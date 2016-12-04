@@ -1,0 +1,3 @@
+[submodule "racket-video"]
+	path = racket-video
+	url = https://github.com/leifandersen/racket-video
