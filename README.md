@@ -19,4 +19,5 @@ Files
     paper.scrbl  -- The main paper
     Makefile     -- Building the paper
     racket-video -- A clone of the video lang source code
-    apis.rktd    -- Listing of various video editor/library APIs.
+    apis.rktd    -- Listing of various video editor/library APIs
+    videobib.md -- An annotated bibliography for video editors/APIs/DSLs
