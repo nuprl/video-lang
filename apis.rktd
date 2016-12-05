@@ -36,10 +36,12 @@
 (
  ;; APIs
  ("Java Media Framework" "???" "???" "http://www.oracle.com/technetwork/java/javase/download-142937.html")
+ ("OpenCV" "???" "???" "http://docs.opencv.org/2.4/modules/refman.html")
 )
 
 ;; Common Videos WITHOUT any API support
 (
  ("Youtube")
  ("iMovie")
+ ("Cinelerra")
 )
