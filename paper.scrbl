@@ -1,12 +1,19 @@
 #lang scribble/sigplan
 
-@require["utils.rkt"]
+@require["bib.rkt"
+         "utils.rkt"]
 
 @title{Video Language}
 @authorinfo["Leif Andersen" "PLT @ Northeastern University" "leif@ccs.neu.edu"]
 @authorinfo["Asumu Takikawa" "Igalia" "asumus@igalia.com"]
 @authorinfo["Matthias Felleisen" "PLT @ Northeastern University" "matthias@ccs.neu.edu"]
 
-Write paper here.
+@abstract{Abstract Text}
+@include-section{introduction.scrbl}
+@include-section{overview.scrbl}
+@include-section{implementation.scrbl}
+@include-section{extensions.scrbl}
+@include-section{related.scrbl}
+@include-section{conclusion.scrbl}
 
-@section{Related Works}
+@gen-bib[]
