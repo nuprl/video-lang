@@ -20,17 +20,17 @@ Windows Movie Maker
 
 @section{Video Editing APIs}
 
-GStreamer@note{@url{https://gstreamer.freedesktop.org/}}
+GStreamer
 
-MLT Framework@note{@url{https://www.mltframework.org/}}
+MLT Framework
 
-OpenShot@note{@url{http://www.openshot.org/}}
+OpenShot@note{@openshot-url}
 
 @section{Video Editing DSLs}
 
-AVSynth@note{@url{http://avisynth.nl}}
+AVISynth@note{@avisynth-url}
 
-MLT XML@note{@url{https://www.mltframework.org/docs/mltxml/}}
+MLT XML@note{@mlt-xml-url}
 
 @section{Functional DSLs}
 

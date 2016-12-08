@@ -52,3 +52,20 @@
             #:location (proceedings-location "ICFP"
                                              #:pages '(109 120)
                                              #:volume 14)))
+
+(define applescript-hopl
+  (make-bib #:title "Applescript"
+            #:author (authors "William R. Cook")
+            #:date "2007"
+            #:location (proceedings-location "HOPL"
+                                             #:pages '("1-1" "1-21")
+                                             #:volume 3)))
+
+(define gstreamer-url (url "https://gstreamer.freedesktop.org/"))
+(define mlt-url (url "https://www.mltframework.org/}}"))
+(define shotcut-url (url "https://www.shotcutapp.com/"))
+(define applescript-use-url (url "http://www.davidheidelberger.com/blog/?p=107"))
+(define openshot-url (url "http://www.openshot.org/"))
+(define avisynth-url (url "http://avisynth.nl"))
+(define mlt-xml-url (url "https://www.mltframework.org/docs/mltxml/"))
+(define rsound-url (url "https://docs.racket-lang.org/rsound/index.html"))
