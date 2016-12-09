@@ -1,8 +1,10 @@
 #lang scribble/sigplan
 
 @require[scriblib/figure
-         (except-in scribble/manual cite)
          pict
+         pict/code
+         racket/format
+         "pictures.rkt"
          "utils.rkt"
          "bib.rkt"]
 
@@ -10,10 +12,7 @@
 
 @Figure-ref{hello-color} shows ...
 
-@figure["hello-color" "A Simple Video"]{
- @codeblock{
-  #lang video
-  (clip "green")
- }
-  @(scale (bitmap "sample.png") 0.15)
-}
+@(current-code-font code-font)
+
+@figure["hello-color" "A Video Program (top) and output (bottom)"]{
+ @hello-green}

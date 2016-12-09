@@ -26,6 +26,10 @@ MLT Framework
 
 OpenShot@note{@openshot-url}
 
+Visual Effects
+
+Lightworks
+
 @section{Video Editing DSLs}
 
 AVISynth@note{@avisynth-url}

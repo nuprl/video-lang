@@ -1,10 +1,15 @@
 #lang scribble/sigplan
 
 @require[scriblib/footnote
+         scriblib/figure
+         "pictures.rkt"
          "bib.rkt"
          "utils.rkt"]
 
 @title[#:tag "introduction"]{Video Editing Process}
+
+Interactive video editing is primarily done by tools called
+non-linear video editors.@cite[technique-of-video-editing]
 
 Video editing, while creative, is often a repetitive task.
 For example, the first and second authors of this paper
@@ -69,6 +74,9 @@ the document object, and eventually render the document
 object. Thus, an API is not adequate for interactive video
 editing.
 
+@figure["nlve-demo" "Blender's Non-linear Video Editor"]{
+ @nlve-sample}
+
 Another alternative is to use existing domain-specific
 languages for video editing, which fall into one of two
 categories. The first type is XML based DSLs such as MLT
@@ -96,19 +104,21 @@ abstraction, but are not robust enough for anything but
 simple tasks. Additionally, these languages have an ad-hoc
 grammar, making robust use of them even more difficult.
 AVISynth, for example, allows programmers to create simple
-functions, but lacks control flow constructs (such as
-conditional branching) for writing anything complicated.
+functions, but lacks control flow constructs such as
+conditional branching.
 
 An ideal environment for video editing includes the power of
 a programming language, without loosing the best parts of a
 traditional non-linear video editor. Its users must be able
 to describe the video without managing a program, in a
 similar fashion to @exact{\LaTeX} or
-Scribble@cite[scribble-icfp]. But it must also be able to
-break out into abstraction mechanisms when useful. Finally,
-the programming mechanism it provides should not be ad-hoc.
-A functional DSL that offers a certain amount of literate
-programming can solve these constraints.
+Scribble@cite[scribble-icfp]. Video objects must be first
+class, and in general there needs to be linguistic support
+for videos. The language must also be able to break out into
+abstraction mechanisms when useful. Finally, the programming
+mechanism it provides should not be ad-hoc. A functional DSL
+that offers a certain amount of literate programming can
+solve these constraints.
 
 Video is a Racket based DSL for video editing. Users can
 express their videos without having to handle all of the

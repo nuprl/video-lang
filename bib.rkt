@@ -38,7 +38,7 @@
             #:location (book-location #:publisher "No Starch Press")))
 
 (define slideshow-jfp
-  (make-bib #:title "Slideshow: functional presentations"
+  (make-bib #:title "Slideshow: Functional Presentations"
             #:author (authors "Matthew Flatt" "Robby Findler")
             #:date "2006"
             #:location (journal-location "JFP"
@@ -46,7 +46,7 @@
                                          #:volume 16)))
 
 (define scribble-icfp
-  (make-bib #:title "Scribble: closing the book on ad hoc documentation tools"
+  (make-bib #:title "Scribble: Closing the Book on Ad Hoc Documentation Tools"
             #:author (authors "Matthew Flatt" "Eli Barzilay" "Robert Bruce Findler")
             #:date "2009"
             #:location (proceedings-location "ICFP"
@@ -60,6 +60,13 @@
             #:location (proceedings-location "HOPL"
                                              #:pages '("1-1" "1-21")
                                              #:volume 3)))
+
+(define technique-of-video-editing
+  (make-bib #:title "The Technique of Film and Video Editing: History, Theory, and Practice"
+            #:author (authors "Ken Dancyger")
+            #:date "2010"
+            #:location (book-location #:edition "fifth"
+                                      #:publisher "Focal Press")))
 
 (define gstreamer-url (url "https://gstreamer.freedesktop.org/"))
 (define mlt-url (url "https://www.mltframework.org/}}"))
