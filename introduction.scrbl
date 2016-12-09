@@ -13,10 +13,13 @@ repetitive manual effort when putting together conference
 recordings. Editing each conference talk involves
 compositing a camera feed with a screen capture feed and one
 for audio capture. Compositing these feeds takes several
-steps, each video must be shrunk and placed on the
-appropriate part of the screen, as well as being
-synchronized. On top of all of this, each video may also
-include the conference logo at the start and end of the
+steps, each feed must be shrunk and placed on the
+appropriate part of the screen and be synchronized, one at a
+time. Each composited feed only takes a few clicks to set
+up, but each feed must be set up individually. Additionally,
+a small amount of processing is required at each step,
+requiring more time. On top of all of this, each video also
+includes the conference logo at the start and end of the
 video, and include a watermark throughout the video. Each
 step only takes a few mouse clicks, but in aggregate they
 become a large task. Worse still, this entire process is
@@ -29,8 +32,8 @@ editing. They frequently develop macros@note{In the context
  of video editing, a macro is a series of buttons that are
  automatically pressed in sequence.} using languages like
 AppleScript@cite[applescript-hopl] for the tools they
-use.@note{@applescript-use-url} Most professional tools even
-include an API to create new plugins.
+use.@note{@applescript-use-url} Most professional tools, and
+some casual ones, even include an API to create new plugins.
 
 Unfortunately, existing means of extending these tools are
 insufficient. Macros are extremely brittle, and frequently
@@ -56,10 +59,15 @@ the language rather than the actual video being created.
 Design patterns reduces time spent managing the language,
 but even that is a distraction from editing videos. This
 process is analogous to a authors trying to write a paper
-using Java. Even if they had access to nice string literals,
-they would still spend a large portion of their time
-managing the java side of their work. Thus, these media
-frameworks are not adequate for interactive video editing.
+using Java. Even if they had access to nice string literals
+and the best API for document writing, they would still
+spend a large portion of their time managing the Java part
+of their work. Somewhere in their project, they would still
+need to have a main class, main function, create a document
+object, design a nice way to imperatively add elements to
+the document object, and eventually render the document
+object. Thus, an API is not adequate for interactive video
+editing.
 
 Another alternative is to use existing domain-specific
 languages for video editing, which fall into one of two
@@ -85,11 +93,11 @@ editing their own videos.
 
 Scripting language style video editing DSLs allow for some
 abstraction, but are not robust enough for anything but
-simple tasks. AVISynth, for example, allows programmers to
-create simple functions, but lacks control flow constructs
-for writing anything complicated. Additionally, these
-languages have an ad-hoc grammar, making robust use of them
-even more difficult.
+simple tasks. Additionally, these languages have an ad-hoc
+grammar, making robust use of them even more difficult.
+AVISynth, for example, allows programmers to create simple
+functions, but lacks control flow constructs (such as
+conditional branching) for writing anything complicated.
 
 An ideal environment for video editing includes the power of
 a programming language, without loosing the best parts of a
