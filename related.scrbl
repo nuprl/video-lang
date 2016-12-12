@@ -36,6 +36,8 @@ AVISynth@note{@avisynth-url}
 
 MLT XML@note{@mlt-xml-url}
 
+SMIL
+
 @section{Functional DSLs}
 
 Racket@cite[plt-tr1]

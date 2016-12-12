@@ -68,6 +68,25 @@
             #:location (book-location #:edition "fifth"
                                       #:publisher "Focal Press")))
 
+(define xslt-tr
+  (make-bib #:title "XSL Transformations"
+            #:author (authors "James Clark")
+            #:date "1999"
+            #:location (techrpt-location #:institution "World Wide Web Consortium (W3C)"
+                                         #:number "1.0")
+            #:url "https://www.w3.org/TR/xslt"))
+
+(define smil-tr
+  (make-bib #:title "Synchronized Multimedia Integration Language"
+            #:author (authors "Dick Bulterman" "Jack Jansen" "Pablo Cesar" "Sjoerd Mullender"
+                              "Eric Hyche" "Marisa DeMeglio" "Julien Quint" "Hiroshi Kawamura"
+                              "Daniel Weck" "Xabiel García Pañeda" "David Melendi" "Samuel Cruz-Lara"
+                              "Marcin Hanclik" "Daniel F. Zucker" "Thierry Michel")
+            #:date "2008"
+            #:location (techrpt-location #:institution "World Wide Web Consortium (W3C)"
+                                         #:number "3.0")
+            #:url "https://www.w3.org/TR/2008/REC-SMIL3-20081201/"))
+
 (define gstreamer-url (url "https://gstreamer.freedesktop.org/"))
 (define mlt-url (url "https://www.mltframework.org/}}"))
 (define shotcut-url (url "https://www.shotcutapp.com/"))
