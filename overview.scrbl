@@ -22,3 +22,4 @@
 @section{Filters}
 @section{Multitracks}
 @section{Playing and Rendering}
+@section{From APIs to Languages}
