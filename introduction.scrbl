@@ -8,6 +8,10 @@
 
 @title[#:tag "introduction"]{Iavor Diatchki, Editing Videos}
 
+This section describes the process of editing a conference
+videos, how it can be repetitive, and that it should be
+scripted.
+
 Interactive video editing is primarily done by tools called
 non-linear video editors@cite[technique-of-video-editing].
 In the context of film production, @emph{non-linear} means

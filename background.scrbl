@@ -7,3 +7,6 @@
          "utils.rkt"]
 
 @title[#:tag "background"]{Background}
+
+This section describes the current state of the art for
+creating embedded DSLs and video editing APIs.

@@ -6,6 +6,10 @@
 
 @title[#:tag "related"]{Related Work}
 
+This section covers related work that is not discussed in
+the background section.
+
+@;{
 @section{Non-Linear Video Editors}
 
 Blender@cite[essential-blender]
@@ -45,3 +49,5 @@ Racket@cite[plt-tr1]
 Slideshow@cite[slideshow-jfp]
 
 Scribble@cite[scribble-icfp]
+
+}

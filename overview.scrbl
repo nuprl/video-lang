@@ -8,18 +8,22 @@
          "utils.rkt"
          "bib.rkt"]
 
+@(current-code-font code-font)
+
 @title[#:tag "overview"]{Editing with Video}
 
-@Figure-ref{hello-color} shows ...
+This section describes the API and semantics Video uses.
 
-@(current-code-font code-font)
+
 
 @figure["hello-color" "A Video Program (top) and output (bottom)"]{
  @hello-green}
 
+@;{
 @section{Clips}
 @section{Playlists}
 @section{Filters}
 @section{Multitracks}
 @section{Playing and Rendering}
 @section{From APIs to Languages}
+}
