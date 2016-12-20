@@ -16,3 +16,9 @@
 
 @figure["hello-color" "A Video Program (top) and output (bottom)"]{
  @hello-green}
+
+@section{Clips}
+@section{Playlists}
+@section{Filters}
+@section{Multitracks}
+@section{Playing and Rendering}

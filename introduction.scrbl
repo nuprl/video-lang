@@ -6,7 +6,7 @@
          "bib.rkt"
          "utils.rkt"]
 
-@title[#:tag "introduction"]{The Video Editing Process}
+@title[#:tag "introduction"]{Iavor Diatchki, Editing Videos}
 
 Interactive video editing is primarily done by tools called
 non-linear video editors@cite[technique-of-video-editing].
