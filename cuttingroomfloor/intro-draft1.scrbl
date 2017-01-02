@@ -6,8 +6,13 @@
          "bib.rkt"
          "utils.rkt"]
 
-@title[#:tag "background"]{The State of Video Editing}
+@title[#:tag "introduction"]{Iavor Diatchki and Conference Videos}
 
+This section describes the process of editing a conference
+videos, how it can be repetitive, and that it should be
+scripted.
+
+@;{
 Interactive video editing is primarily done by tools called
 non-linear video editors@cite[technique-of-video-editing].
 In the context of film production, @emph{non-linear} means
@@ -22,8 +27,23 @@ video and audio clips. Finally, filters and transitions
 indicate how to @emph{composite} videos, or how the various
 clips should be combined together.
 
-@figure["nlve-demo" "A Non-linear Video Editor, part of the Blender suite"]{
- @nlve-sample}
+Video editing, while creative, is often a repetitive task.
+For example, putting conference videos together often takes
+a significant amount of repetative manual effort. Editing
+each conference talk involves compositing a camera feed with
+a screen capture feed and one for audio capture. Compositing
+these feeds takes several steps, each feed must be shrunk
+and placed on the appropriate part of the screen and be
+synchronized, one at a time. On top of all of this, each
+video also includes the conference logo at the start and end
+of the video, and include a watermark throughout the video.
+Each composited feed only takes a few mouse clicks to set
+up, but each feed must be set up individually. Additionally,
+the application must process each clip after every
+operation, requiring more time. In aggregate, this process
+become a large task. Worse still, this entire process is
+repeated for every video, significantly increasing the work
+load.
 
 Professionals have developed tools and design patterns to
 reduce the amount of repetitive manual labor in video
@@ -56,21 +76,24 @@ repetitive tasks. For example, a professional using one of
 these frameworks can write a function to do the composeting
 for a video of a conference talk.
 
-Media frameworks for general purpose languages, however,
-introduce a new set of problems when used directly for video
-editing. Anyone using them must focus on managing the
-language rather than the actual video being created. Design
-patterns reduces time spent managing the language, but even
-that is a distraction from editing videos. Imagine if
-authors tried to write a paper with Java rather than @exact{
- \LaTeX}. Even if they had an API for document writing, they
-would still spend a large portion of their time managing the
-Java part of their work. Somewhere in their project, they
-would still need to have a main class, main function, create
-a document object, design a nice way to imperatively add
-elements to the document object, and eventually render the
-document object. Thus, an API is not adequate for
-interactive video editing. 
+Unfortunately, media frameworks for general purpose
+languages introduce a new set of problems when used directly
+for video editing. Anyone using them must focus on managing
+the language rather than the actual video being created.
+Design patterns reduces time spent managing the language,
+but even that is a distraction from editing videos. Imagine
+if authors tried to write a paper with Java rather than
+@exact{\LaTeX}. Even if they had an API for document
+writing, they would still spend a large portion of their
+time managing the Java part of their work. Somewhere in
+their project, they would still need to have a main class,
+main function, create a document object, design a nice way
+to imperatively add elements to the document object, and
+eventually render the document object. Thus, an API is not
+adequate for interactive video editing.
+
+@figure["nlve-demo" "A Non-linear Video Editor, part of the Blender suite"]{
+ @nlve-sample}
 
 Another alternative is to use existing domain-specific
 languages for video editing, which fall into one of two
@@ -94,7 +117,7 @@ programming languages are designed to process generic XML
 files. For this reason, XML style languages for video
 editing are frequently used only by enthusiasts and
 tinkerers, who are more interested in playing with video
-editor technology than actually editing videos.
+editor technology than actually editing videos
 
 In principle, scripting language style DSLs are the right approach
 for video editing, but current languages fail here. These
@@ -109,23 +132,41 @@ An ideal environment for video editing includes the power of
 a programming language, without losing the best parts of a
 traditional non-linear video editor. Its users must be able
 to describe the video without managing a program, in a
-similar fashion to @exact{\LaTeX}. Video objects must be
-first class, and in general they also need linguistic
-support. The language must also be able to use more powerful
-linguistic constructs when useful. Finally, the programming
-mechanism it provides should not be ad-hoc. A functional DSL
-that offers a certain amount of literate programming can
-solve these constraints.
+similar fashion to @exact{\LaTeX} or
+Scribble@cite[scribble-icfp]. Video objects must be first
+class, and in general they also need linguistic support. The
+language must also be able to use more powerful linguistic
+constructs when useful. Finally, the programming mechanism
+it provides should not be ad-hoc. A functional DSL that
+offers a certain amount of literate programming can solve
+these constraints.
 
-Two DSLs that meet this criteria exist for different
-domains. Scribble@cite[scribble-icfp], for document writing;
-and Slideshow@cite[slideshow-jfp] for presentations. Both of
-these DSLs build on Racket's language extension
-system@cite[macros-icfp] giving its users both a well
-designed API and the ability to use a general purpose
-language when appropriate. Video extends on this idea,
-pushing into a new domain: video editing. Rather, programs
-in this language are declarative descriptions of a video.
-Furthermore, the data-types that Video operates
-over---@emph{producers}---are functional. This allows them
-to compose with existing Racket operations.
+@bold{Video} is a Racket based DSL for video editing. Users
+can express their videos without having to handle all of the
+boilerplate of setting up maintaining a video object and
+rendering code. Rather, programs in Video are declarative
+descriptions of a video. Additionally, if a tasks become
+repetitive, they have access to Racket's abstraction
+facilities. This technique proves useful for editing many
+videos that have similar templates, but are not always
+identical, such as conference recordings or screencasts.
+
+Video is also able to leverage the Racket programming
+environment DrRacket@cite[plt-tr2] and graphical
+toolkits@cite[plt-tr3]. Broadly speaking, video editors
+benefit from what you see is what you get (WYSIWYG)
+environments. DrRacket enables Video to allow to enable
+WYSIWYG video editing when it is appropriate, and textual
+editing when beneficial. Racket also contains an existing
+API for creating pictures@cite[slideshow-jfp] and
+sounds@note{@rsound-url} that Video can leverage.
+
+This paper describes the design and implementation of Video.
+We introduce the design of Video in @secref["overview"].
+Next, @secref["implementation"] discusses how Video is
+implemented. In @secref["extensions"] we discuss graphical
+extensions to video to aid in editing, and how it fits into
+DrRacket's work flow. We compare Video to related work in
+@secref["related"] and finally conclude in
+@secref["conclusion"].
+}

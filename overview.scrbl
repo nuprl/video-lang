@@ -10,16 +10,16 @@
 
 @(current-code-font code-font)
 
-@title[#:tag "overview"]{Editing with Video}
+@title[#:tag "overview"]{The design of Video}
 
 This section describes the API and semantics Video uses.
 
 
 
+@;{
 @figure["hello-color" "A Video Program (top) and output (bottom)"]{
  @hello-green}
 
-@;{
 @section{Clips}
 @section{Playlists}
 @section{Filters}

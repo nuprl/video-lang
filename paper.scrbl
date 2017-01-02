@@ -24,13 +24,13 @@
  and how it becomes a language.}
 @include-section{overview.scrbl}
 
-@;{Describe (at a high level) the implementation
- of Video.}
-@include-section{implementation.scrbl}
-
 @;{A Video DSL saves time and energy in in the concrete
  case of editing conference videos.}
 @include-section{casestudy.scrbl}
+
+@;{Describe (at a high level) the implementation
+ of Video.}
+@include-section{implementation.scrbl}
 
 @;{WYSIWYG video editors are useful, and can compose with
  a video editing DSL.}

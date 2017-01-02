@@ -87,6 +87,14 @@
                                          #:number "3.0")
             #:url "https://www.w3.org/TR/2008/REC-SMIL3-20081201/"))
 
+(define macros-icfp
+  (make-bib #:title "Composable and Compilable Macros, You Want It when?"
+            #:author (authors "Matthew Flatt")
+            #:date "2002"
+            #:location (proceedings-location "ICFP"
+                                             #:pages '(72 83)
+                                             #:volume 7)))
+
 (define gstreamer-url (url "https://gstreamer.freedesktop.org/"))
 (define mlt-url (url "https://www.mltframework.org/}}"))
 (define shotcut-url (url "https://www.shotcutapp.com/"))
