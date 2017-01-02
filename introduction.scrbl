@@ -11,11 +11,11 @@
 Imagine the process of putting together conference videos.
 Each video has a feed of the presenter, as well as the
 presenter's screen. Additionally, conferences talks have a
-separate sound feed for the speaker, and audience questions.
+separate sound feed for the speaker and audience questions.
 Editing a talk video involves @emph{compositing} these
-feeds, or overlaying them for the person watching the video.
-Additionally, each video contains an start/end sequence and
-various watermarks throughout the video.
+feeds, or overlaying them for the viewer. Additionally, each
+video contains an start/end sequence and various watermarks
+throughout the video.
 
 Once one video is put together, the same process must then
 be repeated for every conference talk. Worse still, while
