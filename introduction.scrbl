@@ -16,7 +16,7 @@ role for RacketCon.
 
 When these people create the video clips, they combine a
 feed of the presenter with the presenter's screen, the
-sound feed for the speaker, and yet another one for and
+sound feed for the speaker, and yet another one for
 audience questions. Composing these feeds means overlaying
 them in such a manner that the result appears to be a holistic
 production from the perspective of the viewer. Above and
