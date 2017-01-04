@@ -8,41 +8,58 @@
 
 @title[#:tag "introduction"]{Being Iavor Diatchki}
 
-Imagine the process of putting together conference videos.
-Each video has a feed of the presenter, as well as the
-presenter's screen. Additionally, conferences talks have a
-separate sound feed for the speaker and audience questions.
-Editing a talk video involves @emph{compositing} these
-feeds, or overlaying them for the viewer. Additionally, each
-video contains an start/end sequence and various watermarks
-throughout the video.
+Imagine yourself being Iavor Diatchki. He is the friendly
+guy who tapes all the wonderful ICFP presentations and
+then edits them into digestible YouTube video clips. Or
+imagine yourself being Leif Andersen, who plays Diatchki's
+role for RacketCon.  
 
-Once one video is put together, the same process must then
-be repeated for every conference talk. Worse still, while
-there is creativity in putting together a single video, the
-process gets monotonous and trivially repeatable with each
-talk. When faced with a repetitive task like this one, a
-computer scientist reaches for a way to script it.
+When these people create the video clips, they combine a
+feed of the presenter with the presenter's screen, the
+sound feed for the speaker, and yet another one for and
+audience questions. Composing these feeds means overlaying
+them in such a manner that the result appears to be a holistic
+production from the perspective of the viewer. Above and
+beyond this basic task, Diatchki and Andersen must add a
+start and/or end sequence to each video plus various
+watermarks throughout sequence of images. 
 
-@emph{Video}, a domain-specific language embedded in
-Racket@cite[plt-tr1], automates the repetitive aspects of
-video production. It allows producers to focus on the actual
-content of their videos, while also providing a full
-programming language when appropriate. Finally, as a certain
-amount of video editing benefits from having a graphical
-user interface, we leverage the DrRacket@cite[plt-tr2]
-development environment to mix graphical and textual video
-editing.
+Once one video is put together, the same process must be
+repeated for the next conference talk and the next and so
+on. Worse still, some editing steps involve creativity,
+the process becomes monotonous and reduces the creative
+spirit for when it is truly needed. The problem calls out
+for a computational solution, and the ICFP community is
+well equipped to create one. 
 
-This paper describes the usage, design, and implementation
-of Video. First, @secref["background"] gives the current
-state of APIs and DSLs for video editing and other
-non-traditional programming tasks. We introduce the design
-of Video in @secref["overview"]. @Secref["case-study"] shows
-a practical use case for Video, editing conference videos.
-Next, @secref["implementation"] discusses how Video is
-implemented. In @secref["extensions"] we discuss graphical
-extensions to video to aid in editing, and how it fits into
-DrRacket's work flow. We compare Video to related work in
-@secref["related"] and finally conclude in
-@secref["conclusion"].
+@; embedded in Racket@cite[plt-tr1]
+
+This paper presents @emph{Video} and its IDE. Video is an
+embedded domain-specific language (DSL) for
+post-conference video clip production.  Naturally Video is
+a functional language, whose programs automate the
+repetitive aspects of the production process. Automation
+then helps producers focus on the creative aspects of
+their video production. 
+
+@; DrRacket@cite[plt-tr2] development environment to mix
+
+Since ICFP readers are usually unfamiliar with the process
+of editing videos, the paper contributes a survey of the
+state of the art of video editing and computational
+solutions (@secref["background"]). The survey and
+Andersen's work on RacketCon videos suggest a natural
+design blueprint for a functional video processing
+language (@secref["overview"]). One form of validation is
+a Video program that edits conference videos; see
+@secref["case-study"] for this program. Video is a member
+of the Racket eco-system, which greatly facilitates the
+creation of production-level DSLs
+(@secref["implementation"]).  Since in this day and age a
+programming language must come with a graphical IDE, we
+also explain how to specialize DrRacket to Video with a
+few lines of code so that it supports the creation of
+programs, both as texts as well as short, embedded video
+clips as first-class values (@secref["extensions"]). We
+obviously wrap up the paper with a section on other
+related work and some brief remarks on making DSLs. 
