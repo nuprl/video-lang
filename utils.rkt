@@ -18,6 +18,10 @@
   (make-element (make-style "identity" '(exact-chars))
                 `("\\[" ,@items "\\]")))
 
+(define (paragraph title)
+  (make-element (make-style "identity" '(exact-chars))
+                `("\\paragraph{" ,title "}")))
+
 (define at-char "@")
 
 (define dot (find-executable-path "dot"))
@@ -36,6 +40,12 @@
 (define small-font-size 8)
 (define font-size 9)
 (define small-scale-factor 0.8)
+
+; Test to make sure fonts are installed:
+(unless (set-member? (get-face-list) code-font)
+  (raise-user-error 'paper "Please install '~a' font" code-font))
+(unless (set-member? (get-face-list) text-font)
+  (raise-user-error 'paper "Please install '~a' font" text-font))
 
 (define-syntax-rule (mod->pict modname lang content ...)
   (let ()
