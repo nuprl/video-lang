@@ -2,9 +2,11 @@
 
 (provide (all-defined-out))
 (require (except-in scribble/core table)
+         scribble/base
          racket/draw
          pict
-         pict/code)
+         pict/code
+         ppict/tag)
 
 (define (exact . items)
   (make-element (make-style "identity" '(exact-chars))
@@ -64,3 +66,45 @@
      (cc-superimpose c1 (rectangle (+ buffer (pict-width c1))
                                    (+ buffer (pict-height c1))
                                    #:border-color "dim gray")))))
+
+(define (vsplit-figure a b #:space [space 25])
+  (vc-append
+   a
+   (blank space)
+   (linewidth 0
+              (hline (max (pict-width a) (pict-width b)) 1))
+   (blank space)
+   b))
+
+(define (make-playlist-timeline #:distance [distance 5] . trace)
+  (define frames
+   (apply hc-append distance trace))
+  (vc-append
+   15
+   frames
+   (let ([p (hc-append (pict-width frames) (tag-pict (blank) 'start) (tag-pict (blank) 'end))])
+     (pin-arrow-line 5 p #:label (text "Time" text-font small-font-size)
+                     (find-tag p 'start) cc-find
+                     (find-tag p 'end) cc-find))))
+
+(define (ellipses)
+  (hc-append
+   3
+   (disk 2)
+   (disk 2)
+   (disk 2)))
+
+(define (clip-scale p)
+  (scale-1080p p 50))
+
+(define (scale-1080p p w-size)
+  (define w (pict-width p))
+  (define h (pict-height p))
+  (define h-size (* w-size 9/16))
+  (scale p
+         (/ w-size w)
+         (/ h-size h)))
+
+(define (code-pict code)
+  (nested #:style (style 'code-inset '(never-indents))
+          code))

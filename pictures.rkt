@@ -7,10 +7,10 @@
 
 (define hello-green
   (vc-append
-   15
+   10
    (mod->pict "green.vid" "video" (clip "green"))
    (hline 200 0)
-   (scale (bitmap "res/sample.png") 0.15)))
+   (scale (bitmap "res/sample.png") 0.08)))
 
 (define nlve-sample
   (scale (bitmap "res/nlve-demo.png") 0.14))
