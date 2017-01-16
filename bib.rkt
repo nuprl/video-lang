@@ -96,7 +96,7 @@
                                              #:volume 7)))
 
 (define gstreamer-url (url "https://gstreamer.freedesktop.org/"))
-(define mlt-url (url "https://www.mltframework.org/}}"))
+(define mlt-url (url "https://www.mltframework.org/"))
 (define shotcut-url (url "https://www.shotcutapp.com/"))
 (define applescript-use-url (url "http://www.davidheidelberger.com/blog/?p=107"))
 (define openshot-url (url "http://www.openshot.org/"))

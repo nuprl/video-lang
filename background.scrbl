@@ -67,9 +67,9 @@ Professionals also use domain-specific languages for video
 editing. These DSLs primarily fall into two categories: XML
 based DSLs and scripting language based DSLs.
 
-XML DSLs such as MLT XML@note{@mlt-xml-url} and the
-now deprecated SMIL@cite[smil-tr] offer a declarative
-language for processing videos. The entire program is the video being
+XML DSLs such as MLT XML and the now deprecated
+SMIL@cite[smil-tr] offer a declarative language for
+processing videos. The entire program is the video being
 described. These languages generally do not have functions
 or any other type of abstraction. Professionals tend not to
 deal with these XML languages directly when video editing.

@@ -181,7 +181,8 @@ unexpected effects.
      (inset/clip (clip-scale (bitmap "res/fire.png")) 0 0 0 (* (pict-height size) -1/2))
      (inset/clip (clip-scale (filled-rectangle 100 100 #:color "blue"))
                  0 (* (pict-height size) -1/2) 0 0))
-    (ellipses)))]
+    (ellipses)
+    (clip-scale (bitmap "res/fire.png"))))]
 
 @paragraph{Multitracks} More complicated constructs are
 multitracks. Unlike playlists, multitracks play producers in
@@ -203,7 +204,11 @@ tracks.
  (lt-superimpose (scale-1080p (bitmap "res/fire.png") 150)
                  (scale-1080p (bitmap "res/dragon.png") 75))]
 
-Transitions in multitracks are not associative.
+Transitions in multitracks are not associative. Multricks
+interpret transitions in left to right order. Videos that
+require a different evaluation order can embed a multitrack
+inside of a multitrack. This is possible because, like
+playlists, multitracks are themselves producers.
 
 @racketblock[(multitrack
               (clip "fire.png")
@@ -217,11 +222,15 @@ Transitions in multitracks are not associative.
   (lt-superimpose (scale-1080p (bitmap "res/fire.png") 150)
                   (scale-1080p (bitmap "res/dragon.png") 75))
   (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 75))]
-             
+
+A second alternative is to apply multiple transitions to the
+same track. The @racket[#:transitions] keyword composites a
+top and bottom producer in the multitrack.
 
 @racketblock[(define bg (clip "fire.png"))
              (define dragon (image "dragon.png"))
-             (define color (color "red"))
+             (define green-color (color "green"))
+             (define red-color (color "red"))
              (multitrack dragon color bg
               #:transitions
               (list
@@ -229,15 +238,33 @@ Transitions in multitracks are not associative.
                                      #:top dragon
                                      #:bottom bg)
                (composite-transition 1/2 0 1/2 1/2
-                                     #:top color
+                                     #:top red-color
+                                     #:bottom bg)
+               (composite-transition 0 1/2 1/2 1/2
+                                     #:top green-color
                                      #:bottom bg)))]
 @centered[
- (rt-superimpose
-  (lt-superimpose (scale-1080p (bitmap "res/fire.png") 150)
-                  (scale-1080p (bitmap "res/dragon.png") 75))
-  (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "red") 75))]
+ (lb-superimpose
+  (rt-superimpose
+   (lt-superimpose (scale-1080p (bitmap "res/fire.png") 150)
+                   (scale-1080p (bitmap "res/dragon.png") 75))
+   (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "red") 75))
+  (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 75))]
 
-@paragraph{Filters} Baz
+Racket's @racket[eq] function determines producer
+equivalence. Multitracks are able to use this pattern
+because producers are functional objects.
+
+@paragraph{Filters} Unlike transitions, filters modify the
+behavior of a single producer. Some things filters are
+useful for include removing the color from a clip or even
+changing a producer's aspect ratio.
+
+All filters are functions with producers for the domain and
+range: @mm{\mathit{filter} : @tt{producer}\:\: @tt{
+  extra-args}\: \cdots\: \rightarrow\: @tt{producer}} For
+example, the @racket[scale-filter] filter scales a producer
+by the given width and height.
 
 @racketblock[(scale-filter (image "dragon.png") 1 9)]
 @centered[
@@ -246,7 +273,27 @@ Transitions in multitracks are not associative.
     (scale (scale-1080p (bitmap "res/dragon.png") 150) 1 9)
     0 (* (pict-height size) (+ -1/3 -1/9)) 0 (* (pict-height size) (+ -1/3 -1/9))))]
 
-@paragraph{Properties and Dependent Clips}
+@paragraph{Properties and Dependent Clips} Producers use
+properties to store and retrieve information about other
+producers. They additionally store both implicit and
+explicit properties. Implicit properties are innate to a
+clips, such as length and dimensions. Explicit properties
+are added in the program.
+
+The properties API has two calls:
+@itemlist[
+ @item{@racket[(set-property #,(emph "producer") #,(emph "key") #,(emph "value"))]---creates
+  an explicit property. It returns a new producer with @emph{
+   key} functionally set to @emph{value}.}
+ @item{@racket[(get-property #,(emph "producer") #,(emph "key"))]---Returns
+  the value associated with @emph{key}. If the property is set
+  both implicitly and explicitly, the explicit property is returned.}]
+
+Explicit properties provide a protocol for clips to
+communicate information. For example, a watermark can
+communicate if it should be placed at the top or bottom of
+the screen.
+
 @racketblock[(define fire-clip
                (set-property (clip "fire")
                              'bottom? #f))
@@ -261,6 +308,11 @@ Transitions in multitracks are not associative.
 @centered[
  (lb-superimpose (scale-1080p (bitmap "res/fire.png") 150)
                  (scale-1080p (bitmap "res/dragon.png") 75))]
+
+Implicit properties store innate information about a clip.
+Returning to the watermark example, a multitrack can get the
+length of its main clip. That multitrack can then display
+that watermark for a portion of the clip.
 
 @racketblock[(define fire-clip (clip "fire"))
              (multitrack
