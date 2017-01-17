@@ -332,12 +332,24 @@ that watermark for a portion of the clip.
 
 @section[#:tag "overview-rendering"]{From Programs to Videos}
 
+Video programs can serve as standalone films or as pieces
+in a larger production.
+
+A renderer converts standalone Video programs to traditional videos.
+This renderer allows creators to set various properties such
+as aspect ratio, frame rate, and even output format. If no
+output format is selected, Video plays a preview of the film
+in a new window.
+
+@centered[@exec{raco video -h 1920 -w 1080 --fps 48 demo.vid}]
+@centered[(scale (bitmap "res/sample.png") 0.08)]
+
+
+
 @centered[(mod->pict "green.vid" "video" (clip "green"))]
 
 @examples[#:label #f
  (eval:alts (require "demo.vid") (void))
- (eval:alts vid 42)]
+ (eval:alts vid '((producer #hash() () color "0x00ff00ff" #f #f #f #f)))]
 
-@exec{raco video -h 1920 -w 1080 demo.vid}
-
-@centered[(scale (bitmap "res/sample.png") 0.08)]
+@racketblock[include-video]
