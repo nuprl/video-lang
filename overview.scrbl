@@ -47,9 +47,9 @@ effects, the remainder of the file is a video description.
 The @racket[color] function creates a colored producer with
 an unspecified length.
 
-@codeblock{
- #lang video
- (color "green")}
+@racketmod[
+ video
+ (color "green")]
 @centered[
  @(scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 150)]
 
@@ -332,8 +332,10 @@ that watermark for a portion of the clip.
 
 @section[#:tag "overview-rendering"]{From Programs to Videos}
 
-Video programs can serve as standalone films or as pieces
-in a larger production.
+Video programs can serve as standalone films or as pieces in
+a larger production. In the first case, users give Video
+files to a renderer. In the second case, creators pass the
+prgoram to the larger project, who then renders it.
 
 A renderer converts standalone Video programs to traditional videos.
 This renderer allows creators to set various properties such
@@ -344,12 +346,30 @@ in a new window.
 @centered[@exec{raco video -h 1920 -w 1080 --fps 48 demo.vid}]
 @centered[(scale (bitmap "res/sample.png") 0.08)]
 
-
+Every Video program is usable inside of other Video
+programs, as well as Racket programs in general. Each module
+in the language exports one @racket[vid] identifier, that
+contains the described film.
 
 @centered[(mod->pict "green.vid" "video" (clip "green"))]
-
 @examples[#:label #f
  (eval:alts (require "demo.vid") (void))
  (eval:alts vid '((producer #hash() () color "0x00ff00ff" #f #f #f #f)))]
 
-@racketblock[include-video]
+This exported video is a producer, which can be used in
+larger projects. To streamline this process, video adds
+@racket[include-video] to import video files into larger contexts.
+
+@racketmod[video
+           (clip "fire.mp4")
+           (include-video "green.vid")
+           (image "dragon.png")]
+@centered[
+ (let ([composite-pict (lt-superimpose (scale-1080p (bitmap "res/fire.png") 150)
+                                       (scale-1080p (bitmap "res/dragon.png") 75))])
+   (make-playlist-timeline
+    (clip-scale (bitmap "res/dragon.png"))
+    (ellipses)
+    (clip-scale (filled-rectangle 50 50 #:color "green"))
+    (ellipses)
+    (clip-scale (bitmap "res/fire.png"))))]
