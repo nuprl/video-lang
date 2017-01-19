@@ -1,4 +1,4 @@
-#lang scribble/sigplan
+#lang scribble/acmart @format["acmlarge"]
 
 @require["bib.rkt"
          "utils.rkt"]
@@ -8,7 +8,8 @@
 @authorinfo["Asumu Takikawa" "Igalia" "asumu@igalia.com"]
 @authorinfo["Matthias Felleisen" "PLT @ Northeastern University" "matthias@ccs.neu.edu"]
 
-@abstract{Abstract Text}
+
+@abstract{Video is an Embedded DSL, and this is its paper's abstract.}
 
 @;{Describe concrete example of editing conference videos.
  Describe how task is repetitive, and how a programmer would want to
@@ -43,3 +44,4 @@
 @include-section{conclusion.scrbl}
 
 @gen-bib[]
+
