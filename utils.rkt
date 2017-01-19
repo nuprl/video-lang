@@ -1,4 +1,4 @@
-#lang racket
+#lang at-exp racket
 
 (provide (all-defined-out))
 (require (except-in scribble/core table)
@@ -108,3 +108,11 @@
 (define (code-pict code)
   (nested #:style (style 'code-inset '(never-indents))
           code))
+
+(define (split-minipage a b)
+  (list
+   @exact{\begin{minipage}{0.5\textwidth}}
+   a
+   @exact{\end{minipage}\begin{minipage}{0.5\textwidth}}
+   b
+   @exact{\end{minipage}}))

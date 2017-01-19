@@ -7,3 +7,12 @@ dump*
 drive-output.*
 paper.pdf
 .DS_Store
+pict*.pdf
+*.cls
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.bst
+paper.tex
