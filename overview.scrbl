@@ -13,6 +13,7 @@
          "bib.rkt"]
 
 @(current-code-font code-font)
+@(define blank-clip (clip-scale (blank 1)))
 
 @title[#:tag "overview"]{The Design of Video}
 
@@ -31,6 +32,42 @@ Next, the API for combining video clips is described in
 @secref["overview-composite"]. Finally,
 @secref["overview-rendering"] illustrates the users
 perspective on previewing and rendering videos.
+
+@figure["video-example" "A Sample Video Program"]{
+ @codeblock|{
+#lang video
+
+@color["green" #:length 1]
+
+@multitrack[
+   @clip["fire.png" #:length (/ (property-ref blue-clilp 'length) 8)]
+   @composite-transition[0 0 1/2 1/2]
+   blue-clip
+ #:length 5]
+
+@swipe-transition[#:direction 'up #:length 2]
+
+@image["dragon" #:length 3]
+
+@define[blue-clip @color["blue" #:length 8]]}|
+ @exact{\vspace{0.3cm}} 
+  @(centered
+  (scale
+   (make-playlist-timeline
+    (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
+    (lt-superimpose (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
+                    (scale (clip-scale (bitmap "res/fire.png")) 1/2))
+    (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
+    (vc-append
+     (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
+                 0 0 0 (* (pict-height blank-clip) -1/3))
+     (inset/clip (clip-scale (bitmap "res/dragon.png")) 0 (* (pict-height blank-clip) -2/3) 0 0))
+    (vc-append
+     (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
+                 0 0 0 (* (pict-height blank-clip) -2/3))
+     (inset/clip (clip-scale (bitmap "res/dragon.png")) 0 (* (pict-height blank-clip) -1/3) 0 0))
+    (clip-scale (bitmap "res/dragon.png")))
+   1.6))}
 
 @section[#:tag "overview-simple"]{A Simple Video}
 
