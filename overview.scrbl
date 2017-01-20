@@ -20,8 +20,8 @@ The way filmmakers create videos is at the heart of the
 Video language. They need tools that allow them to describe
 the video while also automating appropriate work. An
 embedded DSL solves this task; it provides creators with a
-declarative language designed for composeting videos, and
-also has the full power of its host language.
+declarative language designed for composing videos and has
+the full power of its host language.
 
 This section describes the language design, and how its
 users turn programs into videos. To accomplish this goal, we
@@ -47,11 +47,12 @@ effects, the remainder of the file is a video description.
 The @racket[color] function creates a colored producer with
 an unspecified length.
 
-@racketmod[
- video
- (color "green")]
-@centered[
- @(scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 150)]
+@(split-minipage
+  (racketmod
+   video
+   (color "green"))
+  (centered
+   (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 150)))
 
 Another form, @racket[clip], creates a producer from a
 traditional video or audio file. Either the clip is imported

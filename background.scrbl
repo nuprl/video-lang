@@ -15,32 +15,30 @@ destructive, the source videos do not slowly degrade in
 quality during editing.@note{Digital editors achieve this
  result by operating on references to videos, rather than
  operating on the videos themselves.} A non-linear video
-editor, shown in @figure-ref{nlve-demo}, is a graphical tool
-with a @emph{ time line} comprised of @emph{ tracks}. Each
-track is a time line of the video and contains video and
-audio clips. All of these tracks exist on the same timeline,
-and various transitions indicate how to @emph{ composite}
-the clips---how they compose. Finally, the NLVE @emph{
- renders} the video by playing the tracks simultaneously and
-applying any additional filters.
-
-@figure["nlve-demo" "A Non-linear Video Editor, part of the Blender suite"]{
- @nlve-sample}
+editor is a graphical tool with a @emph{time line} comprised
+of @emph{tracks}. Each track is a time line of the video
+and contains video and audio clips. All of these tracks
+exist on the same timeline, and various transitions indicate
+how to @emph{composite} the clips.
+Finally, the NLVE @emph{renders} the video by playing the
+tracks simultaneously and applying additional filters.
 
 Professionals have developed tools and design patterns to
 reduce the amount of repetitive manual labor in video
 editing. They frequently develop so-called macros---a
 scripted sequence of user interface elements---in languages
-such as AppleScript@cite[applescript-hopl] for the tools they
-use.@note{@applescript-use-url} Some professional tools,
-such as Adobe Premiere, @note{@premiere-api-url} even
-include an API to create plug-ins directly.
+such as AppleScript@cite[applescript-hopl] for the tools
+they use.@note{@applescript-use-url} Some professional
+tools, such as Adobe Premiere, @note{@premiere-api-url} even
+include an API to create script-style plug-ins directly.
 
 Extending tools in this fashion, however, has its limits.
 Macros are extremely brittle and frequently break, even
-within a single application. Using a tool's official plug-in
-interface produces more robust software, but it is still
-tied specifically to that tool.
+within a single application, because they do not understand
+the underlying tools. Using a tool's official plug-in
+interface produces more robust software, but leads to a
+plug-in that is tightly coupled with its tool. It can only
+be used in settings where the entire tool is present.
 Blender@cite[essential-blender] for example, is only
 scriptable with a modified Python interpreter that runs when
 Blender is launched.
@@ -76,10 +74,10 @@ deal with these XML languages directly when video editing.
 Rather, NLVEs use these languages to save video projects.
 
 Scripting-based DSLs, such as AVISynth@note{@avisynth-url}
-are also declarative, but have their own limitations. Unlike XML based languages, these DSLs
-do have functions and other abstractions. However, they are
-not robust enough for anything but simple tasks, having
-ad-hoc grammars and little to no code reuse features. making
-robust use of them even more difficult. AVISynth, for
-example, allows programmers to create simple functions, but
-lacks control flow constructs such as conditional branching.
+are declarative but have their own limitations. Unlike XML
+based languages, these DSLs do have functions and other
+abstractions. However, they are only robust enough for the
+simplest tasks, having ad-hoc grammars and little to no code
+reuse features. AVISynth, for example, allows programmers to
+create simple functions, but lacks control flow constructs
+such as conditional branching.
