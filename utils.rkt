@@ -50,13 +50,23 @@
   (raise-user-error 'paper "Please install '~a' font" text-font))
 
 (define-syntax-rule (mod->pict modname lang content ...)
+  (mod->pict* #:codeblock? #f modname lang content ...))
+
+(define-syntax-rule (modblock->pict modname lang content ...)
+  (mod->pict* #:codeblock? #t modname lang content ...))
+
+(define-syntax-rule (mod->pict* #:codeblock? codeblock? modname lang content ...)
   (let ()
     (define buffer 10)
     (define c1
       (scale (vl-append 2
                         (hbl-append (colorize ((current-code-tt) "#lang ") (current-keyword-color))
                                     (colorize ((current-code-tt) lang) (current-id-color)))
-                        (code content ...))
+                        (if codeblock?
+                            (codeblock-pict
+                             #:keep-lang-line? #f
+                             (~a "#lang" lang "\n" content ...))
+                            (code content ...)))
              0.75))
     (define title (text modname null 7))
     (vl-append

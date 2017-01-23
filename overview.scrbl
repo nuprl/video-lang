@@ -4,6 +4,7 @@
          (except-in scribble/core table paragraph)
          (except-in scribble/manual cite)
          scribble/example
+         scriblib/footnote
          pict
          (prefix-in pict: pict/code)
          (except-in pict/code typeset-code code)
@@ -27,15 +28,18 @@ the full power of its host language.
 @Figure-ref["video-example"] shows a six frame Video program
 that uses several constructs in the language---producers,
 playlists, multitracks, properties, filters, and
-transitions. Video is terse, this six frame program can also
-reasonably produce 6000 frames by changing a few constants.
-The first line of the program, @code{ #lang video}, is
-required at the top of every video program. The rest of the
-program is an interleaving of expressions and definitions.
-Video combines each expression to produce the final video.
-Definitions are lifted, allowing creators to place them at
-the bottom of the file. Additionally, Video uses similar
-syntax to Scribble, an embedded DSL for describing
+transitions.@note{Images from this example are taken from
+ Sintel. (Note, should I cite this directly?:
+ @url["http://dl.acm.org/citation.cfm?id=2019066"])} Video
+is terse, this six frame program can also reasonably produce
+6000 frames by changing a few constants. The first line of
+the program, @code{ #lang video}, is required at the top of
+every video program. The rest of the program is an
+interleaving of expressions and definitions. Video combines
+each expression to produce the final video. Definitions are
+lifted, allowing creators to place them at the bottom of the
+file. Additionally, Video uses similar syntax to Scribble,
+an embedded DSL for describing
 documents@cite[scribble-icfp]. This syntax allows authors to
 focus on the movies they are creating rather than syntax of
 the language.
@@ -480,7 +484,7 @@ that watermark for a portion of the clip.
                                    . / .
                                    2)]]
 
-  @define[fire-clip <- @clip["fire"]]}|
+              @where[fire-clip <- @clip["fire"]]}|
   (centered
    (let ([composite-pict (lt-superimpose (scale-1080p (bitmap "res/fire.png") 150)
                                          (scale-1080p (bitmap "res/dragon.png") 75))])
@@ -516,7 +520,7 @@ contains the described film.
   (examples #:label #f
             (eval:alts (require "demo.vid") (void))
             (eval:alts vid '((producer #hash() () color "0x00ff00ff" #f #f #f #f))))
-  (centered (mod->pict "green.vid" "video" (clip "green"))))
+  (centered (modblock->pict "green.vid" "video" @~a|{@clip["green"]}|)))
 
 This exported video is a producer, which can be used in
 larger projects. To streamline this process, video adds
