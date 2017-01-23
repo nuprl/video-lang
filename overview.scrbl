@@ -24,14 +24,28 @@ embedded DSL solves this task; it provides creators with a
 declarative language designed for composing videos and has
 the full power of its host language.
 
-This section describes the language design, and how its
-users turn programs into videos. To accomplish this goal, we
-split this section into the following parts: First, we give
-the atomic constructs of film (@secref["overview-simple"]).
-Next, the API for combining video clips is described in
-@secref["overview-composite"]. Finally,
-@secref["overview-rendering"] illustrates the users
-perspective on previewing and rendering videos.
+@Figure-ref["video-example"] shows a six frame Video program
+that uses several constructs in the language---producers,
+playlists, multitracks, properties, filters, and
+transitions. Video is terse, this six frame program can also
+reasonably produce 6000 frames by changing a few constants.
+The first line of the program, @code{ #lang video}, is
+required at the top of every video program. The rest of the
+program is an interleaving of expressions and definitions.
+Video combines each expression to produce the final video.
+Definitions are lifted, allowing creators to place them at
+the bottom of the file. Additionally, Video uses similar
+syntax to Scribble, an embedded DSL for describing
+documents@cite[scribble-icfp]. This syntax allows authors to
+focus on the movies they are creating rather than syntax of
+the language.
+
+We discuss the language constructs used in program
+throughout the section. First, we describe basic producers.
+Then, we discuss the basics of how to combine producers
+using playlists and multitracks. Finally, we describe the
+interface authors use to render their programs into
+traditional video files.
 
 @figure["video-example" "A Sample Video Program"]{
  @codeblock|{
@@ -40,7 +54,7 @@ perspective on previewing and rendering videos.
 @color["green" #:length 1]
 
 @multitrack[
-   @clip["fire.png" #:length (/ (property-ref blue-clilp 'length) 8)]
+   @clip["fire.png" #:length (/ (property-ref blue-clip 'length) 8)]
    @composite-transition[0 0 1/2 1/2]
    blue-clip
  #:length 5]
@@ -49,7 +63,7 @@ perspective on previewing and rendering videos.
 
 @image["dragon" #:length 3]
 
-@define[blue-clip @color["blue" #:length 8]]}|
+@where[blue-clip <- @color["blue" #:length 8]]}|
  @exact{\vspace{0.3cm}} 
   @(centered
   (scale
@@ -69,14 +83,15 @@ perspective on previewing and rendering videos.
     (clip-scale (bitmap "res/dragon.png")))
    1.6))}
 
-@section[#:tag "overview-simple"]{A Simple Video}
+@section[#:tag "overview-simple"]{Producers}
 
 The @emph{producer} is the basic building block for video
 programs. A producer is any data that can be coerced into a
 video---audio clips, video clips, pictures, and even solid
-colors. Video programs composite all of the producers
-into a single producer, which a render converts into a
-traditional video file.
+colors and some internal Racket data structures. Video
+programs combine all of the producers into a single
+producer, which a render converts into a traditional video
+file.
 
 Every Video program begins with @code["#lang video"]. Unlike
 traditional languages where expressions are run for their
@@ -85,9 +100,9 @@ The @racket[color] function creates a colored producer with
 an unspecified length.
 
 @(split-minipage
-  (racketmod
-   video
-   (color "green"))
+  @codeblock[#:keep-lang-line? #f]|{
+   #lang video
+   @color["green"]}|
   (centered
    (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 150)))
 
@@ -99,7 +114,7 @@ used, these keywords specify the initial and final frames
 that are are included.
 
 @(split-minipage
-  (racketblock (clip "fire.mp4" #:start 100 #:end 500))
+  @codeblock|{@clip["fire.mp4" #:start 100 #:end 500]}|
   (centered (scale-1080p (bitmap "res/fire.png") 150)))
 
 Pictures have their own constructor: @racket[image]. Unlike
@@ -109,7 +124,7 @@ the pictures display time is important, @racket[#:length]
 constructs a producer with a specified length.
 
 @(split-minipage
-  (racketblock (image "dragon.png" #:length 50))
+  @codeblock|{@image["dragon.png" #:length 50]}|
   (centered (scale-1080p (bitmap "res/dragon.png") 150)))
 
 The final important form is @racket[blank]. Like
@@ -137,8 +152,8 @@ composite form. They are syntactically identical to lists.
 Any producer can be put in a playlist. Each clip in the list will play in succession.
 
 @(split-minipage
-  (racketblock (list (image "dragon.png")
-                     (clip "fire.mp4")))
+  @codeblock|{@playlist[@image["dragon.png"]
+                        @clip["fire.mp4"]]}|
   (centered (make-playlist-timeline
              (clip-scale (bitmap "res/dragon.png"))
              (ellipses)
@@ -149,11 +164,11 @@ example, @racket[append] creates a new playlist comprised of
 the playlists given to it.
 
 @(split-minipage
-  (racketblock (define dragons (list (image "dragon.mp4")
-                                     (clip "fire.mp4")))
-               (define colors (list (color "red")
-                                    (color "blue")))
-               (append dragon-clips color-clips))
+  @codeblock|{@playlist-append[dragon-clips color-clips]
+              @where[dragons <- @playlist[@image["dragon.mp4"]
+                                          @clip["fire.mp4"]]]
+              @where[colors <- @playlist[@color["red"]
+                                         @color["blue"]]]}|
   (centered
    (make-playlist-timeline
     (clip-scale (bitmap "res/dragon.png"))
@@ -178,10 +193,10 @@ shorten playlists because they consume two frames from its
 adjacent producers for every frame it produces.
 
 @(split-minipage
-  (racketblock (list (image "dragon.png" #:length 50)
-                     (swipe-transition #:direction 'bottom
-                                       #:durration 50)
-                     (clip "fire.png")))
+  @codeblock|{@playlist[@image["dragon.png" #:length 50]
+                        @swipe-transition[#:direction 'bottom
+                                          #:durration 50]
+                        @clip["fire.png"]]}|
   (centered
    (let ([size (clip-scale (blank 1))])
      (make-playlist-timeline
@@ -203,13 +218,13 @@ transitions can be placed in a single playlist without any
 unexpected effects.
 
 @(split-minipage
-  (racketblock (list (image "dragon.png" #:length 50)
-                     (swipe-transition #:direction 'bottom
-                                       #:durration 50)
-                     (color "blue" #:length 100)
-                     (swipe-transition #:direction 'top
-                                       #:duration 50)
-                     (clip "fire.png")))
+  @codeblock|{@playlist[@image["dragon.png" #:length 50]
+                        @swipe-transition[#:direction 'bottom
+                                          #:durration 50]
+                        @color["blue" #:length 100]
+                        @swipe-transition[#:direction 'top
+                                          #:duration 50]
+                        @clip["fire.png"]]}|
   (centered
    (let ([size (clip-scale (blank 1))])
      (make-playlist-timeline
@@ -242,10 +257,10 @@ transitions are place directly in the list to combine
 tracks.
 
 @(split-minipage
-  (racketblock (multitrack
-                (clip "fire.mpg")
-                (composite-transition 0 0 1/2 1/2)
-                (image "dragon.png")))
+  @codeblock|{@multitrack[
+               @clip["fire.mpg"]
+               @composite-transition[0 0 1/2 1/2]
+               @image["dragon.png"]]}|
   (centered
    (lt-superimpose (scale-1080p (bitmap "res/fire.png") 150)
                    (scale-1080p (bitmap "res/dragon.png") 75))))
@@ -257,13 +272,13 @@ inside of a multitrack. This is possible because, like
 playlists, multitracks are themselves producers.
 
 @(split-minipage
-  (racketblock (multitrack
-                (clip "fire.png")
-                (composite-transition 0 0 1/2 1/2)
-                (multitrack
-                 (image "dragon.png")
-                 (composite-transition 0 1/2 1/2 1/2)
-                 (color "green"))))
+  @codeblock|{@multitrack[
+               @clip["fire.png"]
+               @composite-transition[0 0 1/2 1/2]
+               @multitrack[
+                @image["dragon.png"]
+                @composite-transition[0 1/2 1/2 1/2]
+                @color["green"]]]}|
   (centered
    (lb-superimpose
     (lt-superimpose (scale-1080p (bitmap "res/fire.png") 150)
@@ -275,22 +290,22 @@ same track. The @racket[#:transitions] keyword composites a
 top and bottom producer in the multitrack.
 
 @(split-minipage
-  (racketblock (define bg (clip "fire.png"))
-               (define dragon (image "dragon.png"))
-               (define green-color (color "green"))
-               (define red-color (color "red"))
-               (multitrack dragon color bg
-                           #:transitions
-                           (list
-                            (composite-transition 0 0 1/2 1/2
-                                                  #:top dragon
-                                                  #:bottom bg)
-                            (composite-transition 1/2 0 1/2 1/2
-                                                  #:top red-color
-                                                  #:bottom bg)
-                            (composite-transition 0 1/2 1/2 1/2
-                                                  #:top green-color
-                                                  #:bottom bg))))
+  @codeblock|{@multitrack[dragon color bg
+                          #:transitions
+                          @playlist[
+                           @composite-transition[0 0 1/2 1/2
+                                                 #:top dragon
+                                                 #:bottom bg]
+                           @composite-transition[1/2 0 1/2 1/2
+                                                 #:top red-color
+                                                 #:bottom bg]
+                           @composite-transition[0 1/2 1/2 1/2
+                                                 #:top green-color
+                                                 #:bottom bg]]]
+              @where[bg <- @clip["fire.png"]]
+              @where[dragon <- @image["dragon.png"]]
+              @where[green-color <- @color["green"]]
+              @where[red-color <- @color["red"]]}|
   (centered
    (lb-superimpose
     (rt-superimpose
@@ -315,7 +330,7 @@ example, the @racket[scale-filter] filter scales a producer
 by the given width and height.
 
 @(split-minipage
-  (racketblock (scale-filter (image "dragon.png") 1 9))
+  @codeblock|{@scale-filter[@image["dragon.png"] 1 9]}|
   (centered
    (let ([size (scale (scale-1080p (blank 1) 150) 1 9)])
      (inset/clip
@@ -344,17 +359,18 @@ communicate if it should be placed at the top or bottom of
 the screen.
 
 @(split-minipage
-  (racketblock (define fire-clip
-                 (set-property (clip "fire")
-                               'bottom? #f))
-               (multitrack
-                fire-clip
-                (composite-transition
-                 0
-                 (if (get-property dragon 'bottom?)
-                     1/2 0)
-                 1/2 1/2)
-                (image "dragon.png")))
+  @codeblock|{@multitrack[
+               fire-clip
+               @composite-transition[
+                0
+                @if[@get-property[dragon 'bottom?]
+                    1/2 0]
+                 1/2 1/2]
+               @image["dragon.png"]]
+
+               @where[fire-clip <-
+                 @set-property[@clip["fire"] 'bottom? #f]]}|
+               
   (centered
    (lb-superimpose (scale-1080p (bitmap "res/fire.png") 150)
                    (scale-1080p (bitmap "res/dragon.png") 75))))
@@ -365,14 +381,16 @@ length of its main clip. That multitrack can then display
 that watermark for a portion of the clip.
 
 @(split-minipage
-  (racketblock (define fire-clip (clip "fire"))
-               (multitrack
-                fire-clip
-                (composite-transition 0 0 1/2 1/4)
-                (image "dragon.png"
-                       #:length (/ (get-property dragon
-                                                 'length)
-                                   2))))
+  @codeblock|{@multitrack[
+               fire-clip
+               @composite-transition[0 0 1/2 1/4]
+               @image["dragon.png"
+                      #:length (@get-property[dragon
+                                              'length]
+                                   . / .
+                                   2)]]
+
+  @define[fire-clip <- @clip["fire"]]}|
   (centered
    (let ([composite-pict (lt-superimpose (scale-1080p (bitmap "res/fire.png") 150)
                                          (scale-1080p (bitmap "res/dragon.png") 75))])
@@ -414,10 +432,10 @@ larger projects. To streamline this process, video adds
 @racket[include-video] to import video files into larger contexts.
 
 @(split-minipage
-  (racketmod video
-             (clip "fire.mp4")
-             (include-video "green.vid")
-             (image "dragon.png"))
+  @codeblock|{#lang video
+             @clip["fire.mp4"]
+             @include-video["green.vid"]
+             @image["dragon.png"]}|
   (centered
    (let ([composite-pict (lt-superimpose (scale-1080p (bitmap "res/fire.png") 150)
                                          (scale-1080p (bitmap "res/dragon.png") 75))])
