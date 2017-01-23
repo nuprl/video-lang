@@ -87,70 +87,104 @@ use to render their programs into traditional video files.
 @section[#:tag "overview-simple"]{Producers}
 
 The @emph{producer} is the basic building block for video
-programs. A producer is any data that can be coerced into a
-video---audio clips, video clips, pictures, and even solid
-colors and some internal Racket data structures. Video
-programs combine all of the producers into a single
-producer, which a render converts into a traditional video
-file.
+programs. A producer is any data that can be coerced into
+video---audio clips, video clips, pictures, and even some
+internal Racket data structures. Video programs combine all
+of the producers and a render converts them into a
+traditional video file. The power of Video lies in the fact
+that combinations of producers are themselves producers, and
+can be further combined into yet more complex producers
+still.
 
-Every Video program begins with @code["#lang video"]. Unlike
-traditional languages where expressions are run for their
-effects, the remainder of the file is a video description.
-The @racket[color] function creates a colored producer with
-an unspecified length.
+The simplest type of producer is one of Racket's internal
+data structures for drawing pictures@cite[slideshow-jfp].
+Colors, for example, are constructed with the @racket[color]
+function. It creates a colored producer with an unspecified
+length.
 
 @(split-minipage
-  @codeblock[#:keep-lang-line? #f]|{
-   #lang video
+  @codeblock|{
    @color["green"]}|
   (centered
    (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 150)))
+
+A length can be given to the color with the
+@racket[#:length] keyword. This keyword takes in the number
+of frames the producer should contain. If this keyword is
+not present, then @racket[color] will generate a producer
+long enough to fill any media it is combined with.
+
+@(split-minipage
+  @codeblock|{
+   @color["blue" #:length 2]}|
+  (centered
+   (make-playlist-timeline
+    (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
+    (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "blue")))))
 
 Another form, @racket[clip], creates a producer from a
 traditional video or audio file. Either the clip is imported
 in its entirely, or the @racket[#:start] and @racket[#:end]
 keywords project a slice of the clip into the program. If
 used, these keywords specify the initial and final frames
-that are are included.
+that are are included. The @racket[#:length] keyword can be
+used here when only the length of the clip is relevant,
+otherwise the length will be the difference between the
+start and end frame number.
 
 @(split-minipage
-  @codeblock|{@clip["fire.mp4" #:start 100 #:end 500]}|
-  (centered (scale-1080p (bitmap "res/fire.png") 150)))
+  @codeblock|{@clip["fire.mp4" #:start 100 #:end 103]}|
+  (centered
+   (make-playlist-timeline
+    (clip-scale (bitmap "res/fire.png"))
+    (clip-scale (bitmap "res/fire.png"))
+    (clip-scale (bitmap "res/fire.png")))))
 
 Pictures have their own constructor: @racket[image]. Unlike
 clips, images do not have an implicit start and end time.
-Rather, they can fill as much or little time as needed. If
-the pictures display time is important, @racket[#:length]
-constructs a producer with a specified length.
+Rather, like colors, they can fill as much or little time as
+needed. If the pictures display time is important,
+@racket[#:length] constructs a producer with a specified
+length.
 
 @(split-minipage
-  @codeblock|{@image["dragon.png" #:length 50]}|
+  @codeblock|{@image["dragon.png" #:length 1]}|
   (centered (scale-1080p (bitmap "res/dragon.png") 150)))
 
 The final important form is @racket[blank]. Like
 @racket[image], it takes a @racket[#:length] parameter. A
 blank is equivalent to inserting a completely transparent
-color. Developers use it when they need a producer that
-takes time, but does not produce any media.
+color. While blank is not useful on its own, it is useful for creating playlists with an offset in their start time.
 
-@section[#:tag "overview-composite"]{Videos Compositing}
+@(split-minipage
+  @codeblock|{@blank[2]}|
+  (centered
+   (make-playlist-timeline
+    (clip-scale (rectangle 50 50))
+    (clip-scale (rectangle 50 50)))))
+
+@section{Playlists}
 
 A video is merely a composition of many clips. Video
-provides two main ways for combining videos: @emph{
- playlists} and @emph{multitracks}. Roughly speaking,
+provides two main ways for combining videos:
+@emph{playlists} and @emph{multitracks}. Roughly speaking,
 playlists play clips in sequence, while multitracks play
-clips in parallel. Both data types additionally rely on
+clips in parallel.
+
+The playlist is the simpler video
+composite form. They are syntactically similar to lists.
+Any producer can be put in a playlist. Each clip in the playlist
+will play in succession.
+
+@;{
+Both data types additionally rely on
 @emph{transitions} and @emph{filters}. Transitions inform
 playlists and multitracks how multiple clips merge, such as
 fading or overlays. Filters, unlike transitions, change the
 behavior of a single producer---change the color, change
 playback speed, etc. Finally, producer properties allow for
 programs with dependent producers.
-
-@section{Playlists} The playlist is the simpler video
-composite form. They are syntactically identical to lists.
-Any producer can be put in a playlist. Each clip in the list will play in succession.
+}
 
 @(split-minipage
   @codeblock|{@playlist[@image["dragon.png"]
@@ -160,8 +194,24 @@ Any producer can be put in a playlist. Each clip in the list will play in succes
              (clip-scale (bitmap "res/fire.png"))
              (ellipses))))
 
+Creators insert blanks into their playlist to create a
+placeholder frame that does not have any content. This is
+used if they playlist should have an offset at the start, or
+a gap in the middle.
+
+@(split-minipage
+  @codeblock|{@playlist[@image["dragon.png"]
+                        @blank[1]
+                        @clip["fire.mp4"]]}|
+  (centered (make-playlist-timeline
+             (clip-scale (rectangle 50 50))
+             (clip-scale (rectangle 50 50))
+             (clip-scale (bitmap "res/dragon.png"))
+             (clip-scale (bitmap "res/fire.png"))
+             (ellipses))))
+
 Standard list operations also work with playlists. For
-example, @racket[append] creates a new playlist comprised of
+example, @racket[playlist-append] creates a new playlist comprised of
 the playlists given to it.
 
 @(split-minipage
@@ -178,24 +228,20 @@ the playlists given to it.
     (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "red"))
     (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "blue")))))
 
-@section{Transitions} Jumping from one producer to another
+@section{Transitions}
+Jumping from one producer to another in a playlist
 is jarring. Movies frequently reduce this effect with
-transitions---fading, swiping, etc. These transitions merge
+@emph{transitions}---fading, swiping, etc. These transitions merge
 two adjacent clips in a playlist.
 
-Creators place transitions inside playlists directly. While
-each transition is a producer, every playlist that a
-transition is placed into actually shortens the length of
-the playlist. For example, a transition with a length of 50
-frames will make the playlist 25 frames shorter. Transitions
-shorten playlists because they consume two frames from its
-adjacent producers for every frame it produces.
+Creators place transitions inside playlists directly. The
+transition mixes the clip above and below it in the list.
 
 @(split-minipage
   @codeblock|{@playlist[@image["dragon.png" #:length 3]
                         @swipe-transition[#:direction 'bottom
-                                          #:durration 2]
-                        @clip["fire.png"]]}|
+                                          #:duration 2]
+                        @clip["fire.mp4" #:length 3]]}|
   (centered
    (let ([size (clip-scale (blank 1))])
      (make-playlist-timeline
@@ -206,8 +252,26 @@ adjacent producers for every frame it produces.
       (vc-append
        (inset/clip (clip-scale (bitmap "res/dragon.png")) 0 0 0 (* (pict-height size) -2/3))
        (inset/clip (clip-scale (bitmap "res/fire.png")) 0 (* (pict-height size) -1/3) 0 0))
-      (clip-scale (bitmap "res/fire.png"))
-      (ellipses)))))
+      (clip-scale (bitmap "res/fire.png"))))))
+
+Every transition in a playlist actually shortens the length
+of the playlist. This effect stems from the fac that
+transitions produce one clip for every two clips they
+consume. For example, the playlist above has six frames without its transition, rather than four.
+
+@(split-minipage
+  #:split-location 0.4
+  @codeblock|{@playlist[
+               @image["dragon.png" #:length 3]
+               @clip["fire.mp4" #:length 3]]}|
+  (centered
+    (make-playlist-timeline
+     (clip-scale (bitmap "res/dragon.png"))
+     (clip-scale (bitmap "res/dragon.png"))
+     (clip-scale (bitmap "res/dragon.png"))
+     (clip-scale (bitmap "res/fire.png"))
+     (clip-scale (bitmap "res/fire.png"))
+     (clip-scale (bitmap "res/fire.png")))))
 
 Playlists can also have multiple transitions. Transitions,
 however, are associative operations. Therefore multiple
@@ -217,7 +281,7 @@ unexpected effects.
 @(split-minipage
   @codeblock|{@playlist[@image["dragon.png" #:length 2]
                         @swipe-transition[#:direction 'bottom
-                                          #:durration 1]
+                                          #:duration 1]
                         @color["blue" #:length 2]
                         @swipe-transition[#:direction 'top
                                           #:duration 1]
@@ -237,15 +301,16 @@ unexpected effects.
                    0 (* (pict-height size) -1/2) 0 0))
       (clip-scale (bitmap "res/fire.png"))))))
 
-@section{Multitracks} More complicated constructs are
-multitracks. Unlike playlists, multitracks play producers in
+@section{Multitracks}
+
+Unlike playlists, multitracks play producers in
 parallel. Like image layers, the renderer can only display
 one track. Developers use transitions to composite the
 tracks together.
 
 Multiracks are syntactically similar to playlist. The
 @racket[multitrack] form accepts a list of producers and
-produces a new multitrack producer. Like playlists,
+creates a new multitrack producer. Like playlists,
 transitions are place directly in the list to combine
 tracks.
 
@@ -258,7 +323,7 @@ tracks.
    (lt-superimpose (scale-1080p (bitmap "res/fire.png") 150)
                    (scale-1080p (bitmap "res/dragon.png") 75))))
 
-Transitions in multitracks are not associative. Multricks
+Unlike playlists, transitions in multitracks are not associative. Multricks
 interpret transitions in left to right order. Videos that
 require a different evaluation order can embed a multitrack
 inside of a multitrack. This is possible because, like
@@ -311,16 +376,47 @@ Racket's @racket[eq] function determines producer
 equivalence. Multitracks are able to use this pattern
 because producers are functional objects.
 
-@section{Filters} Unlike transitions, filters modify the
-behavior of a single producer. Some things filters are
-useful for include removing the color from a clip or even
-changing a producer's aspect ratio.
+The @racket[#:transitions] keyword also applies to
+playlists. While not strictly needed for playlists, it
+allows authors to create functions that insert transitions
+into playlists without having to bother with list operations directly.
 
-All filters are functions with producers for the domain and
-range: @mm{\mathit{filter} : @tt{producer}\:\: @tt{
-  extra-args}\: \cdots\: \rightarrow\: @tt{producer}} For
-example, the @racket[scale-filter] filter scales a producer
-by the given width and height.
+@(split-minipage
+  @codeblock|{@swiping-playlist[dragon green-color]
+              @where[dragon <- @image["dragon.png"]]
+              @where[green-color <- @color["green"]]
+              @where[swiping-playlist <-
+               (λ (a b)
+                 @playlist[a b
+                  #:transitions
+                    @list[@swipe-transition[#:direction 'bottom
+                                            #:duration 2
+                                            #:first a
+                                            #:second b]]])]}|
+  (centered
+   (let ([size (clip-scale (blank 1))])
+     (make-playlist-timeline
+      (clip-scale (bitmap "res/dragon.png"))
+      (vc-append
+       (inset/clip (clip-scale (bitmap "res/dragon.png")) 0 0 0 (* (pict-height size) -1/3))
+       (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
+                   0 (* (pict-height size) -2/3) 0 0))
+      (vc-append
+       (inset/clip (clip-scale (bitmap "res/dragon.png")) 0 0 0 (* (pict-height size) -2/3))
+       (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
+                   0 (* (pict-height size) -1/3) 0 0))
+      (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "green"))))))
+  
+
+@section{Filters}
+
+Filters are similar to transitions that modify the behavior
+of only a single producer. Some things filters are useful
+for include removing the color from a clip or even changing
+a producer's aspect ratio. Thus, filters themselves are
+functions from producers to producers. For example, the
+@racket[scale-filter] filter scales a producer by the given
+width and height.
 
 @(split-minipage
   @codeblock|{@scale-filter[@image["dragon.png"] 1 9]}|
@@ -330,10 +426,11 @@ by the given width and height.
       (scale (scale-1080p (bitmap "res/dragon.png") 150) 1 9)
       0 (* (pict-height size) (+ -1/3 -1/9)) 0 (* (pict-height size) (+ -1/3 -1/9))))))
 
-@section{Properties and Dependent Clips} Producers use
-properties to store and retrieve information about other
-producers. They additionally store both implicit and
-explicit properties. Implicit properties are innate to a
+@section{Properties and Dependent Clips}
+
+Producers use properties to store and retrieve information
+about other producers. They additionally store both implicit
+and explicit properties. Implicit properties are innate to a
 clips, such as length and dimensions. Explicit properties
 are added in the program.
 

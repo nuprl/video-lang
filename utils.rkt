@@ -109,11 +109,11 @@
   (nested #:style (style 'code-inset '(never-indents))
           code))
 
-(define (split-minipage a b)
+(define (split-minipage a b #:split-location [split-location 0.5])
   (centered
    (list
-    @exact{\begin{minipage}{0.5\textwidth}}
+    @exact{\begin{minipage}{@(number->string split-location)\textwidth}}
     a
-    @exact{\end{minipage}\begin{minipage}{0.5\textwidth}}
+    @exact{\end{minipage}\begin{minipage}{@(number->string (- 1 split-location))\textwidth}}
     b
     @exact{\end{minipage}})))
