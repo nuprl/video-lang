@@ -31,7 +31,7 @@ particularly on editing conference videos.
                                                     #:bottom background]]]
                        @where[background <- @blank[@properties-ref[speaker 'length]]])]}|
   (centered
-   (scale-1080p (filled-rectangle 50 50) 150)))
+   (scale-1080p (bitmap "res/stephen.jpg") 150)))
 
 Some text...
 
@@ -46,21 +46,19 @@ Some text...
                      @where[end-clip <- @image[logo #:length 500]])]}|
 @(centered
   (make-playlist-timeline
-   (clip-scale (filled-rectangle 50 50))
+   (clip-scale (bitmap "res/rcon.png"))
    (ellipses)
-   (clip-scale (filled-rectangle 50 50))
+   (clip-scale (bitmap "res/geoffrey.jpg"))
    (ellipses)
-   (clip-scale (filled-rectangle 50 50))
+   (clip-scale (bitmap "res/stephen.jpg"))
    (ellipses)
-   (clip-scale (filled-rectangle 50 50))
+   (clip-scale (bitmap "res/stephen2.jpg"))
    (ellipses)
-   (clip-scale (filled-rectangle 50 50))
+   (clip-scale (bitmap "res/stephen3.jpg"))
    (ellipses)
-   (clip-scale (filled-rectangle 50 50))
+   (clip-scale (bitmap "res/alexis.jpg"))
    (ellipses)
-   (clip-scale (filled-rectangle 50 50))
-   (ellipses)
-   (clip-scale (filled-rectangle 50 50))))
+   (clip-scale (bitmap "res/rcon.png"))))
 
 More text
 
@@ -82,11 +80,11 @@ More text
    25
    (filled-rectangle 200 50)
    (make-playlist-timeline
-    (clip-scale (filled-rectangle 50 50))
+    (clip-scale (bitmap "res/rcon.png"))
     (ellipses)
-    (clip-scale (filled-rectangle 50 50))
+    (clip-scale (bitmap "res/stephen.jpg"))
     (ellipses)
-    (clip-scale (filled-rectangle 50 50)))))
+    (clip-scale (bitmap "res/rcon.png")))))
 
 And some more text...
 
@@ -94,7 +92,8 @@ And some more text...
                 @~a|{
                      
                      @make-conference-talk[video audio 125]
-                     
+
+                     @require["conference-lib.vid"]
                      @where[slides <- @project-filter[@clip["0005.MTS"]]
                                                       #:in 2900 #:out 80000]
                      @where[_ <- @playlist[@clip["0001.mp4"] @clip["0002.mp4"]]]
