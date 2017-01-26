@@ -14,6 +14,8 @@
          "bib.rkt"]
 
 @(current-code-font code-font)
+@(get-current-code-font-size (λ () font-size))
+@(current-code-line-sep code-line-sep)
 @(define blank-clip (clip-scale (blank 1)))
 
 @title[#:tag "overview"]{The Design of Video}
@@ -517,10 +519,13 @@ in the language exports one @racket[vid] identifier, that
 contains the described film.
 
 @(split-minipage
+  #:split-location 0.7
   (examples #:label #f
             (eval:alts (require "demo.vid") (void))
             (eval:alts vid '((producer #hash() () color "0x00ff00ff" #f #f #f #f))))
-  (centered (modblock->pict "green.vid" "video" @~a|{@clip["green"]}|)))
+  @(filebox "green.vid"
+            @codeblock|{#lang video
+                        @clip["green"]}|))
 
 This exported video is a producer, which can be used in
 larger projects. To streamline this process, video adds

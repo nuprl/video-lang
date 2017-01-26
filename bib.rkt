@@ -104,3 +104,4 @@
 (define mlt-xml-url (url "https://www.mltframework.org/docs/mltxml/"))
 (define rsound-url (url "https://docs.racket-lang.org/rsound/index.html"))
 (define premiere-api-url (url "http://www.adobe.com/devnet/premiere.html"))
+(define racketcon-url (url "http://con.racket-lang.org/"))

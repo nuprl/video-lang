@@ -39,9 +39,10 @@
 
 (define code-font "CMU Typewriter Text")
 (define text-font "Times")
-(define small-font-size 8)
-(define font-size 9)
+(define small-font-size 14)
+(define font-size 15)
 (define small-scale-factor 0.8)
+(define code-line-sep 10)
 
 ; Test to make sure fonts are installed:
 (unless (set-member? (get-face-list) code-font)
@@ -127,3 +128,8 @@
     @exact{\end{minipage}\begin{minipage}{@(number->string (- 1 split-location))\textwidth}}
     b
     @exact{\end{minipage}})))
+
+(define (minipage . a)
+  (append (list @exact{\begin{minipage}{\textwidth}})
+          a
+          (list @exact{\end{minipage}})))
