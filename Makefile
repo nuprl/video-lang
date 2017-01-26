@@ -1,5 +1,4 @@
 all:
+	racket setup.rkt
 	raco doodle
 
-deps:
-	raco pkg install doodle
