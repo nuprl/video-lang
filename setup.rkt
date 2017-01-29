@@ -25,4 +25,4 @@
          (when update-deps
            (pkg-update-command #:deps 'search-auto i))]
         [else
-         (pkg-install-command #:deps 'search-auto)]))
+         (pkg-install-command #:deps 'search-auto i)]))

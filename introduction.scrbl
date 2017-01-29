@@ -42,9 +42,9 @@ repetitive aspects of the production process. Automation
 then helps producers focus on the creative aspects of
 their video production. 
 
-Abstractly speaking, Video make a new and unique contribution to the thread
+Abstractly speaking, Video makes a new and unique contribution to the thread
 of ideas on domain-specific functional languages. It is an example of a
-domain-specific language of lgebraic effects at two levels (see
+domain-specific language of algebraic effects at two levels (see
 @secref{rationale}). Obviously, Video programs describe run-time effects on
 video clips, which the renderer eventually executes. Additionally, Video
 programs describe compile-time effects, meaning the Video compiler shifts
