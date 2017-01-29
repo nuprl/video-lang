@@ -37,6 +37,8 @@
  a video editing DSL.}
 @include-section{extensions.scrbl}
 
+@include-section{rationale.scrbl}
+
 @;{Cover related work not in background section}
 @include-section{related.scrbl}
 

@@ -42,26 +42,29 @@ repetitive aspects of the production process. Automation
 then helps producers focus on the creative aspects of
 their video production. 
 
+Abstractly speaking, Video make a new and unique contribution to the thread
+of ideas on domain-specific functional languages. It is an example of a
+domain-specific language of lgebraic effects at two levels (see
+@secref{rationale}). Obviously, Video programs describe run-time effects on
+video clips, which the renderer eventually executes. Additionally, Video
+programs describe compile-time effects, meaning the Video compiler shifts
+definitions and imperatively composes the descriptions of video clips in a
+module into a single, exportable data structure.
+
 @; DrRacket@cite[plt-tr2] development environment to mix
 
-Since most ICFP readers are probably unfamiliar with the
-process of editing videos, the paper's first contribution is
-a survey of the state of the art of video editing and
-computational solutions (@secref["background"]). The survey
-and Andersen's work on RacketCon videos suggest a natural
-design blueprint for a functional video processing language
-(@secref["overview"]). One form of validation is a Video
-program that edits conference videos
-(@secref["case-study"]). It turns out that creating the
-language, writing the program, and editing videos for
-RacketCon 2016 takes less time than editing them manually.
-Video is implemented in Racket, which greatly facilitates
-the creation of production-level DSLs
-(@secref["implementation"]). Finally, since in this day and
-age a programming language must come with a graphical IDE,
-we also explain how to specialize DrRacket to Video with a
-few lines of code so that it supports the creation of
-programs, both as texts as well as short, embedded video
-clips as first-class values (@secref["extensions"]). We
-obviously wrap up the paper with a section on other related
-work and some brief remarks on developing DSLs.
+Since most ICFP readers are probably unfamiliar with the process of editing
+videos, the paper starts with a survey of the state of the art of video
+editing and computational solutions (@secref["background"]). The survey
+suggests a natural design blueprint for a functional video processing
+language (@secref["overview"]). One form of validation is a Video program
+that edits conference videos (@secref["case-study"]). It turns out that
+creating the language, writing the program, and editing videos for
+RacketCon 2016 takes less time than editing them manually.  Video is
+implemented in Racket, which greatly facilitates the creation of
+production-level DSLs such as video (@secref["implementation"]).  Racket
+also makes it easy to equip Video with a graphical IDE; that is, we can
+adapt DrRacket to Video with a few lines of code so that it supports the
+creation of programs as texts as well as short, embedded video clips
+(@secref["extensions"]). We obviously wrap up the paper with a section on
+other related work and some brief remarks on developing DSLs.

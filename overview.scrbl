@@ -20,12 +20,23 @@
 
 @title[#:tag "overview"]{The Design of Video}
 
-The way filmmakers create videos is at the heart of the
-Video language. They need tools that allow them to describe
-the video while also automating appropriate work. An
-embedded DSL solves this task; it provides creators with a
-declarative language designed for composing videos and has
-the full power of its host language.
+The preceding overview suggests that non-linear video editing distinctly
+separates the description of a video clip from the rendering action on
+it. Specifically, a video editor demands a description of what the final
+video should look like in terms of the given pieces.  The action of
+creating and rendering this video is a distinct second step. Furthermore,
+experience tells us that like programs, descriptions need abstractions; for
+example, a description may employ a comprehension to apply a watermark to
+all images, or it may employ of one module per ICFP presentation to make up
+a complete ICFP channel.
+
+The Video language gets to the heart of the problem. Each Video program
+is a complete module that intermingles descriptions of video clips and
+functions. It denotes a module that exports a single item: a playlist
+description of the complete video. One way to use a Video module is to
+create a video with a renderer. Another way is to import it into another
+Video module and to incorporate the exported video clip description into a
+larger one. 
 
 @Figure-ref["video-example"] shows a six frame Video program
 that uses several constructs in the language---producers,
