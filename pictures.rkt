@@ -14,3 +14,22 @@
 
 (define nlve-sample
   (scale (bitmap "res/nlve-demo.png") 0.14))
+
+(define blank-rect
+  (clip-scale (blank 1 1)))
+
+(define circ-image
+  (cc-superimpose blank-rect
+                  (disk 10 #:color "yellow")))
+
+(define rect-clip-frames 10)
+(define rect-clip
+  (build-list rect-clip-frames
+              (λ (f#)
+                (cc-superimpose blank-rect
+                                (rotate (filled-rectangle 15 15 #:color "red")
+                                        (/ (* f# pi) rect-clip-frames 2))))))
+
+(define (clip-frame clip)
+  (cc-superimpose (clip-scale (rectangle 50 50))
+                  (clip-scale clip)))

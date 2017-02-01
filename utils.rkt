@@ -87,13 +87,17 @@
    (blank space)
    b))
 
-(define (make-playlist-timeline #:distance [distance 5] . trace)
+(define (make-playlist-timeline #:distance [distance 5]
+                                #:end [end #f]
+                                . trace)
   (define frames
    (apply hc-append distance trace))
   (vc-append
    15
    frames
-   (let ([p (hc-append (pict-width frames) (tag-pict (blank) 'start) (tag-pict (blank) 'end))])
+   (let ([p (hc-append (pict-width frames)
+                       (tag-pict (vline 1 10) 'start)
+                       (tag-pict (if end (vline 1 10) (blank)) 'end))])
      (pin-arrow-line 5 p #:label (text "Time" text-font small-font-size)
                      (find-tag p 'start) cc-find
                      (find-tag p 'end) cc-find))))

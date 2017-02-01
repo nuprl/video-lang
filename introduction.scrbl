@@ -9,20 +9,18 @@
 @title[#:tag "introduction"]{Being Iavor Diatchki}
 
 Imagine yourself being Iavor Diatchki. He is the friendly
-guy who tapes all the wonderful ICFP presentations and
-then edits them into digestible YouTube video clips. Or
-imagine yourself being Leif Andersen, who plays Diatchki's
-role for RacketCon.
-
-When these people create the video clips, they combine a
-feed of the presenter with the presenter's screen, the
-sound feed for the speaker, and yet another one for
-audience questions. Composing these feeds means overlaying
-them in such a manner that the result appears to be a holistic
-production from the perspective of the YouTube viewer. Above and
-beyond this basic task, Diatchki and Andersen must add a
-start and/or end sequence to each video plus various
-watermarks throughout the video.
+guy who tapes all the wonderful ICFP presentations and then
+edits them into digestible YouTube video clips. Or imagine
+yourself being Leif Andersen, who plays Diatchki's role for
+RacketCon. When they create the video clips, they combine a
+feed of the presenter with the presenter's screen, the sound
+feed for the speaker, and yet another one for audience
+questions. Composing these feeds means overlaying them in
+such a manner that the result appears to be a holistic
+production from the perspective of the YouTube viewer.
+Aditionally, Diatchki and Andersen must add a start and
+end sequence to each video plus various watermarks
+throughout the video.
 
 Once one video is put together, the same process must be
 repeated for the next conference talk and the next and so
@@ -35,12 +33,11 @@ community is well equipped to create one.
 @; embedded in Racket@cite[plt-tr1]
 
 This paper presents @emph{Video} and its IDE. Video is an
-embedded domain-specific language (DSL) for
-post-conference video clip production.  Naturally Video is
-a functional language, whose programs automate the
-repetitive aspects of the production process. Automation
-then helps producers focus on the creative aspects of
-their video production. 
+embedded domain-specific language (DSL) for video clip
+production. Naturally Video is a functional language, whose
+programs automate the repetitive aspects of the production
+process. Automation then helps producers focus on the
+creative aspects of their video production.
 
 Abstractly speaking, Video makes a new and unique contribution to the thread
 of ideas on domain-specific functional languages. It is an example of a

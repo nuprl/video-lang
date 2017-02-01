@@ -98,6 +98,7 @@ transitions between the logos and the recording.
                       @where[end-clip <- @image[logo #:length 500]])]}|
  (centered
   (make-playlist-timeline
+   #:end #t
    (clip-scale (bitmap "res/rcon.png"))
    (ellipses)
    (clip-scale (bitmap "res/geoffrey.jpg"))
@@ -144,6 +145,7 @@ background, even when a video is a splash screen.
    25
    (filled-rectangle 200 50)
    (make-playlist-timeline
+    #:end #t
     (clip-scale (bitmap "res/rcon.png"))
     (ellipses)
     (clip-scale (bitmap "res/stephen.jpg"))
