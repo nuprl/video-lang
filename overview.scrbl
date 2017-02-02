@@ -82,9 +82,7 @@ larger one.
 @Figure-ref["video-example"] shows a six frame Video video
 that uses some of its most basic constructs: producers,
 playlists, multitracks, properties, filters, and
-transitions.@note{Images from this example are taken from
- the movie Sintel. (Note, should I cite this directly?:
- @url["http://dl.acm.org/citation.cfm?id=2019066"])} Video is
+transitions. Video is
 terse; this six-frame program can also reasonably produce
 6,000 frames by changing a few constants. The first line of
 the program, @code["#lang video"], is required at the top of
@@ -226,7 +224,7 @@ example, @racket[playlist-append] creates a new playlist comprised of
 the given playlists:
 
 @(split-minipage
-  @codeblock|{@playlist-append[dragon-clips color-clips]
+  @codeblock|{@playlist-append[shapes colors]
               @where[shapes <- @playlist[@image["circ.png"]
                                          @clip["rect.mp4"]]]
               @where[colors <- @playlist[@color["red"]
@@ -405,7 +403,7 @@ uses Racket's @racket[eq?] function to determine equality:
                                                  #:top green-color
                                                  #:bottom bg]]]
               @where[bg <- @clip["rect.mp4"]]
-              @where[dragon <- @image["circ.png"]]
+              @where[circ <- @image["circ.png"]]
               @where[green-color <- @color["green"]]
               @where[red-color <- @color["blue"]]}|
   (centered
@@ -536,10 +534,10 @@ that watermark for a portion of the clip:
 @(split-minipage
   #:split-location 0.45
   @codeblock|{@multitrack[
-               fire-clip
+               rect-clip
                @composite-transition[0 0 1/2 1/4]
                @image["circ.jpg"
-                      #:length (@get-property[dragon
+                      #:length (@get-property[rect-clip
                                               'length]
                                    . / .
                                    2)]]
@@ -615,16 +613,14 @@ and places the @racket[vid] struct where it is placed.
  
  @(split-minipage
    @codeblock|{#lang video
-               @clip["fire.mp4"]
+               @clip["rect.mp4"]
                @include-video["green.vid"]
-               @image["dragon.png"]}|
+               @image["circ.png"]}|
    (centered
-    (let ([composite-pict (lt-superimpose (scale-1080p (bitmap "res/fire.png") 150)
-                                          (scale-1080p (bitmap "res/dragon.png") 75))])
-      (make-playlist-timeline
-       #:end #f
-       (clip-frame (first rect-clip))
-       (ellipses)
-       (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-       (clip-frame circ-image)))))}
+    (make-playlist-timeline
+     #:end #f
+     (clip-frame (first rect-clip))
+     (ellipses)
+     (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
+     (clip-frame circ-image))))}
  
