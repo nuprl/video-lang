@@ -133,7 +133,7 @@
     b
     @exact{\end{minipage}})))
 
-(define (minipage . a)
-  (append (list @exact{\begin{minipage}{\textwidth}})
+(define (minipage #:size [size 1] . a)
+  (append (list @exact{\begin{minipage}{@(number->string size)\textwidth}})
           a
           (list @exact{\end{minipage}})))

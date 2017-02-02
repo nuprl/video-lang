@@ -251,7 +251,7 @@ hardware failure caused a screen recording failure for the
 first five talks. A slide deck appears in each video to
 compensate for the loss, but increases the program's size.
 
-@figure["video-lengths" "Length of RacketCon Video Programs"]{
+@figure-here["video-lengths" "Length of RacketCon Video Programs"]{
 @exact|{\begin{tabular}{@{}llrr@{}}\toprule
  Talk Title                           & Presenter                     & Run Time & Lines of Code \\
  \midrule

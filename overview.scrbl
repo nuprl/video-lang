@@ -597,16 +597,22 @@ and places the @racket[vid] struct where it is placed.
 @figure["video-use"
         "Video program for green clip (top) and another program using the green clip (bottom)."]{
  @(split-minipage
-   #:split-location 0.7
+   #:split-location 0.4
+   @(minipage
+     #:size 0.5
+     (filebox "green.vid"
+              @codeblock|{#lang video
+                          @clip["green"]}|))
    (examples #:label #f
              (eval:alts (require "demo.vid") (void))
-             (eval:alts vid '((producer #hash() () color "0x00ff00ff" #f #f #f #f))))
-   @(filebox "green.vid"
-             @codeblock|{#lang video
-                         @clip["green"]}|))
- @(blank 20)
+             (eval:alts vid '((producer #hash() () color "0x00ff00ff" #f #f #f #f)))))
+  
+ @exact{\vspace{0.2cm}}
+ 
  @(hline 500 0)
- @(blank 20)
+ 
+ @exact{\vspace{0.5cm}}
+ 
  @(split-minipage
    @codeblock|{#lang video
                @clip["fire.mp4"]
