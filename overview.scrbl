@@ -569,45 +569,56 @@ a larger production. In the first case, users give Video
 files to a renderer. In the second case, other modules
 import Video modules before rendering.
 
-A renderer converts standalone Video programs to traditional videos.
-This renderer allows creators to set various properties such
-as aspect ratio, frame rate, and even output format. If no
-output format is selected, Video plays a preview of the film
-in a new window.
+A renderer converts standalone Video programs to traditional
+videos. This renderer allows creators to set various
+properties such as aspect ratio, frame rate, and even output
+format. If no output format is selected, Video plays a
+preview of the film. For example, here is the command to
+preview a clip that displays a green background:
 
 @(split-minipage
   (centered @exec{raco video -h 1920 -w 1080 --fps 48 demo.vid})
   (centered (scale (bitmap "res/sample.png") 0.08)))
 
 Every Video program is usable inside of other Video
-programs, as well as Racket programs in general. Each module
+programs and general purpose Racket programs. Each module
 in the language exports one @racket[vid] identifier, that
 contains the described film.
 
-@(split-minipage
-  #:split-location 0.7
-  (examples #:label #f
-            (eval:alts (require "demo.vid") (void))
-            (eval:alts vid '((producer #hash() () color "0x00ff00ff" #f #f #f #f))))
-  @(filebox "green.vid"
-            @codeblock|{#lang video
-                        @clip["green"]}|))
+The top half of @figure-ref["video-use"] shows the program
+for the green video used above. The code to the right shows
+the contents of the @racket[vid] structure. This video is
+itself a producer and can be used in larger projects, shown
+in the bottom half of @figure-ref["video-use"]. Video
+provides @racket[include-video] to import video files into
+larger contexts. This function imports the specified file
+and places the @racket[vid] struct where it is placed.
 
-This exported video is a producer, which can be used in
-larger projects. To streamline this process, video adds
-@racket[include-video] to import video files into larger contexts.
-
-@(split-minipage
-  @codeblock|{#lang video
-             @clip["fire.mp4"]
-             @include-video["green.vid"]
-             @image["dragon.png"]}|
-  (centered
-   (let ([composite-pict (lt-superimpose (scale-1080p (bitmap "res/fire.png") 150)
-                                         (scale-1080p (bitmap "res/dragon.png") 75))])
-     (make-playlist-timeline
-      #:end #f
-      (clip-frame (first rect-clip))
-      (ellipses)
-      (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-      (clip-frame circ-image)))))
+@figure["video-use"
+        "Video program for green clip (top) and another program using the green clip (bottom)."]{
+ @(split-minipage
+   #:split-location 0.7
+   (examples #:label #f
+             (eval:alts (require "demo.vid") (void))
+             (eval:alts vid '((producer #hash() () color "0x00ff00ff" #f #f #f #f))))
+   @(filebox "green.vid"
+             @codeblock|{#lang video
+                         @clip["green"]}|))
+ @(blank 20)
+ @(hline 500 0)
+ @(blank 20)
+ @(split-minipage
+   @codeblock|{#lang video
+               @clip["fire.mp4"]
+               @include-video["green.vid"]
+               @image["dragon.png"]}|
+   (centered
+    (let ([composite-pict (lt-superimpose (scale-1080p (bitmap "res/fire.png") 150)
+                                          (scale-1080p (bitmap "res/dragon.png") 75))])
+      (make-playlist-timeline
+       #:end #f
+       (clip-frame (first rect-clip))
+       (ellipses)
+       (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
+       (clip-frame circ-image)))))}
+ 

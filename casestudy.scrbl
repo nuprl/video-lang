@@ -143,7 +143,10 @@ background, even when a video is a splash screen.
                                       #:direction 'out]]]])]}|
   (vc-append
    25
-   (filled-rectangle 200 50)
+   (hc-append 20
+              (scale-to-fit (bitmap "res/sound-start.png") 90 30 #:mode 'distort)
+              (ellipses)
+              (scale-to-fit (bitmap "res/sound-end.png") 90 30 #:mode 'distort))
    (make-playlist-timeline
     #:end #t
     (clip-scale (bitmap "res/rcon.png"))
