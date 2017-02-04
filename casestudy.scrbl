@@ -16,15 +16,14 @@
 
 @title[#:tag "case-study"]{Case Study: Conference Videos}
 
-Video shines in situations where films are similar, but have
-slight variations. Conference recordings have similar
-structure with only slight deviations. Each talk has a
-recording of the speaker, a screen capture feed, and audio
-feeds for both the speaker and audience questions. Post
-production composites these feed into one stream, and
-inserts relevant watermarks. Each talk plays the feeds in
-lockstep, but slight artifacts in recording vary from talk
-to talk.
+Video shines in situations where films are similar but have
+slight variations, such as conference recordings. Each talk
+has a recording of the speaker, a screen capture feed, and
+audio feeds for both the speaker and audience questions.
+Post production composites these feed into one stream and
+inserts relevant watermarks. Each talk recording plays the
+feeds in lockstep, but slight artifacts in recording vary
+from talk to talk.
 
 The high amount of repeatability makes Video an ideal
 language for processing conference recordings. Every video
