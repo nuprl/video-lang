@@ -1,6 +1,6 @@
 #lang scribble/acmart @format["acmlarge"]
 
-@require["bib.rkt"
+@require["bib.rkt" (only-in scribble/core element make-style)
          "utils.rkt"]
 
 @title{A Declarative Embedded DSL for Video Editing}
@@ -8,8 +8,17 @@
 @authorinfo["Asumu Takikawa" "Igalia" "asumu@igalia.com"]
 @authorinfo["Matthias Felleisen" "PLT @ Northeastern University" "matthias@ccs.neu.edu"]
 
+@abstract{Creating videos from several feeds usually employs so-called
+non-linear editors. For many tasks, the use of these graphical tools
+demands a serious amount of repetitive work. As it turns out, this domain
+is an ideal candidate for the injection of a special-purpose functional
+scripting language that separates the imperative rendering effects from
+their description. This paper presents Video, a functional-declarative
+domain-specific language, its design, implementation, and
+evaluation. Abstractly put, the paper demonstrates why host languages for
+domain-specific languages must allow a context-sensitive manipulation of
+subject code.}
 
-@abstract{Video is an Embedded DSL, and this is its paper's abstract.}
 
 @;{Describe concrete example of editing conference videos.
  Describe how task is repetitive, and how a programmer would want to
