@@ -37,18 +37,18 @@
   (send b load-file in)
   (bitmap b))
 
-(define code-font "CMU Typewriter Text")
-(define text-font "Times")
-(define small-font-size 14)
+(define code-font "Linux Libertine Mono")
+(define text-font "Linux Libertine")
+(define small-font-size 12)
 (define font-size 15)
 (define small-scale-factor 0.8)
 (define code-line-sep 10)
 
 ; Test to make sure fonts are installed:
 (unless (set-member? (get-face-list) code-font)
-  (raise-user-error 'paper "Please install '~a' font" code-font))
+  (raise-user-error 'paper "Please install '~a' font: http://www.linuxlibertine.org" code-font))
 (unless (set-member? (get-face-list) text-font)
-  (raise-user-error 'paper "Please install '~a' font" text-font))
+  (raise-user-error 'paper "Please install '~a' font: http://www.linuxlibertine.org" text-font))
 
 (define-syntax-rule (mod->pict modname lang content ...)
   (mod->pict* #:codeblock? #f modname lang content ...))
@@ -89,6 +89,7 @@
 
 (define (make-playlist-timeline #:distance [distance 5]
                                 #:end [end #f]
+                                #:font-size [font-size small-font-size]
                                 . trace)
   (define frames
    (apply hc-append distance trace))
@@ -98,7 +99,7 @@
    (let ([p (hc-append (pict-width frames)
                        (tag-pict (vline 1 10) 'start)
                        (tag-pict (if end (vline 1 10) (blank)) 'end))])
-     (pin-arrow-line 5 p #:label (text "Time" text-font small-font-size)
+     (pin-arrow-line 5 p #:label (text "time" text-font font-size)
                      (find-tag p 'start) cc-find
                      (find-tag p 'end) cc-find))))
 
@@ -137,3 +138,7 @@
   (append (list @exact{\begin{minipage}{@(number->string size)\textwidth}})
           a
           (list @exact{\end{minipage}})))
+
+(define (TODO . content)
+  (elem #:style (style #f (list (color-property "red")))
+        content))

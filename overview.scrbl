@@ -21,15 +21,18 @@
 
 @title[#:tag "overview"]{The Design of Video}
 
-The preceding overview suggests that non-linear video editing distinctly
-separates the description of a video clip from the rendering action on
-it. Specifically, a video editor demands a description of what the final
-video should look like in terms of the given pieces.  The action of
-creating and rendering this video is a distinct second step. Furthermore,
-experience tells us that like programs, descriptions need abstractions; for
-example, a description may employ a comprehension to apply a watermark to
-all images, or it may employ of one module per ICFP presentation to make up
-a complete ICFP channel.
+The preceding overview suggests that non-linear video
+editing distinctly separates the description of a video clip
+from the rendering action on it. Specifically, a video
+editor demands a description of what the final video should
+look like in terms of the given pieces. The action of
+creating and rendering this video is a distinct second step.
+@TODO{I cannot parse this sentence(}Furthermore,
+experience tells us that, like programs, descriptions need
+abstractions; for example, a description may use a
+comprehension to apply a watermark to all images, or it may
+employ of one module per ICFP presentation to make up a
+complete ICFP channel.@TODO{)}
 
 The Video language gets to the heart of the problem. Each Video program
 is a complete module that intermingles descriptions of video clips and
@@ -61,6 +64,7 @@ larger one.
   (scale
    (make-playlist-timeline
     #:end #t
+    #:font-size (inexact->exact (floor (/ small-font-size 1.4)))
     (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
     (clip-frame
      (lt-superimpose (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
@@ -80,27 +84,28 @@ larger one.
    1.6))}
 
 @Figure-ref["video-example"] shows a six frame Video video
-that uses some of its most basic constructs: producers,
-playlists, multitracks, properties, filters, and
-transitions. Video is
-terse; this six-frame program can also reasonably produce
-6,000 frames by changing a few constants. The first line of
-the program, @code["#lang video"], is required at the top of
-every video program. The rest of the program is an
-interleaving of expressions and definitions. Video turns the
-sequence of expression to produce the final video.
-Definitions are lifted, allowing creators to place them at
-whatever positiong makes the program most readable.
+that uses some of the language's most basic constructs:
+producers, playlists, multitracks, properties, filters, and
+transitions. Video is terse; this six-frame program can also
+reasonably produce 6,000 frames by changing a few constants.
+Like Unix shell scripts, the first line of the program
+specifies that this module is written in the Video language.
+The remaining program is an interleaving of expressions and
+definitions. Video turns the sequence of expression to
+produce the final video. The definitions introduce auxiliary
+functions and constants, and can be placed at whatever
+positioning makes the program most readable.
 
 Video uses syntax similar to Scribble, an
 embedded DSL for describing documents@cite[scribble-icfp].
 This syntax allows authors to focus on the movies they are
 creating rather than syntax of the language.
 
-We discuss the language constructs used in program
-throughout the section. First, we describe basic producers.
-Then, we discuss the basics of how to combine producers
-using playlists and multitracks. To make compelling
+The rest of this section presents
+the language constructs in Video.
+First, we describe basic producers: images, blanks, colors and so on.
+Then, we discuss the basics of how to combine these producers
+into playlists and multitracks. To make compelling
 examples, we simultaneously introduce transitions, filters,
 and properties. Finally, we describe the interface authors
 use to render their programs into traditional video files.
@@ -110,12 +115,12 @@ use to render their programs into traditional video files.
 The @emph{producer} is the most basic building block for
 Video programs. A producer is any data that can be coerced
 into video: audio clips, video clips, pictures, and even
-some internal Racket data structures. Combinations of
+some data structures. Combinations of
 producers are themselves producers, and they can be further
 combined into yet more complex producers still.
 
-The simplest type of producer, color, is one of Racket's
-internal data structures for drawing
+The simplest type of producer, color, is a
+data structures for drawing
 pictures@cite[slideshow-jfp]. A color producer creates a
 clip of the specified color with an unspecified length:
 
@@ -143,8 +148,8 @@ Another producer, @racket[clip], describes a
 traditional video or audio file. Either the clip is imported
 in its entirely, or the @racket[#:start] and @racket[#:end]
 keywords project a slice of the clip into the program. If
-used, these keywords specify the initial and final frames
-that are are included. The @racket[#:length] keyword can be
+used, the two keywords specify the initial and final frames respectively.
+The @racket[#:length] keyword can be
 used here when only the length of the clip is relevant.
 
 @(split-minipage
@@ -156,11 +161,11 @@ used here when only the length of the clip is relevant.
     (clip-frame (sixth rect-clip))
     (clip-frame (seventh rect-clip)))))
 
-Pictures have their own producer: @racket[image]. Unlike
+Individual pictures have their own producer: @racket[image]. Unlike
 clips, images do not have an implicit start and end time.
 Rather, like colors, they can fill as much or little time as
 needed. If the pictures display time is important,
-@racket[#:length] constructs a producer with a specified
+@racket[#:length] constructs a producer with a specific
 length:
 
 @(split-minipage
@@ -188,10 +193,10 @@ provides two main ways for combining videos:
 playlists play clips in sequence, while multitracks play
 clips in parallel.
 
-The playlist is the simpler of the two
-compositing form. They are syntactically similar to lists.
-Any producer can be put in a playlist. Each clip in the playlist
-plays in succession:
+The playlist is the simpler of the two compositing form.
+They are syntactically similar to lists. Any producer can be
+put in a playlist including another playlist. Each clip in
+the playlist plays in succession:
 
 @(split-minipage
   @codeblock|{@playlist[@image["circ.png"]
@@ -202,8 +207,8 @@ plays in succession:
              (clip-frame (first rect-clip))
              (ellipses))))
 
-Insert a blanks into playlists creates a placeholder frame
-that does not have any content. This is used if they
+Insert a blank into playlists creates placeholder frames
+that do not have any content. This is used if they
 playlist should have an offset at the start or a gap in the
 middle:
 
@@ -239,27 +244,30 @@ the given playlists:
     (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "blue")))))
 
 This sample also introduces @racket[where] for binding. This
-binding is similar to Racket's @racket[define] binding form,
-but is lifted to the top of its scope. Here,
-@racket[shapes] and @racket[colors] are bound to existing
-playlists. Video raises these definitions to top of the
-program. thus enabling to put them where they are most clear
-in this program. In this case, at the bottom.
+binding is similar to Racket's @racket[define] binding form.
+Here, @racket[shapes] and @racket[colors] are bound to
+existing playlists. Unlike Haskell's @tt{where} keyword,
+variables bound this way are available in the entire module
+or function they are defined in. Thus, the example would
+yield the same result if the @racket[where] statement is at
+the top of the code.
 
 @section{Transitions}
-Jumping from one producer to another in a playlist
+Jumping from one producer in a playlist to another
 is jarring. Movies frequently reduce this effect with
 @emph{transitions}: fading, swiping, etc. These transitions merge
 two adjacent clips in a playlist.
 
-Transitions are placed directly inside playlists. The
-transition mixes the two adjacent clips in the list.
-
-@(split-minipage
-  @codeblock|{@playlist[@image["circ.png" #:length 3]
-                        @swipe-transition[#:direction 'bottom
-                                          #:duration 2]
-                        @clip["rect.mp4" #:length 3]]}|
+@(compound-paragraph
+  (style #f '())
+  (list
+   @para{Transitions are placed directly inside playlists. The
+ transition mixes the two adjacent clips in the list:}
+   (split-minipage
+    @codeblock|{@playlist[@image["circ.png" #:length 3]
+                          @swipe-transition[#:direction 'bottom
+                                            #:duration 2]
+                          @clip["rect.mp4" #:length 3]]}|
   (centered
    (let ([size (clip-scale (blank 1))])
      (make-playlist-timeline
@@ -274,18 +282,16 @@ transition mixes the two adjacent clips in the list.
         (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -2/3))
         (inset/clip (clip-scale (second rect-clip)) 0 (* (pict-height size) -1/3) 0 0)))
       (clip-frame (third rect-clip))))))
-
-Every transition in a playlist actually shortens the length
-of the playlist, because transitions produce one clip for
-every two clips they consume. For example, the playlist
-above has six frames without its transition, rather than
-four:
-
-@(split-minipage
-  #:split-location 0.4
-  @codeblock|{@playlist[
-               @image["circ.png" #:length 3]
-               @clip["rect.mp4" #:length 3]]}|
+   @para{Every transition in a playlist actually shortens the length
+ of the playlist, because transitions produce one clip for
+ every two clips they consume. For example, the playlist
+ above has six frames without its transition, rather than
+ four:}
+   (split-minipage
+    #:split-location 0.4
+    @codeblock|{@playlist[
+                 @image["circ.png" #:length 3]
+                 @clip["rect.mp4" #:length 3]]}|
   (centered
     (make-playlist-timeline
      #:end #t
@@ -294,13 +300,13 @@ four:
      (clip-frame circ-image)
      (clip-frame (first rect-clip))
      (clip-frame (second rect-clip))
-     (clip-frame (third rect-clip)))))
+     (clip-frame (third rect-clip)))))))
 
 Playlists may contain multiple transitions. Videos that
-contain this behavior are not ambiguous because transitions
-are associative operations. Multiple transitions placed in a
-single playlist described the desired clip without any
-unexpected effects:
+contain this behavior are not ambiguous because playlist
+transitions are associative operations. Multiple transitions
+placed in a single playlist described the desired clip
+without any surprises:
 
 @(split-minipage
   @codeblock|{@playlist[@image["circ.png" #:length 2]
@@ -331,13 +337,13 @@ unexpected effects:
 @section{Multitracks}
 
 Unlike playlists, multitracks play producers in parallel.
-Like with playlists transitions are used to composite the
+Like with playlists, transitions are used to composite the
 tracks.
 
-Multiracks are syntactically similar to playlist. The
+Syntactically, multiracks are similar to playlists. The
 @racket[multitrack] form accepts a list of producers and
-creates a new multitrack producer. Transitions are again
-placed directly in the list to combine tracks:
+creates a new multitrack producer. Again, transitions show
+up directly in the list to combine tracks:
 
 @(split-minipage
   @codeblock|{@multitrack[
@@ -355,7 +361,15 @@ placed directly in the list to combine tracks:
                      (scale-1080p circ-image 75)))
     (ellipses))))
 
-Transitions within multitracks are not associative. Indeed
+This example uses @racket[composite-transition], which
+places one producer on top of the other. The four constants
+used indicate the coordinates to place the top-left corner
+of the producer, and the other two indicate the screen space
+the top producer takes. Here, the top producer appears in
+the top-left hand of the screen, and takes up half of the
+width and height of the screen.
+
+Transitions within multitracks are not associative; instead,
 multricks interpret transitions in left to right order.
 Videos that require a different evaluation order can embed a
 multitrack inside of a multitrack, because multitracks are
@@ -384,10 +398,13 @@ themselves producers. Here is an example:
       (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 75))))))
 
 An alternative is to apply multiple transitions to the same
-track. The @racket[#:transitions] keyword takes a list of
-transitions. Each transition in this list composites a two
-producers, top and bottom, in the multitrack. The renderer
-uses Racket's @racket[eq?] function to determine equality:
+track. To support this alternative, multitracks support the
+@racket[#:transitions] keyword, which takes a list of
+transitions. Each transition in this list composites a pair
+of producers, top and bottom, in the multitrack. These
+producers are specified with the @racket[#:top] and
+@racket[#:bottom] keywords respectively, and must be
+producers found in the multitrack.
 
 @(split-minipage
   @codeblock|{@multitrack[circ color bg
@@ -425,24 +442,26 @@ uses Racket's @racket[eq?] function to determine equality:
       (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 75))))))
 
 The @racket[#:transitions] keyword also applies to
-playlists. While not strictly needed for playlists, it
-allows abstractions into both playlist and multitrack
+playlists.
+This
+allows abstracting over both playlist and multitrack
 functions that insert transitions into both of these data
 representations without having to bother with list
 operations directly. Here is an example:
 
 @(split-minipage
-  @codeblock|{@swiping-playlist[circ green-color]
-              @where[circ <- @image["circ.png"]]
-              @where[green-color <- @color["green"]]
+  #:split-location 0.35
+  @codeblock|{@swiping-playlist[@image["circ.png"] @color["green"]]
+              @swiping-playlist[@color["green"] @clip[rect]]
               @where[swiping-playlist <-
                (λ (a b)
                  @playlist[a b
                   #:transitions
-                    @list[@swipe-transition[#:direction 'bottom
-                                            #:duration 2
-                                            #:first a
-                                            #:second b]]])]}|
+                    @list[@swipe-transition[
+                           #:direction 'bottom
+                           #:duration 1
+                           #:first a
+                           #:second b]]])]}|
   (centered
    (let ([size (clip-scale (blank 1))])
      (make-playlist-timeline
@@ -450,20 +469,22 @@ operations directly. Here is an example:
       (clip-frame circ-image)
       (clip-frame
        (vc-append
-        (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -1/3))
+        (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -1/2))
         (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-                    0 (* (pict-height size) -2/3) 0 0)))
+                    0 (* (pict-height size) -1/2) 0 0)))
+      (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
+      (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
       (clip-frame
        (vc-append
-        (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -2/3))
         (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-                    0 (* (pict-height size) -1/3) 0 0)))
-      (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))))))
-  
+                    0 0 0 (* (pict-height size) -1/2))
+        (inset/clip (first rect-clip) 0 (* (pict-height size) -1/2) 0 0)))
+      (clip-frame (second rect-clip))
+      (ellipses)))))
 
 @section{Filters}
 
-Filters are similar to transitions that modify the behavior
+Filters are similar to transitions, but they modify the behavior
 of only a single producer. For example, filters can
 remove the color from a clip or change
 a producer's aspect ratio. Thus, filters themselves are
