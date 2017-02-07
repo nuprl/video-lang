@@ -142,3 +142,37 @@
 (define (TODO . content)
   (elem #:style (style #f (list (color-property "red")))
         content))
+
+(define (type-table . table)
+  (make-element (make-style "identity" '(exact-chars))
+                `("\\begin{align*}"
+                  ,@(add-between
+                     (for/list ([i (in-list table)])
+                       (format "\\textit{~a} :&\\ ~a" (first i) (type->latex-str (second i))))
+                     "\\\\")
+                  "\\end{align*}")))
+
+(define parenize (make-parameter #f))
+(define (type->latex-str type)
+  (match type
+    [`(-> ,type* ... ,ret-type)
+     (format (if (parenize) "(~a \\rightarrow ~a)" "~a \\rightarrow ~a")
+             (parameterize ([parenize #t])
+               (string-join (map type->latex-str type*)
+                            "\\; "))
+             (type->latex-str ret-type))]
+    [`(U ,type* ...)
+     (format (if (parenize) "(~a)" "~a")
+             (parameterize ([parenize #t])
+               (string-join (map type->latex-str type*)
+                            " \\mid ")))]
+    [`(X ,type* ...)
+     (format (if (parenize) "(~a)" "~a")
+             (parameterize ([parenize #t])
+               (string-join (map type->latex-str type*)
+                            " \\times ")))]
+    [`(List ,type)
+     (format "[~a\\: \\cdots]"
+             (type->latex-str type))]
+    [#\newline "\\\\ & "]
+    [_ (format "\\texttt{~a}" type)]))

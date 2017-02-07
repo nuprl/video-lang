@@ -465,7 +465,7 @@ operations directly. Here is an example:
   (centered
    (let ([size (clip-scale (blank 1))])
      (make-playlist-timeline
-      #:end #f
+      #:end #t
       (clip-frame circ-image)
       (clip-frame
        (vc-append
@@ -484,13 +484,14 @@ operations directly. Here is an example:
 
 @section{Filters}
 
-Filters are similar to transitions, but they modify the behavior
-of only a single producer. For example, filters can
-remove the color from a clip or change
-a producer's aspect ratio. Thus, filters themselves are
-functions from producers to producers. As an example, the
-@racket[scale-filter] filter scales a producer by the given
-width and height, leading to a stretching effect:
+Filters are similar to transitions, but they modify the
+behavior of only a single producer. For example, filters can
+remove the color from a clip or change a producer's aspect
+ratio. Thus, filters themselves are functions from producers
+to producers. As an example, the @racket[scale-filter]
+filter scales a producer by the given width and height,
+leading to a stretching effect. Here, the first integer
+scales the width, while the second one scales the height:
 
 @(split-minipage
   @codeblock|{@scale-filter[@image["circ.png"] 1 3]}|
@@ -506,37 +507,37 @@ width and height, leading to a stretching effect:
 @section{Properties and Dependent Clips}
 
 Producers use properties to store and retrieve information
-about other producers. They additionally store both implicit
-and explicit properties. Implicit properties are innate to
-clips, such as length and dimensions. Explicit properties
-are added by the program.
+about other producers. Properties come in two varieties:
+implicit and explicit properties. Implicit properties are
+innate to clips, for example, length and dimensions.
+Explicit properties must be added by the program itself.
 
-The properties API has two calls:
-@itemlist[
+@(compound-paragraph
+  (style #f '())
+  (list
+   @para{The properties API has two calls:}
+   @itemlist[
  @item{@racket[(set-property #,(emph "producer") #,(emph "key") #,(emph "value"))] creates
   an explicit property. It returns a new producer with @emph{key} associated with @emph{value}.}
  @item{@racket[(get-property #,(emph "producer") #,(emph "key"))] returns
   the value associated with @emph{key}. If the property is set
   both implicitly and explicitly, the explicit property has priority.}]
+   @para{Explicit properties provide a protocol to
+ communicate information from one clip to another. For example, a watermark can
+ communicate whether it should be placed at the top or bottom of
+ the screen:}
+   (split-minipage
+    @codeblock|{@multitrack[
+                 rect-clip
+                 @composite-transition[
+                  0
+                  @if[@get-property[rect-clip 'bottom?]
+                      1/2 0]
+                   1/2 1/2]
+                 @image["circ.png"]]
 
-Explicit properties provide a protocol for clips to
-communicate information. For example, a watermark can
-communicate whether it should be placed at the top or bottom of
-the screen:
-
-@(split-minipage
-  @codeblock|{@multitrack[
-               rect-clip
-               @composite-transition[
-                0
-                @if[@get-property[rect-clip 'bottom?]
-                    1/2 0]
-                 1/2 1/2]
-               @image["circ.png"]]
-
-               @where[rect-clip <-
-                 @set-property[@clip["rect.mp4"] 'bottom? #f]]}|
-               
+                 @where[rect-clip <-
+                   @set-property[@clip["rect.mp4"] 'bottom? #f]]}|
   (centered
    (make-playlist-timeline
     #:end #t
@@ -545,7 +546,7 @@ the screen:
                      (scale-1080p circ-image 75)))
     (clip-frame
      (lb-superimpose (scale-1080p (second rect-clip) 150)
-                     (scale-1080p circ-image 75))))))
+                     (scale-1080p circ-image 75))))))))
 
 Implicit properties store innate information about a clip.
 Returning to the watermark example, a multitrack can get the
@@ -583,7 +584,7 @@ that watermark for a portion of the clip:
 
 @section[#:tag "overview-rendering"]{From Programs to Videos}
 
-Video programs may describe standalone films or as pieces in
+Video programs may describe standalone films or pieces of
 a larger production. In the first case, users give Video
 files to a renderer. In the second case, other modules
 import Video modules before rendering.
@@ -624,7 +625,7 @@ and places the @racket[vid] struct where it is placed.
                           @clip["green"]}|))
    (examples #:label #f
              (eval:alts (require "demo.vid") (void))
-             (eval:alts vid '((producer #hash() () color "0x00ff00ff" #f #f #f #f)))))
+             (eval:alts vid (display "#<producer>"))))
   
  @exact{\vspace{0.2cm}}
  
@@ -644,4 +645,32 @@ and places the @racket[vid] struct where it is placed.
      (ellipses)
      (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
      (clip-frame circ-image))))}
- 
+
+@(type-table `(blank (-> Number Producer))
+             `(color (-> (U String (X Number Number Number)) Producer))
+             `(clip (-> String Producer))
+             `(image (-> String Producer))
+             `(playlist (-> (List (U Producer (-> Producer Producer Producer)))
+                            #\newline
+                            (List (X (-> Producer Producer Producer) Producer Producer))
+                            #\newline
+                            (List (X (-> Producer Producer) Producer))
+                            #\newline
+                            Producer))
+             `(multitrack (-> (List (U Producer (-> Producer Producer Producer)))
+                              #\newline
+                              (List (X (-> Producer Producer Producer) Producer Producer))
+                              #\newline
+                              (List (X (-> Producer Producer) Producer))
+                              #\newline
+                              Producer))
+             `(attach-filter (-> Producer (-> Producer Producer) Producer))
+             `(grayscale-filter (-> Producer Producer))
+             `(cut-filter (-> Number Number (-> Producer Producer)))
+             `(scale-filter (-> Number Number (-> Producer Producer)))
+             `(translate-filter (-> Number Number (-> Producer Producer)))
+             `(fade-transition (-> Number (-> Producer Producer Producer)))
+             `(swipe-transition (-> String Number (-> Producer Producer Producer)))
+             `(composite-transition (-> Number Number Number Number
+                                        #\newline
+                                        (-> Producer Producer Producer))))

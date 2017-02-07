@@ -16,7 +16,7 @@
 
 @title[#:tag "case-study"]{Case Study: Conference Videos}
 
-Video shines in situations where films are similar but have
+Video shines in situations where films are similar with
 slight variations, such as conference recordings. Each talk
 has a recording of the speaker, a screen capture feed, and
 audio feeds for both the speaker and audience questions.
