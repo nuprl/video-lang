@@ -37,8 +37,9 @@
   (send b load-file in)
   (bitmap b))
 
-(define code-font "Linux Libertine Mono")
-(define text-font "Linux Libertine")
+(define matthias-suffix (if (regexp-match #px"matthias" (current-directory)) " O" ""))
+(define code-font (string-append "Linux Libertine Mono" matthias-suffix))
+(define text-font (string-append "Linux Libertine" matthias-suffix))
 (define small-font-size 12)
 (define font-size 15)
 (define small-scale-factor 0.8)
