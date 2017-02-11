@@ -3,10 +3,14 @@
 @require["bib.rkt" (only-in scribble/core element make-style)
          "utils.rkt"]
 
-@title{A Declarative Embedded DSL for Video Editing}
-@authorinfo["Leif Andersen" "PLT @ Northeastern University" "leif@ccs.neu.edu"]
-@authorinfo["Asumu Takikawa" "Igalia" "asumu@igalia.com"]
-@authorinfo["Matthias Felleisen" "PLT @ Northeastern University" "matthias@ccs.neu.edu"]
+@title{Super 8, A Functional Pearl}
+@authorinfo["J.J. Abrams"       "Bad Robot Productions"]
+@authorinfo["Bryan Burk"        "Amblin Entertainment"]
+@authorinfo["Steven Spielberg"  ""]
+
+@;authorinfo["Leif Andersen" "PLT @ Northeastern University" "leif@ccs.neu.edu"]
+@;authorinfo["Asumu Takikawa" "Igalia" "asumu@igalia.com"]
+@;authorinfo["Matthias Felleisen" "PLT @ Northeastern University" "matthias@ccs.neu.edu"]
 
 @abstract{Creating videos from several feeds usually employs so-called
 non-linear editors. For many tasks, the use of these graphical tools
@@ -20,9 +24,6 @@ domain-specific languages must allow a context-sensitive manipulation of
 subject code.}
 
 
-@;{Describe concrete example of editing conference videos.
- Describe how task is repetitive, and how a programmer would want to
- automate it.}
 @include-section{introduction.scrbl}
 
 @;{The background of how Video is constructed. Including two parts:
@@ -30,17 +31,17 @@ subject code.}
  B: Existing APIs for editing videos.}
 @include-section{background.scrbl}
 
-@;{Overview of the API for Video
- and how it becomes a language.}
+@;{Overview of the API for Video and how it becomes a language.}
 @include-section{overview.scrbl}
 
-@;{A Video DSL saves time and energy in in the concrete
- case of editing conference videos.}
+@;{A Video DSL saves time and energy in in the concrete case of editing conference videos.}
 @include-section{casestudy.scrbl}
 
-@;{Describe (at a high level) the implementation
- of Video.}
+@;{Describe (at a high level) the implementation of Video.}
 @include-section{implementation.scrbl}
+
+@;{Describe (at a high level) the type system of Video.}
+@include-section{types.scrbl}
 
 @;{WYSIWYG video editors are useful, and can compose with
  a video editing DSL.}
