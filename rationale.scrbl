@@ -10,39 +10,53 @@
 
 @(current-code-font code-font)
 
-@title[#:tag "rationale"]{The Design Rationale: Effects via Compilation}
+@title[#:tag "rationale"]{Dr Strangelove: How I Learned to Stop Worrying and Love the Racket}
+@; ----------------------------------------------------------------------------------------
 
-Video demonstrates that an eDSL is often more than new function calls and
-binding expressions.  A convenient-to-use eDSL may need a context-sensitive
-traversal of independent phrases on top of a ``fuzzy'' interface to its
-host language. 
+The Racket doctrine@cite[manifesto] says, developers must feel empowered
+to easily create and deploy a new language to solve problems. Racket's
+distinctive feature is a modular syntax system@cite[macros-icfp], which
+blurs the distinction between languages and libraries. It is thus as easy
+to import a linguistic construct as a function. While a library module may
+provide functions that, say, solve problems in a mathematical domain, a
+language module provides the basic services of a programming language.
 
-Video is a descriptive, functional language. Most of its phrases describe
-video clips. The language gathers the descriptions, and a video renderer
-eventually presents the resulting video in a window. In between, functions
-may process these video representations at will.  Conveniently, Video
-allows inter-mingling function and variable definitions so that video
-artists can place these elements near where they are used.
+In Racket, every module starts with a one-line language specification. For
+example, @tt{#lang racket/base} tells the reader that the module is written
+in the @tt{racket/base} language; the specification is pronounced ``hash
+lang racket base.'' Roughly speaking, the specified language is the first
+import into the module. From an implementation perspective, the language
+specification points to a file that provides a language, approximately
+speaking, a suite of linguistic features and run-time functions. A
+developer can thus edit a language @tt{L} in one tab of an IDE and an
+@tt{L} program in a second one. Any change to the first tab is immediately
+visible in the second one, just by saving a file and switching tabs. Hence
+language development in Racket suffers from no points of friction.
 
-Video thus abstracts over functional or imperative patterns in Racket. A
-functional pattern would require the Video programmer to thread variables
-through series of expressions (say via @tt{let*}); the expressions
-would also spell out how to gather the video-clip descriptions into a
-single piece of data.  An imperative pattern would require the Video
-programmer to mutate a variable (or several) to collect the video-clip
-descriptions manually, with all the usual dangers that imperative
-programming comes with.
+Due to the ease of developing and installing languages in the Racket
+eco-system, language creation has become a critical arrow@margin-note*{We
+considered ``war head'' but decided against it to appease the peacnicks on
+the PC.} in the quiver of problem solving tools. When developers realize
+that it is best to express themselves in the language of a domain, they do
+not hesitate to develop a Racket dialect so that they can articulate their
+solutions in this language programmatically. After all, domain experts have
+developed this specialized jargon so that they can discuss problems and
+solutions efficiently.
 
-Video avoids all of these dangers and remains declarative and
-functional. Like a functional programmer, a Video programmer can manipulate
-the code using the full power of functional calculi.Like a purely
-functional language, Video compiles programs into imperative, low-level
-object code. 
+Given a base language, a Racket developer usually creates a language with
+some or all of the following actions: 
+@itemlist[
+@item{adding new linguistic constructs;}
 
-At first glance, Video is a domain-specific language algebraic effects for
-video composition. It shifts the effect computations (concerning the
-creation of a single, coherent video-clip) to compile time. Thus a Video
-programmer can completely ignore that the video-clip descriptions are
-manipulated in an imperative way before they get readied for the renderer. 
+@item{hiding linguistic constructs;}
 
-Need to compare with algebraic-effect languages 
+@item{re-interpreting linguistic constructs;}
+
+@item{supplying run-time functions.}
+]
+Two of the most popular constructs for re-interpretation are function
+application plus the notion of a function and a module body. role. For
+Video, the latter two play a critical role; otherwise, it is just a few
+hundred lines of veneer around a C library---the usual approach of creating
+DSLs@cite[fowler]. Before we can describe Video and its implementation, we
+first need to survey the world of editing videos. 

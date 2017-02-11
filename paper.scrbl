@@ -26,6 +26,9 @@ subject code.}
 
 @include-section{introduction.scrbl}
 
+@;{Explain the Racket doctrine}
+@include-section{rationale.scrbl}
+
 @;{The background of how Video is constructed. Including two parts:
  A: Existing related DSLs (scribble, slideshow, etc.)
  B: Existing APIs for editing videos.}
@@ -46,8 +49,6 @@ subject code.}
 @;{WYSIWYG video editors are useful, and can compose with
  a video editing DSL.}
 @include-section{extensions.scrbl}
-
-@include-section{rationale.scrbl}
 
 @;{Cover related work not in background section}
 @include-section{related.scrbl}

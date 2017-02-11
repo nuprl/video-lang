@@ -7,6 +7,25 @@
 
 (define-cite cite citet gen-bib)
 
+(define fowler
+  (make-bib #:title "Domain-specific Languages"
+            #:author (authors "Martin Fowler" "Rebecca Parsons")
+            #:date "2010"
+            #:location (book-location #:publisher "Addison-Wesley")))
+
+(define manifesto
+  (make-bib
+   #:title "The Racket Manifesto"
+   #:author (authors "Matthias Felleisen"
+		      "Robert Bruce Findler"
+		      "Matthew Flatt"
+		      "Shriram Krishnamurthi"
+		      "Eli Barzilay"
+		      "Jay McCarthy"
+		      "Sam Tobin-Hochstadt")
+   #:date "2015"
+   #:location (proceedings-location "SNAPL" #:pages '(113 128))))
+
 (define plt-tr1
   (make-bib #:title    "Reference: Racket"
             #:author   (authors "Matthew Flatt" "PLT")
@@ -105,3 +124,4 @@
 (define rsound-url (url "https://docs.racket-lang.org/rsound/index.html"))
 (define premiere-api-url (url "http://www.adobe.com/devnet/premiere.html"))
 (define racketcon-url (url "http://con.racket-lang.org/"))
+
