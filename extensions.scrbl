@@ -5,7 +5,10 @@
          pict
          "utils.rkt"]
 
-@title[#:tag "extensions"]{Extending Video with Graphical Editing}
+@title[#:tag "extensions"]{Teenage Mutant Ninja Turtles ω} @margin-note{We
+could not figure out how to express ω as a Roman numeral, at which point we
+started wondering what the NFL will do with the Super Bowl when it reaches
+this age.}
 
 Some videos are best expressed with a graphical NLVE. Video
 comes with a prototype NLVE (shown in
