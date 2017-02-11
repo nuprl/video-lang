@@ -21,18 +21,18 @@
 
 @title[#:tag "overview"]{The Design of Video}
 
-The preceding overview suggests that non-linear video
+The preceding literature survey suggests that non-linear video
 editing distinctly separates the description of a video clip
 from the rendering action on it. Specifically, a video
-editor demands a description of what the final video should
+editor needs a description of what the final video should
 look like in terms of the given pieces. The action of
 creating and rendering this video is a distinct second step.
-@TODO{I cannot parse this sentence(}Furthermore,
-experience tells us that, like programs, descriptions need
-abstractions; for example, a description may use a
-comprehension to apply a watermark to all images, or it may
-employ of one module per ICFP presentation to make up a
-complete ICFP channel.@TODO{)}
+Going from this assessment to a language design, requires one more idea: 
+abstraction. for example, a declarative-functional description of a video
+composition should be able to use a
+comprehension to apply a watermark to all images. Or, a professional may
+wish to create one module per ICFP presentation in order to make up a
+complete ICFP channel.
 
 The Video language gets to the heart of the problem. Each Video program
 is a complete module that intermingles descriptions of video clips and
