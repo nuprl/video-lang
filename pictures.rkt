@@ -33,3 +33,26 @@
 (define (clip-frame clip)
   (cc-superimpose (clip-scale (rectangle 50 50))
                   (clip-scale clip)))
+
+(define rcon-timeline
+  (make-playlist-timeline
+   #:end #t
+   (clip-scale (bitmap "res/rcon.png"))
+   (ellipses)
+   (clip-scale (bitmap "res/geoffrey.jpg"))
+   (ellipses)
+   (clip-scale (bitmap "rconframes/stephen50.jpg"))
+   (ellipses)
+   (clip-scale (bitmap "rconframes/stephen75.jpg"))
+   (ellipses)
+   (clip-scale (bitmap "rconframes/stephen80.jpg"))
+   (ellipses)
+   (clip-scale (bitmap "rconframes/stephen100.jpg"))
+   (ellipses)
+   (clip-scale (bitmap "rconframes/stephen250.jpg"))
+   (ellipses)
+   (clip-scale (bitmap "rconframes/stephen300.jpg"))
+   (ellipses)
+   (clip-scale (bitmap "res/alexis.jpg"))
+   (ellipses)
+   (clip-scale (bitmap "res/rcon.png"))))

@@ -112,7 +112,7 @@
    (disk 2)))
 
 (define (clip-scale p)
-  (scale-1080p p 50))
+  (scale-1080p p 30))
 
 (define (scale-1080p p w-size)
   (define w (pict-width p))

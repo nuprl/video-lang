@@ -54,28 +54,27 @@ conference logo to the bottom left of the screen.
 
 @(split-minipage
   #:split-location 0.575
-  @codeblock|{;; Combine the video feed for a conference recording
-              ;; Producer Producer -> Producer
-              @where[make-speaker-slide-composite <-
-                     (λ (speaker slides)
-                       @multitrack[speaker slides logo background
-                        #:transitions
-                        @list[@composite-transition[0 0 3/10 1
-                               #:top speaker
-                               #:bottom background]
-                              @composite-transition[0 1/2 3/10 1
-                               #:top logo
-                               #:bottom background]
-                              @composite-transition[1/3 0 2/3 1
-                               #:top slides
-                               #:bottom background]]]
-                       @where[background <-
+  @racketblock[(code:comment "Combine the video feed for a conference recording")
+               (code:comment "Producer Producer -> Producer")
+               (define (make-speaker-slide-composite speaker slides)
+                 @multitrack[speaker slides logo background
+                             #:transitions
+                             @list[@composite-transition[0 0 3/10 1
+                                    #:top speaker
+                                    #:bottom background]
+                                   @composite-transition[0 1/2 3/10 1
+                                    #:top logo
+                                    #:bottom background]
+                                   @composite-transition[1/3 0 2/3 1
+                                    #:top slides
+                                    #:bottom background]]]
+                       @(define background
                               @blank[@properties-ref[speaker
-                                                     'length]]])]
+                                                     'length]]))
 
-              @where[logo <- @image["logo.jpg"]]}|
+              (define logo @image["logo.jpg"])]
   (centered
-   (scale-1080p (bitmap "res/stephen.jpg") 225)))
+   (scale-1080p (bitmap "rconframes/stephen50.jpg") 225)))
 
 Editors next put a splash screen at the start and end of the
 video. Here, @racket[make-talk-video] uses a playlist to
@@ -84,33 +83,18 @@ Additionally, two @racket[fade-transitions] smooths the
 transitions between the logos and the recording.
 
 @(minipage
- @codeblock|{;; Add conference logos to the front and end of a video.
-             ;; Producer -> Producer
-             @where[make-talk-video <-
-                    (λ (main-talk)
-                      @playlist[begin-clip
-                                @fade-transition[200]
-                                main-talk
-                                @fade-transition[200]
-                                end-clip]
-                      @where[begin-clip <- @image[logo #:length 500]]
-                      @where[end-clip <- @image[logo #:length 500]])]}|
+ @racketblock[(code:comment "Add conference logos to the front and end of a video.")
+              (code:comment "Producer -> Producer")
+              (define (make-talk-video main-talk)
+                (playlist begin-clip
+                          @fade-transition[200]
+                          main-talk
+                          @fade-transition[200]
+                          end-clip)
+                (define begin-clip @image[logo #:length 500])
+                (define end-clip @image[logo #:length 500]))]
  (centered
-  (make-playlist-timeline
-   #:end #t
-   (clip-scale (bitmap "res/rcon.png"))
-   (ellipses)
-   (clip-scale (bitmap "res/geoffrey.jpg"))
-   (ellipses)
-   (clip-scale (bitmap "res/stephen.jpg"))
-   (ellipses)
-   (clip-scale (bitmap "res/stephen2.jpg"))
-   (ellipses)
-   (clip-scale (bitmap "res/stephen3.jpg"))
-   (ellipses)
-   (clip-scale (bitmap "res/alexis.jpg"))
-   (ellipses)
-   (clip-scale (bitmap "res/rcon.png")))))
+  rcon-timeline))
 
 Finally, @racket[attach-audio] attaches a higher quality
 recording of presenter's audio to the video. Only one feed
@@ -126,20 +110,19 @@ background, even when a video is a splash screen.
 
 @(split-minipage
   #:split-location 0.6
-  @codeblock|{;; Add higher quality speaker recording
-              ;; Producer Number -> Producer
-              @where[attach-audio <-
-                     (λ (video audio offset)
-                       @multitrack[video cleaned-audio
-                         #:length (property-ref video 'length)]
-                       @where[cleaned-audio <-
-                              @attach-filters[
-                               audio
-                               @list[@project-filter[#:in offset]
-                                     @envelope-filter[50
-                                      #:direction 'in]
-                                     @envelope-filter[50
-                                      #:direction 'out]]]])]}|
+  @racketblock[(code:comment "Add higher quality speaker recording")
+               (code:comment "Producer Number -> Producer")
+               @(define (attach-audio video audio offset)
+                  @multitrack[video cleaned-audio
+                              #:length (property-ref video 'length)]
+                  (define cleaned-audio
+                     (attach-filters
+                      audio
+                      (list @project-filter[#:in offset]
+                            (envelope-filter
+                             50 #:direction 'in)
+                            (envelope-filter
+                             50 #:direction 'out)))))]
   (vc-append
    25
    (hc-append 20
@@ -165,12 +148,11 @@ capture feed, the audio feed, and an offset for audio. It
 combines these feed by composing the previous three functions
 together.
 
-@codeblock|{@where[make-conference-talk <-
-                   (λ (speaker slides audio offset)
-                     @attach-audio[video audio offset]
-                     @where*[_ <- @make-speaker-slides-composite[speaker slides]]
-                     @where*[_ <- @make-talk-video[_]]
-                     @where[video <- @make-talk-video[_]])]}|
+@racketblock[(define (make-conference-talk speaker slides audio offset)
+               @attach-audio[video audio offset]
+               @(define* _ @make-speaker-slides-composite[speaker slides])
+               @(define* _ @make-talk-video[_])
+               @(define video @make-talk-video[_]))]
 
 This function, which composes the previous three together,
 uses @racket[where*]. Like @racket[where], all
@@ -189,13 +171,13 @@ example, the following two programs have equivalent
 bindings.
 
 @(split-minipage
-  @codeblock|{#lang video
-              a
-              @where*[_ <- 24]
-              @where*[_ <- (_ . + . 5)]
-              @where[a <- (_ . / . 2)]
-              @where*[_ <- 84]
-              @where[b <- (_ . * . 2)]}|
+  @racketmod[video
+             a
+             (define* _ 24)
+             (define* _ (+ _ 5))
+             (define a (/ _ 2))
+             (define* _ 84)
+             (define* b (* _ 2))]
   @racketmod[racket
              (let* ([_ 24]
                     [_ (+ _ 5)])
@@ -205,7 +187,7 @@ bindings.
                  a))])
 
 Using @racket[make-conference-talk] makes creating the video
-straightforward. @Figure-ref["stephen-talk"] shows an
+straightforward. @Figure-ref["video-example"] shows an
 example Video program for a single RacketCon talk. The
 entire program is 7 lines of code to describe a 20 minute
 talk. Recording devices split video and audio files into
@@ -224,20 +206,6 @@ at 1080p and 48 frames a second. Once finished, the resulting video is
 @exact{\vspace{0.5cm}}
 @(nested @exec{raco video --width 1920 --height 1080 --fps 48 --mp4 chang.vid})
 @exact{\vspace{0.5cm}}
-
-@figure["stephen-talk" "Example Video Program for a RacketCon Talk"]{
-@filebox["chang.vid"]{
- @codeblock|{
-#lang video
-
-@make-conference-talk[video slides audio 125]
-
-@require["conference-lib.vid"]
-@where[slides <- @clip["0005.MTS" #:filters @list[@project-filter[2900 80000]]]]
-@where[video <- @playlist[@clip["0001.mp4"] @clip["0002.mp4"]
-                 #:filters @list[@project-filter[3900 36850]]]]
-@where[audio <- @playlist[@clip["0001.wav"] @clip["0002.wav"]]]
-}|}}
 
 Using a common utilities file reduces the implementation
 costs of every conference video. To demonstrate this,
