@@ -167,6 +167,10 @@
              (parameterize ([parenize #t])
                (string-join (map type->latex-str type*)
                             " \\mid ")))]
+    [`(U/man ,type* ...)
+     (format (if (parenize) "(~a)" "~a")
+             (parameterize ([parenize #t])
+               (map type->latex-str type*)))]
     [`(X ,type* ...)
      (format (if (parenize) "(~a)" "~a")
              (parameterize ([parenize #t])
@@ -175,5 +179,10 @@
     [`(List ,type)
      (format "[~a\\: \\cdots]"
              (type->latex-str type))]
+    [`(Ghost ,text)
+     (format "\\phantom{~a}" text)]
+    [`(Const ,text)
+     text]
     [#\newline "\\\\ & "]
-    [_ (format "\\texttt{~a}" type)]))
+    [(? keyword?) (format "\\texttt{\\~a}" type)]
+    [_ (format "\\mathsf{~a}" type)]))

@@ -46,9 +46,10 @@ Playing the slide capture and speaker recording in lockstep
 is the first step in editing conference videos. The
 @racket[make-speaker-slide-composite] function composites
 the slide feed and the speaker feed into one producer. As
-before, @racket[where] is lifted to the top of the function
-to define @racket[background]. Both @racket[speaker] and
-@racket[slides] are placed on top of this background using
+before, @racket[background] is bound in the entire function,
+even though it is syntactically declared at the function's
+bottom. Both @racket[speaker] and @racket[slides] are placed
+on top of this background using
 @racket[composite-transition]. Finally, the editor adds a
 conference logo to the bottom left of the screen.
 
@@ -153,36 +154,13 @@ together.
                @(define video @make-talk-video[_]))]
 
 This function, which composes the previous three together,
-uses @racket[where*]. Like @racket[where], all
-@racket[where*] forms get lifted to the top of their scope.
-The difference is that @racket[where*] can bind the same
-identifier multiple times. The semantics for @racket[where*]
-are otherwise identical to Racket's @racket[let*]. Any
-@racket[where] binding can reference a @racket[where*]
-binding. However, no @racket[where*] binding can reference a
-@racket[where] binding. Furthermore, the ordering of
-@racket[where*] is significant. A @racket[where*] binding
-can only access previous @racket[where*] bindings.
-Additionally, each @racket[where*] binding shadows any
-previous @racket[where*] binding of the same name. As an
-example, the following two programs have equivalent
-bindings.
-
-@(split-minipage
-  @racketmod[video
-             a
-             (define* _ 24)
-             (define* _ (+ _ 5))
-             (define a (/ _ 2))
-             (define* _ 84)
-             (define* b (* _ 2))]
-  @racketmod[racket
-             (let* ([_ 24]
-                    [_ (+ _ 5)])
-               (define a (/ _ 2))
-               (let* ([_ 84])
-                 (define b (* _ 2))
-                 a))])
+uses @racket[define*]. As with @racket[define], all
+variables bound with @racket[define*] are lifted to the
+function or module they are defined in. The difference is
+that @racket[define*] binds the same identifier multiple
+times, similarly to Racket's @racket[let*], or monadic bind.
+This enables programs to build up a temporary form that
+eventually gets used in a much larger binding.
 
 Using @racket[make-conference-talk] makes creating the video
 straightforward. @Figure-ref["video-example"] shows an

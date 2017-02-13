@@ -259,14 +259,12 @@ the given playlists:
     (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
     (ellipses))))
 
-This sample also introduces @racket[where] for binding. This
-binding is similar to Racket's @racket[define] binding form.
-Here, @racket[shapes] and @racket[colors] are bound to
-existing playlists. Unlike Haskell's @tt{where} keyword,
-variables bound this way are available in the entire module
-or function they are defined in. Thus, the example would
-yield the same result if the @racket[where] statement is at
-the top of the code.
+This sample also introduces binding using @racket[define].
+Unlike with Racket's @racket[define] keyword or Haskell's
+@tt{where} keyword, variables bound this way are available
+in the entire module or function they are defined in. Thus,
+the example would yield the same result if the definition is
+at the top of the code.
 
 @section{Transitions}
 Jumping from one producer in a playlist to another
@@ -359,7 +357,7 @@ without any surprises:
                                   #:length 3)
                 (color "blue" #:length 7)
                 (swipe-transition #:direction 'top
-                                  #:duration 3)
+                                  #:length 3)
                 (clip "rect.mp4" #:length 4))]
   (centered
    (let ([size (clip-scale (blank 1))])
@@ -610,15 +608,28 @@ leading to a stretching effect. Here, the first integer
 scales the width, while the second one scales the height:
 
 @(split-minipage
-  @racketblock[(scale-filter (image "circ.png"  1 3))]
+  #:split-location 0.45
+  @racketblock[(scale-filter (clip "rect.mp4"  1 3))]
   (centered
    (let ([size (scale (scale-1080p (blank 1) 150) 1 9)])
-     (make-playlist-timeline
-      #:end #f
-      (clip-frame
-       (inset/clip
-        (scale (scale-1080p circ-image 150) 1 9)
-        0 (* (pict-height size) (+ -1/3)) 0 (* (pict-height size) (+ -1/3))))))))
+     (apply make-playlist-timeline
+      #:end #t
+      (append
+       (build-list
+        6
+        (λ (n)
+          (clip-frame
+           (inset/clip
+            (scale (scale-1080p (list-ref rect-clip n) 150) 1 9)
+            0 (* (pict-height size) (+ -1/3)) 0 (* (pict-height size) (+ -1/3))))))
+       (list (ellipses))
+       (build-list
+        2
+        (λ (n)
+          (clip-frame
+           (inset/clip
+            (scale (scale-1080p (list-ref rect-clip (+ n 7)) 150) 1 9)
+            0 (* (pict-height size) (+ -1/3)) 0 (* (pict-height size) (+ -1/3)))))))))))
 
 @section{Properties and Dependent Clips}
 
@@ -643,17 +654,17 @@ Explicit properties must be added by the program itself.
  communicate whether it should be placed at the top or bottom of
  the screen:}
    (split-minipage
-    @racketblock[@multitrack[
-                 rect-clip
-                 @composite-transition[
-                  0
-                  @if[@get-property[rect-clip 'bottom?]
-                      1/2 0]
-                   1/2 1/2]
-                 @image["circ.png"]]
+    @racketblock[(multitrack
+                  rect-clip
+                  (composite-transition
+                   0
+                   (if (get-property rect-clip 'bottom?) 1/2 0)
+                   1/2
+                   1/2)
+                  (image "circ.png"))
 
                  (define rect-clip
-                   @set-property[@clip["rect.mp4"] 'bottom? #f])]
+                   (set-property (clip "rect.mp4") 'bottom? #f))]
   (centered
    (make-playlist-timeline
     #:end #t
@@ -767,19 +778,26 @@ and places the @racket[vid] struct where it is placed.
              `(image (-> String Producer))
              `(playlist (-> (List (U Producer (-> Producer Producer Producer)))
                             #\newline
-                            (List (X (-> Producer Producer Producer) Producer Producer))
-                            #\newline
-                            (List (X (-> Producer Producer) Producer))
+                            #:transitions
+                            (List (U/man (X (-> Producer Producer Producer) Producer Producer)
+                                         #\newline
+                                         (Ghost "\\texttt{\\#:transitions} [( ")
+                                         (Const " \\mid ")
+                                         (X (-> Producer Producer) Producer)))
                             #\newline
                             Producer))
              `(multitrack (-> (List (U Producer (-> Producer Producer Producer)))
                               #\newline
-                              (List (X (-> Producer Producer Producer) Producer Producer))
-                              #\newline
-                              (List (X (-> Producer Producer) Producer))
+                              #:transitions
+                              (List (U/man (X (-> Producer Producer Producer) Producer Producer)
+                                           #\newline
+                                           (Ghost "\\texttt{\\#:transitions} [( ")
+                                           (Const " \\mid ")
+                                           (X (-> Producer Producer) Producer)))
                               #\newline
                               Producer))
              `(get-property (-> Producer String Any))
+             `(set-property (-> Producer String Any Producer))
              `(attach-filter (-> Producer (-> Producer Producer) Producer))
              `(grayscale-filter (-> Producer Producer))
              `(cut-filter (-> Number Number (-> Producer Producer)))
