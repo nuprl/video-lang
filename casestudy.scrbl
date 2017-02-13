@@ -116,13 +116,11 @@ background, even when a video is a splash screen.
                   @multitrack[video cleaned-audio
                               #:length (property-ref video 'length)]
                   (define cleaned-audio
-                     (attach-filters
+                     (attach-filter
                       audio
-                      (list @project-filter[#:in offset]
-                            (envelope-filter
-                             50 #:direction 'in)
-                            (envelope-filter
-                             50 #:direction 'out)))))]
+                      (project-filter #:end offset)
+                      (envelope-filter 50 #:direction 'in)
+                      (envelope-filter 50 #:direction 'out))))]
   (vc-append
    25
    (hc-append 20

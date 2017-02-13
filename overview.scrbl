@@ -284,7 +284,7 @@ two adjacent clips in a playlist.
     @racketblock[(playlist (image "circ.png" #:length 8)
                            (swipe-transition
                             #:direction 'bottom
-                            #:duration 7)
+                            #:length 7)
                            (clip "rect.mp4" #:length 8))]
     (centered
      (let ([size (clip-scale (blank 1))])
@@ -356,7 +356,7 @@ without any surprises:
   @racketblock[(playlist
                 (image "circ.png" #:length 4)
                 (swipe-transition #:direction 'bottom
-                                  #:duration 3)
+                                  #:length 3)
                 (color "blue" #:length 7)
                 (swipe-transition #:direction 'top
                                   #:duration 3)
@@ -489,14 +489,14 @@ producers are specified with the @racket[#:top] and
 producers found in the multitrack.
 
 @(split-minipage
-  @racketblock[(multitrack circ color bg
+  @racketblock[(multitrack circ blue-color green-color bg
                            #:transitions
                            (list
                             (composite-transition 0 0 1/2 1/2
                                                   #:top circ
                                                   #:bottom bg)
                             (composite-transition 1/2 0 1/2 1/2
-                                                  #:top red-color
+                                                  #:top blue-color
                                                   #:bottom bg)
                             (composite-transition 0 1/2 1/2 1/2
                                                   #:top green-color
@@ -504,7 +504,7 @@ producers found in the multitrack.
               (define bg (clip "rect.mp4"))
               (define circ (image "circ.png"))
               (define green-color (color "green"))
-              (define red-color (color "blue"))]
+              (define blue-color (color "blue"))]
   (centered
    (make-playlist-timeline
     #:end #t
@@ -553,7 +553,7 @@ operations directly. Here is an example:
                            #:transitions
                            (list (swipe-transition
                                   #:direction 'bottom
-                                  #:duration 3
+                                  #:length 3
                                   #:first a
                                   #:second b))))]
   (centered
