@@ -6,10 +6,12 @@
 @title{Super 8, A Functional Pearl}
 @authorinfo["J.J. Abrams"       "Bad Robot Productions"]
 @authorinfo["Bryan Burk"        "Amblin Entertainment"]
-@authorinfo["Steven Spielberg"  ""]
+@authorinfo["Larry Fong" "Paramount Pictures"]
+@authorinfo["Steven Spielberg"  "Paramount Pictures"]
 
 @;authorinfo["Leif Andersen" "PLT @ Northeastern University" "leif@ccs.neu.edu"]
 @;authorinfo["Asumu Takikawa" "Igalia" "asumu@igalia.com"]
+@;authorinfo["Stephen Chang" "PLT @ Northeastern University" "stchang@ccs.neu.edu"]
 @;authorinfo["Matthias Felleisen" "PLT @ Northeastern University" "matthias@ccs.neu.edu"]
 
 @abstract{Creating videos from several feeds usually employs so-called
