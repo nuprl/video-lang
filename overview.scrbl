@@ -48,34 +48,13 @@ larger one.
  (make-conference-talk video slides audio 125)
  
  (require "conference-lib.vid")
- (define slides (clip "0005.MTS" #:filters (list (project-filter 2900 80000))))
+ (define slides (clip "0005.MTS" #:start 2900 #:end 80000))
  (define video (playlist (clip "0001.mp4") (clip "0002.mp4")
-                         #:filters (list (project-filter 3900 36850))))
+                         #:start 3900 #:end 36850))
  (define audio (playlist (clip "0001.wav") (clip "0002.wav")))]
  @exact{\vspace{0.3cm}} 
   @(centered
-   rcon-timeline
-  #;(scale
-   (make-playlist-timeline
-    #:end #t
-    #:font-size (inexact->exact (floor (/ small-font-size 1.4)))
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-    (clip-frame
-     (lt-superimpose (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
-                     (scale (clip-scale circ-image) 3/4)))
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
-    (clip-frame
-     (vc-append
-      (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
-                  0 0 0 (* (pict-height blank-clip) -1/3))
-      (inset/clip (clip-scale (first rect-clip)) 0 (* (pict-height blank-clip) -2/3) 0 0)))
-    (clip-frame
-     (vc-append
-      (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
-                  0 0 0 (* (pict-height blank-clip) -2/3))
-      (inset/clip (clip-scale (second rect-clip)) 0 (* (pict-height blank-clip) -1/3) 0 0)))
-    (clip-frame (third rect-clip)))
-   1.6))}
+   rcon-timeline)}
 
 @Figure-ref["video-example"] shows a talk recording made
 with Video. The total running time for the talk is a little
@@ -235,16 +214,14 @@ middle:
              (ellipses)
              (clip-frame (last rect-clip)))))
 
-Standard list operations also work with playlists. For
-example, @racket[playlist-append] creates a new playlist comprised of
-the given playlists:
+Playlists act as an append operator for producers. As an
+example, appending two playlists together is as simple as
+putting them into a new playlist.
 
-@(split-minipage
-  @racketblock[(playlist-append shapes colors)
-               (define shapes (playlist (image "circ.png")
-                                        (clip "rect.mp4")))
-               (define colors (playlist (color "red" #:length 1)
-                                        (color "blue")))]
+@(minipage
+  @racketblock[(playlist shapes colors)
+               (define shapes (playlist (image "circ.png") (clip "rect.mp4")))
+               (define colors (playlist (color "red" #:length 1) (color "blue")))]
   (centered
    (make-playlist-timeline
     #:end #f
@@ -255,6 +232,7 @@ the given playlists:
     (clip-frame (ninth rect-clip))
     (clip-frame (tenth rect-clip))
     (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "red"))
+    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
     (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
     (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
     (ellipses))))
@@ -585,13 +563,13 @@ operations directly. Here is an example:
        (vc-append
         (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
                     0 0 0 (* (pict-height size) -2/4))
-        (inset/clip (first rect-clip) 0 (* (pict-height size) -2/4) 0 0)))
+        (inset/clip (second rect-clip) 0 (* (pict-height size) -2/4) 0 0)))
       (clip-frame
        (vc-append
         (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
                     0 0 0 (* (pict-height size) -3/4))
-        (inset/clip (first rect-clip) 0 (* (pict-height size) -1/4) 0 0)))
-      (clip-frame (second rect-clip))
+        (inset/clip (third rect-clip) 0 (* (pict-height size) -1/4) 0 0)))
+      (clip-frame (fourth rect-clip))
       (ellipses)
       (clip-frame (ninth rect-clip))
       (clip-frame (last rect-clip))))))
@@ -656,24 +634,28 @@ Explicit properties must be added by the program itself.
    (split-minipage
     @racketblock[(multitrack
                   rect-clip
-                  (composite-transition
-                   0
-                   (if (get-property rect-clip 'bottom?) 1/2 0)
-                   1/2
-                   1/2)
-                  (image "circ.png"))
+                  (composite-transition 0 1/2 3/4 3/4)
+                  (image
+                   "circ.png"
+                   #:length (* 6 (get-property rect-clip 'ratio))))
 
                  (define rect-clip
-                   (set-property (clip "rect.mp4") 'bottom? #f))]
+                   (set-property (clip "rect.mp4" #:length 6) 'ratio 1/2))]
   (centered
    (make-playlist-timeline
     #:end #t
     (clip-frame
      (lb-superimpose (scale-1080p (first rect-clip) 150)
-                     (scale-1080p circ-image 75)))
+                     (scale-1080p circ-image 120)))
     (clip-frame
      (lb-superimpose (scale-1080p (second rect-clip) 150)
-                     (scale-1080p circ-image 75))))))))
+                     (scale-1080p circ-image 120)))
+    (clip-frame
+     (lb-superimpose (scale-1080p (third rect-clip) 150)
+                     (scale-1080p circ-image 120)))
+    (clip-frame (fourth rect-clip))
+    (clip-frame (fifth rect-clip))
+    (clip-frame (sixth rect-clip)))))))
 
 Implicit properties store innate information about a clip.
 Returning to the watermark example, a multitrack can get the
@@ -681,32 +663,32 @@ length of its main clip. That multitrack can then display
 that watermark for a portion of the clip:
 
 @(split-minipage
-  #:split-location 0.45
-  @racketblock[@multitrack[
-               rect-clip
-               @composite-transition[0 0 1/2 1/4]
-               @image["circ.jpg"
-                      #:length (/ @get-property[rect-clip
-                                              'length]
-                                   2)]]
-
-               (define rect-clip @clip["rect.mp4"])]
+  @racketblock[(multitrack
+                rect-clip
+                (composite-transition 0 1/2 3/4 3/4)
+                (image
+                 "circ.png"
+                 #:length (* (get-property rect-clip 'ratio)
+                             (get-property rect-clip 'length))))
+               
+               (define rect-clip
+                 (set-property (clip "rect.mp4" #:length 6) 'ratio 1/2))]
   (centered
-   (let ([composite-pict (lt-superimpose (scale-1080p (first rect-clip) 150)
-                                         (scale-1080p circ-image 75))]
-         [composite-pict2 (lt-superimpose (scale-1080p (second rect-clip) 150)
-                                          (scale-1080p circ-image 75))]
-         [composite-pict3 (lt-superimpose (scale-1080p (seventh rect-clip) 150)
-                                          (scale-1080p circ-image 75))])
-     (make-playlist-timeline
-      #:end #t
-      (clip-frame composite-pict)
-      (clip-frame composite-pict2)
-      (ellipses)
-      (clip-frame composite-pict3)
-      (clip-frame (eighth rect-clip))
-      (clip-frame (ninth rect-clip))
-      (ellipses)))))
+   (make-playlist-timeline
+    #:end #t
+    (clip-frame
+     (lb-superimpose (scale-1080p (first rect-clip) 150)
+                     (scale-1080p circ-image 120)))
+    (clip-frame
+     (lb-superimpose (scale-1080p (second rect-clip) 150)
+                     (scale-1080p circ-image 120)))
+    (clip-frame
+     (lb-superimpose (scale-1080p (third rect-clip) 150)
+                     (scale-1080p circ-image 120)))
+    (clip-frame (fourth rect-clip))
+    (clip-frame (fifth rect-clip))
+    (clip-frame (sixth rect-clip)))))))
+
 
 @section[#:tag "overview-rendering"]{From Programs to Videos}
 
@@ -748,7 +730,7 @@ and places the @racket[vid] struct where it is placed.
      #:size 0.5
      (filebox "green.vid"
               @racketmod[video
-                         @clip["green"]]))
+                         (color "green")]))
    (examples #:label #f
              (eval:alts (require "demo.vid") (void))
              (eval:alts vid (display "#<producer>"))))
@@ -761,16 +743,20 @@ and places the @racket[vid] struct where it is placed.
  
  @(split-minipage
    @racketmod[video
-              @clip["rect.mp4"]
-              @include-video["green.vid"]
+              (clip "rect.mp4")
+              (include-video "green.vid" #:length 1)
               @image["circ.png"]]
    (centered
     (make-playlist-timeline
      #:end #f
      (clip-frame (first rect-clip))
+     (clip-frame (second rect-clip))
      (ellipses)
+     (clip-frame (eighth rect-clip))
+     (clip-frame (last rect-clip))
      (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-     (clip-frame circ-image))))}
+     (clip-frame circ-image)
+     (ellipses))))}
 
 @(type-table `(blank (-> Number Producer))
              `(color (-> (U String (X Number Number Number)) Producer))

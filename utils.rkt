@@ -104,12 +104,13 @@
                      (find-tag p 'start) cc-find
                      (find-tag p 'end) cc-find))))
 
-(define (ellipses)
+(define (ellipses #:offset [offset 3]
+                  #:size [size 2])
   (hc-append
-   3
-   (disk 2)
-   (disk 2)
-   (disk 2)))
+   offset
+   (disk size)
+   (disk size)
+   (disk size)))
 
 (define (clip-scale p)
   (scale-1080p p 30))

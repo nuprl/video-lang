@@ -113,15 +113,16 @@ background, even when a video is a splash screen.
   #:split-location 0.6
   @racketblock[(code:comment "Add higher quality speaker recording")
                (code:comment "Producer Number -> Producer")
-               @(define (attach-audio video audio offset)
-                  @multitrack[video cleaned-audio
-                              #:length (property-ref video 'length)]
-                  (define cleaned-audio
-                     (attach-filter
-                      audio
-                      (project-filter #:end offset)
-                      (envelope-filter 50 #:direction 'in)
-                      (envelope-filter 50 #:direction 'out))))]
+               (define (attach-audio video audio offset)
+                 (define cleaned-audio
+                   (cut-producer
+                    (attach-filter
+                     audio
+                     (envelope-filter 50 #:direction 'in)
+                     (envelope-filter 50 #:direction 'out)))
+                   #:end offset)
+                  (multitrack video cleaned-audio
+                              #:length (get-property video "length")))]
   (vc-append
    25
    (hc-append 20
