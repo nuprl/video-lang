@@ -6,8 +6,7 @@
 @title{Super 8, A Functional Pearl}
 @authorinfo["J.J. Abrams"       "Bad Robot Productions"]
 @authorinfo["Bryan Burk"        "Amblin Entertainment"]
-@authorinfo["Larry Fong" "Paramount Pictures"]
-@authorinfo["Steven Spielberg"  "Paramount Pictures"]
+@authorinfo["Steven Spielberg"  ""]
 
 @;authorinfo["Leif Andersen" "PLT @ Northeastern University" "leif@ccs.neu.edu"]
 @;authorinfo["Asumu Takikawa" "Igalia" "asumu@igalia.com"]
