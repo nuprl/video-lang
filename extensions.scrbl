@@ -61,15 +61,9 @@ objects in Video. They can be bound to a variable and
 further manipulated. Integrating the graphical and textual
 program in this manner allows users to edit videos in the
 style that is relavent for the task at hand. For example,
-the following program uses @racket[make-conference-talk]
-from @figure-ref["video-example"], but uses a NLVE to build
-the slides:
-
-@(minipage
-  (centered
-   (hc-append 10
-              (scale (bitmap "res/video+nlve.png") 0.4)
-              (vc-append 50 (blank) (ellipses #:offset 5)))))
+the @racket[make-conference-talk] function from
+@figure-ref["video-example"], can be built graphically with
+an embedded NLVE.
 
 In addition to placing graphical NLVEs in a program, code
 can also appear in the NLVEs. Going back to the conference
