@@ -27,9 +27,9 @@ doctrine. That is to say, Video is implemented in a DSL
 designed specifically for implementing Video, which itself
 is implemented in Racket (@secref{impl-ffi}).
 
-@subsection[#:tag "impl-create"]{Creating Languages - The Racket Way}
+@section[#:tag "impl-create"]{Creating Languages - The Racket Way}
 
-@subsection[#:tag "impl-video"]{Video Editing as a Language}
+@section[#:tag "impl-video"]{Video Editing as a Language}
 
 Video's implementation is spread across several main
 components: a surface syntax, a core library, and a
@@ -54,4 +54,4 @@ modifying the implementation of an existing language. Here,
 Video composes with the rest of the Racket ecosystem, while
 still remaining a DSL.
 
-@subsection[#:tag "impl-ffi"]{Video - Behind the Scenes}
+@section[#:tag "impl-ffi"]{Video - Behind the Scenes}
