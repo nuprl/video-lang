@@ -19,7 +19,7 @@
 @(current-code-line-sep code-line-sep)
 @(define blank-clip (clip-scale (blank 1)))
 
-@title[#:tag "overview"]{The Design of Video}
+@title[#:tag "overview"]{Kill Bill Vol. 1}
 
 The preceding literature survey suggests that non-linear video
 editing distinctly separates the description of a video clip

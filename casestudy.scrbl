@@ -14,7 +14,7 @@
 @(get-current-code-font-size (λ () font-size))
 @(current-code-line-sep code-line-sep)
 
-@title[#:tag "case-study"]{Case Study: Conference Videos}
+@title[#:tag "case-study"]{Kill Bill: Vol. 2}
 
 Video shines in situations where films are similar with
 slight variations, such as conference recordings. Each talk

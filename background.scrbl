@@ -6,7 +6,7 @@
          "bib.rkt"
          "utils.rkt"]
 
-@title[#:tag "background"]{The State of Video Editing}
+@title[#:tag "background"]{Primer}
 
 People use so-called non-linear video editors (NLVEs) to
 compose video clips@cite[technique-of-video-editing]. In the
