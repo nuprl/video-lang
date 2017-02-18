@@ -24,6 +24,15 @@
   (make-element (make-style "identity" '(exact-chars))
                 `("\\paragraph{" ,title "}")))
 
+(define (->text . text)
+  (make-element (make-style "identity" '(exact-chars))
+                `("\\begin{tikzpicture}"
+                  "\\node (0) {};"
+                  "\\node [left of=0, xshift=4cm] (1) {};"
+                  "\\draw[->,transform canvas={yshift=-1mm}] (0) -- node[yshift=1mm]"
+                  ,(format "{\\tiny ~a} (1);" (apply string-append text))
+                  "\\end{tikzpicture}")))
+
 (define at-char "@")
 
 (define dot (find-executable-path "dot"))
@@ -127,13 +136,29 @@
   (nested #:style (style 'code-inset '(never-indents))
           code))
 
-(define (split-minipage a b #:split-location [split-location 0.5])
+(define (split-minipage a b #:split-location [split-location 0.5]
+                        #:direction [direction "c"])
   (centered
    (list
-    @exact{\begin{minipage}{@(number->string split-location)\textwidth}}
+    @exact{\begin{minipage}[@direction]{@(number->string split-location)\textwidth}}
     a
-    @exact{\end{minipage}\begin{minipage}{@(number->string (- 1 split-location))\textwidth}}
+    @exact{\end{minipage}\begin{minipage}[@direction]{@(number->string (- 1 split-location))\textwidth}}
     b
+    @exact{\end{minipage}})))
+
+(define (3split-minipage a b c
+                         #:size-a [size-a 1/3]
+                         #:size-b [size-b 1/3]
+                         #:size-c [size-c 1/3]
+                         #:direction [direction "c"])
+  (centered
+   (list
+    @exact{\begin{minipage}[@direction]{@(number->string size-a)\textwidth}}
+    a
+    @exact{\end{minipage}\begin{minipage}[@direction]{@(number->string size-b)\textwidth}}
+    b
+    @exact{\end{minipage}\begin{minipage}[@direction]{@(number->string size-c)\textwidth}}
+    c
     @exact{\end{minipage}})))
 
 (define (minipage #:size [size 1] . a)

@@ -4,7 +4,7 @@
          "utils.rkt"
          "bib.rkt"]
 
-@title[#:tag "related"]{Related Work}
+@title[#:tag "related"]{Groundhog Day}
 
 This section covers related work that is not discussed in
 the background section.

@@ -114,6 +114,18 @@
                                              #:pages '(72 83)
                                              #:volume 7)))
 
+(define lal-pldi
+  (make-bib #:title "Languages As Libraries"
+            #:author (authors "Sam Tobin-Hochstadt"
+                              "Vincent St-Amour"
+                              "Ryan Culpepper"
+                              "Matthew Flatt"
+                              "Matthias Felleisen")
+            #:date "2011"
+            #:location (proceedings-location "PLDI"
+                                             #:pages '(132 141)
+                                             #:volume 32)))
+
 (define gstreamer-url (url "https://gstreamer.freedesktop.org/"))
 (define mlt-url (url "https://www.mltframework.org/"))
 (define shotcut-url (url "https://www.shotcutapp.com/"))

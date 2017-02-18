@@ -6,7 +6,7 @@
          "bib.rkt"
          "utils.rkt"]
 
-@title[#:tag "extensions"]{Teenage Mutant Ninja Turtles ω} @margin-note*{We
+@title[#:tag "extensions"]{Teenage Mutant Ninja Turtles: ω} @margin-note*{We
 could not figure out how to express ω as a Roman numeral, at which point we
 started wondering what the NFL will do with the Super Bowl when it reaches
 this age.}

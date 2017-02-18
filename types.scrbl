@@ -1,5 +1,5 @@
 #lang scribble/sigplan
 
-@title[#:tag "types"]{Typed Video}
+@title[#:tag "types"]{Inspector Gadget}
 
 
