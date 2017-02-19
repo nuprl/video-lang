@@ -55,8 +55,8 @@ some or all of the following actions:
 @item{supplying run-time functions.}
 ]
 Two of the most popular constructs for re-interpretation are function
-application plus the notion of a function and a module body. role. For
-Video, the latter two play a critical role; otherwise, it is just a few
-hundred lines of veneer around a C library---the usual approach of creating
-DSLs@cite[fowler]. Before we can describe Video and its implementation, we
-first need to survey the world of editing videos. 
+application and the elements in a lexical scope (module, function). For
+Video, the latter plays a critical role; otherwise, it is just a couple of 
+thousand lines of veneer around a C library---the usual approach of creating
+DSLs@cite[fowler]. Before we can describe Video and its implementation,
+however, we need to survey the world of editing videos. 
