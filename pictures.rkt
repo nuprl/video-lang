@@ -56,3 +56,21 @@
    (clip-scale (bitmap "res/alexis.jpg"))
    (ellipses)
    (clip-scale (bitmap "res/rcon.png"))))
+
+(define talk-list
+  (sort
+   (append*
+    (for/list ([f (directory-list "rconframes"
+                                  #:build? #t)])
+      (if (equal? (path-get-extension f) #".jpg")
+          (list f)
+          (list))))
+   <=
+   #:key (λ (key)
+           (string->number (car (regexp-match #rx"[0-9]+"
+                                              (path->string key)))))))
+
+         
+
+(define (t# n)
+  (clip-frame (bitmap (list-ref talk-list n))))

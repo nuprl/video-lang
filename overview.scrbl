@@ -73,12 +73,14 @@ These definitions introduce auxiliary functions and constants, and
 can be placed at whatever positioning makes the program most
 readable.
 
-The rest of this section presents the language constructs in
-Video. We use simple videos of basic geometric shapes and
-colors to aid readability. Readers interested a larger
-example can skip to @secref["case-study"], which shows how
-these constructs form actual conference videos. First, we
-describe basic producers: images, blanks, colors and so on.
+Showing the constructing of @racket[make-conference-talk]
+demonstrates Videos primitives and combinators, as well as
+how developers are productive with it. Readers not
+interested in Video's design, but want to see an analysis of
+its use can skip to @secref["case-study"]. That section
+shows how much effort goes into making conference
+recordings, both in terms of time and code length. First, we
+describe basic producers: images, clips, colors and so on.
 Then, we discuss the basics of how to combine these
 producers into playlists and multitracks. To make compelling
 examples, we simultaneously introduce transitions, filters,
@@ -94,81 +96,40 @@ some data structures. Combinations of
 producers are themselves producers, and they can be further
 combined into yet more complex producers still.
 
-The simplest type of producer, color, is a
-data structures for drawing
-pictures@cite[slideshow-jfp]. A color producer creates a
-clip of the specified color with an unspecified length:
+The simplest type of producer, clips, are simply traditional
+video files. The producer converts the file into a sequence
+of frames. Creators use clips to import recordings, such as
+a conference talk, into their files:
 
 @(split-minipage
-  @racketblock[(color "green")]
-  (centered
-   (make-playlist-timeline
-    #:end #f
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-    (ellipses))))
-
-Alternatively, a length can be specified with the
-@racket[#:length] keyword:
-
-@(split-minipage
-  @racketblock[(color "blue" #:length 3)]
+  @racketblock[(clip "talk00.MTS")]
   (centered
    (make-playlist-timeline
     #:end #t
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "blue")))))
+    (t# 1)
+    (t# 2)
+    (t# 3)
+    (ellipses)
+    (t# 4)
+    (t# 5))))
 
-Another producer, @racket[clip], describes a
-traditional video or audio file. Either the clip is imported
-in its entirely, or the @racket[#:start] and @racket[#:end]
-keywords project a slice of the clip into the program. If
-used, the two keywords specify the initial and final frames respectively.
-The @racket[#:length] keyword can be
-used here when only the length of the clip is relevant.
-
-@(split-minipage
-  @racketblock[(clip "rect.mp4" #:start 100 #:end 107)]
-  (centered
-   (apply make-playlist-timeline
-    #:end #t
-    (build-list 8
-                (λ (n)
-                  (clip-frame (list-ref rect-clip (+ n 2))))))))
-
-Individual pictures have their own producer: @racket[image]. Unlike
-clips, images do not have an implicit start and end time.
-Rather, like colors, they can fill as much or little time as
-needed. If the pictures display time is important,
-@racket[#:length] constructs a producer with a specific
-length:
+Unlike clips, images are producers with an unspecified
+length. Producers with an unspecified length produce an
+infinite stream of frames. Video's combination forms
+truncate these streams to fit the length other producers
+expect. However, authors can use @racket[#:length] when they
+want a specific number of frames, such as creating an intro
+sequence to a conference:
 
 @(split-minipage
-  @racketblock[(image "circ.png" #:length 3)]
-  (centered (apply make-playlist-timeline #:end #t (make-list 3 (clip-frame circ-image)))))
-
-The final important producer is @racket[blank]. Like
-@racket[image], it takes a @racket[#:length] parameter. A
-blank is equivalent to inserting a completely transparent
-color. While blank is not useful on its own, it is useful
-for creating playlists with an offset in their start time.
-
-@(split-minipage
-  @racketblock[(blank 5)]
-  (centered
-   (apply make-playlist-timeline
-          #:end #t
-          (make-list 5 (clip-frame (rectangle 50 50))))))
+  @racketblock[(image "splash.png" #:length 3)]
+  (centered (apply make-playlist-timeline #:end #t
+                   (make-list 3 (clip-frame (bitmap "res/rcon.png"))))))
 
 @section{Playlists}
 
-A video is merely a composition of many clips. Video
-provides two main ways for combining videos:
+A video is merely a composition of many producers. Video
+provides two main ways for combining them: 
 @emph{playlists} and @emph{multitracks}. Roughly speaking,
 playlists play clips in sequence, while multitracks play
 clips in parallel.
@@ -176,66 +137,52 @@ clips in parallel.
 The playlist is the simpler of the two compositing form.
 They are syntactically similar to lists. Any producer can be
 put in a playlist including another playlist. Each clip in
-the playlist plays in succession:
+the playlist plays in succession. Frequently, video cameras
+split recordings in multiple files. Playlists stitch these
+files together to form a single producer.
 
 @(split-minipage
-  @racketblock[(playlist (image "circ.png" #:length 3)
-                         (clip "rect.mp4"))]
+  @racketblock[(playlist (clip "talk00.MTS")
+                         (clip "talk01.MTS"))]
   (centered (make-playlist-timeline
              #:end #t
-             (clip-frame circ-image)
-             (clip-frame circ-image)
-             (clip-frame circ-image)
-             (clip-frame (first rect-clip))
-             (clip-frame (second rect-clip))
-             (clip-frame (third rect-clip))
+             (t# 1)
+             (t# 2)
              (ellipses)
-             (clip-frame (last rect-clip)))))
+             (t# 3)
+             (t# 4)
+             (t# 5)
+             (t# 6)
+             (ellipses)
+             (t# 7)
+             (t# 8))))
 
-Inserting a blank into playlists creates placeholder frames
-that do not have any content. This is used if they
-playlist should have an offset at the start or a gap in the
-middle:
+Programmers cut playlist and producer lengths with the
+@racket[#:start] and @racket[#:end] keywords. This step is
+important in video editin because video recordings
+frequently start before a talk begins, and ends after the
+talk finishes.
 
 @(split-minipage
-  #:split-location 0.43
-  @racketblock[(playlist (blank 2)
-                         (image "circ.png" #:length 2)
-                         (clip "rect.mp4"))]
+  @racketblock[(image "splash.jpg" #:length 100)
+               talk
+               (image "splash.jpg" #:length 100)
+               (define talk
+                 (playlist (clip "talk00.MTS")
+                           (clip "talk01.MTS")
+                           #:start 100
+                           #:end 8000))]
   (centered (make-playlist-timeline
              #:end #t
-             (clip-frame (rectangle 50 50))
-             (clip-frame (rectangle 50 50))
-             (clip-frame circ-image)
-             (clip-frame circ-image)
-             (clip-frame (first rect-clip))
-             (clip-frame (second rect-clip))
-             (clip-frame (third rect-clip))
              (ellipses)
-             (clip-frame (last rect-clip)))))
-
-Playlists act as an append operator for producers. As an
-example, appending two playlists together is as simple as
-putting them into a new playlist.
-
-@(minipage
-  @racketblock[(playlist shapes colors)
-               (define shapes (playlist (image "circ.png") (clip "rect.mp4")))
-               (define colors (playlist (color "red" #:length 1) (color "blue")))]
-  (centered
-   (make-playlist-timeline
-    #:end #f
-    (clip-frame circ-image)
-    (clip-frame (first rect-clip))
-    (clip-frame (second rect-clip))
-    (ellipses)
-    (clip-frame (ninth rect-clip))
-    (clip-frame (tenth rect-clip))
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "red"))
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
-    (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "blue"))
-    (ellipses))))
+             (t# 1)
+             (t# 2)
+             (t# 3)
+             (ellipses)
+             (t# 4)
+             (t# 5)
+             (t# 6)
+             (ellipses))))
 
 This sample also introduces binding using @racket[define].
 Unlike with Racket's @racket[define] keyword or Haskell's
@@ -244,169 +191,68 @@ in the entire module or function they are defined in. Thus,
 the example would yield the same result if the definition is
 at the top of the code.
 
-@section{Transitions}
-Jumping from one producer in a playlist to another
-is jarring. Movies frequently reduce this effect with
-@emph{transitions}: fading, swiping, etc. These transitions merge
-two adjacent clips in a playlist.
-
-@(compound-paragraph
-  (style #f '())
-  (list
-   @para{Transitions are placed directly inside playlists. The
- transition mixes the two adjacent clips in the list:}
-   (split-minipage
-    #:split-location 0.45
-    @racketblock[(playlist (image "circ.png" #:length 8)
-                           (swipe-transition
-                            #:direction 'bottom
-                            #:length 7)
-                           (clip "rect.mp4" #:length 8))]
-    (centered
-     (let ([size (clip-scale (blank 1))])
-       (make-playlist-timeline
-        #:end #t
-        (clip-frame circ-image)
-        (clip-frame
-         (vc-append
-          (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -1/8))
-          (inset/clip (clip-scale (first rect-clip)) 0 (* (pict-height size) -7/8) 0 0)))
-        (clip-frame
-         (vc-append
-          (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -2/8))
-          (inset/clip (clip-scale (second rect-clip)) 0 (* (pict-height size) -6/8) 0 0)))
-        (clip-frame
-         (vc-append
-          (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -3/8))
-          (inset/clip (clip-scale (third rect-clip)) 0 (* (pict-height size) -5/8) 0 0)))
-        (clip-frame
-         (vc-append
-          (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -4/8))
-          (inset/clip (clip-scale (fourth rect-clip)) 0 (* (pict-height size) -4/8) 0 0)))
-        (clip-frame
-         (vc-append
-          (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -5/8))
-          (inset/clip (clip-scale (fifth rect-clip)) 0 (* (pict-height size) -3/8) 0 0)))
-        (clip-frame
-         (vc-append
-          (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -6/8))
-          (inset/clip (clip-scale (sixth rect-clip)) 0 (* (pict-height size) -2/8) 0 0)))
-        (clip-frame
-         (vc-append
-          (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -7/8))
-          (inset/clip (clip-scale (seventh rect-clip)) 0 (* (pict-height size) -1/8) 0 0)))
-        (clip-frame (eighth rect-clip))))))
-   @para{Every transition in a playlist actually shortens the length
- of the playlist, because transitions produce one clip for
- every two clips they consume. For example, the playlist
- above has six frames without its transition, rather than
- four:}
-   (split-minipage
-    #:split-location 0.35
-    @racketblock[(playlist
-                  (image "circ.png" #:length 8)
-                  (clip "rect.mp4" #:length 8))]
-  (centered
-    (make-playlist-timeline
-     #:end #t
-     (clip-frame circ-image)
-     (clip-frame circ-image)
-     (ellipses)
-     (clip-frame circ-image)
-     (clip-frame circ-image)
-     (clip-frame (first rect-clip))
-     (clip-frame (second rect-clip))
-     (ellipses)
-     (clip-frame (sixth rect-clip))
-     (clip-frame (seventh rect-clip))
-     (clip-frame (eighth rect-clip)))))))
-
-Playlists may contain multiple transitions. Videos that
-contain this behavior are not ambiguous because playlist
-transitions are associative operations. Multiple transitions
-placed in a single playlist described the desired clip
-without any surprises:
+@section{Transitions} Jumping from one producer in a
+playlist to another is jarring. Movies frequently reduce
+this effect with @emph{transitions}: fading, swiping, etc.
+These transitions merge two adjacent clips in a playlist and
+are placed directly inside the playlists syntax. Using the
+previous example, fade transitions are used to smooth the
+transition from logo to video:@note{Remember that playlists
+ are implicit in Video modules. Also, the @racket[talk]
+ variable is elided.}
 
 @(split-minipage
-  #:split-location 0.4
-  @racketblock[(playlist
-                (image "circ.png" #:length 4)
-                (swipe-transition #:direction 'bottom
-                                  #:length 3)
-                (color "blue" #:length 7)
-                (swipe-transition #:direction 'top
-                                  #:length 3)
-                (clip "rect.mp4" #:length 4))]
-  (centered
-   (let ([size (clip-scale (blank 1))])
-     (make-playlist-timeline
-      #:end #t
-      (clip-frame circ-image)
-      (clip-frame
-       (vc-append
-        (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -1/4))
-        (inset/clip (clip-scale (filled-rectangle 100 100 #:draw-border? #f #:color "blue"))
-                    0 (* (pict-height size) -3/4) 0 0)))
-      (clip-frame
-       (vc-append
-        (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -2/4))
-        (inset/clip (clip-scale (filled-rectangle 100 100 #:draw-border? #f #:color "blue"))
-                    0 (* (pict-height size) -2/4) 0 0)))
-      (clip-frame
-       (vc-append
-        (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -3/4))
-        (inset/clip (clip-scale (filled-rectangle 100 100 #:draw-border? #f #:color "blue"))
-                    0 (* (pict-height size) -1/4) 0 0)))
-      (clip-frame (filled-rectangle 100 100 #:draw-border? #f #:color "blue"))
-      (clip-frame
-       (vc-append
-        (inset/clip (clip-scale (first rect-clip)) 0 0 0 (* (pict-height size) -3/4))
-        (inset/clip (clip-scale (filled-rectangle 100 100 #:draw-border? #f #:color "blue"))
-                    0 (* (pict-height size) -1/4) 0 0)))
-      (clip-frame
-       (vc-append
-        (inset/clip (clip-scale (first rect-clip)) 0 0 0 (* (pict-height size) -2/4))
-        (inset/clip (clip-scale (filled-rectangle 100 100 #:draw-border? #f #:color "blue"))
-                    0 (* (pict-height size) -2/4) 0 0)))
-      (clip-frame
-       (vc-append
-        (inset/clip (clip-scale (first rect-clip)) 0 0 0 (* (pict-height size) -1/4))
-        (inset/clip (clip-scale (filled-rectangle 100 100 #:draw-border? #f #:color "blue"))
-                    0 (* (pict-height size) -3/4) 0 0)))
-      (clip-frame (second rect-clip))))))
+    #:split-location 0.45
+    @racketblock[(image "splash.png" #:length 100)
+                 (fade-transition #:length 50)
+                 talk
+                 (fade-transition #:length 50)
+                 (image "splash.jpg" #:length 100)]
+      (centered (make-playlist-timeline
+             #:end #t
+             (ellipses)
+             (t# 1)
+             (t# 2)
+             (t# 3)
+             (ellipses)
+             (t# 4)
+             (t# 5)
+             (t# 6)
+             (ellipses))))
+
+Every transition in a playlist actually shortens the length
+of the playlist, because transitions produce one clip for
+every two clips they consume. Additionally, playlists may
+contain multiple transitions. Videos that contain this
+behavior, like above, are not ambiguous because playlist transitions are
+associative operations. Thus, multiple transitions placed in a
+single playlist described the desired clip without any
+surprises.
 
 @section{Multitracks}
 
 Unlike playlists, multitracks play producers in parallel.
-Like with playlists, transitions are used to composite the
-tracks.
+Though, as with playlists, they employ transition to
+composite their producers.
 
 Syntactically, multiracks are similar to playlists. The
 @racket[multitrack] form accepts a list of producers and
-creates a new multitrack producer. Again, transitions show
-up directly in the list to combine tracks:
+creates a new multitrack producer. Again, transitions are
+syntactically placed in the list to combine tracks.
 
 @(split-minipage
   @racketblock[(multitrack
-                (clip "rect.mp4")
-                (composite-transition 0 0 1/2 1/2)
-                (image "circ.png"))]
-  (centered
-   (make-playlist-timeline
-    #:end #t
-    (clip-frame
-     (lt-superimpose (scale-1080p (first rect-clip)  150)
-                     (scale-1080p circ-image 75)))
-    (clip-frame
-     (lt-superimpose (scale-1080p (second rect-clip)  150)
-                     (scale-1080p circ-image 75)))
-    (ellipses)
-    (clip-frame
-     (lt-superimpose (scale-1080p (ninth rect-clip)  150)
-                     (scale-1080p circ-image 75)))
-    (clip-frame
-     (lt-superimpose (scale-1080p (last rect-clip)  150)
-                     (scale-1080p circ-image 75))))))
+                (clip "slides.mp4")
+                (composite-transition 0 0 1/4 1/4)
+                talk)]
+  (centered (make-playlist-timeline
+             #:end #t
+             (ellipses)
+             (t# 1)
+             (t# 2)
+             (t# 3)
+             (t# 4)
+             (ellipses))))
 
 This example uses @racket[composite-transition], which
 places one producer on top of the other. The four constants
@@ -420,41 +266,30 @@ Transitions within multitracks are not associative; instead,
 multricks interpret transitions in left to right order.
 Videos that require a different evaluation order can embed a
 multitrack inside of a multitrack, because multitracks are
-themselves producers. Here is an example:
+themselves producers. This technique allows producers to
+appear side by side rather than just on top of each other.
+Modifying the example above shows a conference video where
+the recording of the present goes in the top left, while the
+slides go on the right:
 
 @(split-minipage
   @racketblock[(multitrack
-                (clip "rect.mp4")
-                (composite-transition 0 0 1/2 1/2)
-                (multitrack
-                 (image "circ.png")
-                 (composite-transition 0 1/2 1/2 1/2)
-                 (color "green")))]
-  (centered
-   (make-playlist-timeline
-    #:end #t
-    (clip-frame
-     (lb-superimpose
-      (lt-superimpose (scale-1080p (first rect-clip) 150)
-                      (scale-1080p circ-image 75))
-      (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 75)))
-    (clip-frame
-     (lb-superimpose
-      (lt-superimpose (scale-1080p (second rect-clip) 150)
-                      (scale-1080p circ-image 75))
-      (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 75)))
-    (ellipses)
-    (clip-frame
-     (lb-superimpose
-      (lt-superimpose (scale-1080p (ninth rect-clip) 150)
-                      (scale-1080p circ-image 75))
-      (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 75)))
-    (clip-frame
-     (lb-superimpose
-      (lt-superimpose (scale-1080p (last rect-clip) 150)
-                      (scale-1080p circ-image 75))
-      (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 75))))))
-
+                (blank #f)
+                (composite-transition 0 0 1/4 1/4)
+                (clip "slides.mp4")
+                (composite-transition 1/4 0 3/4 1)
+                talk)]
+  (centered (make-playlist-timeline
+             #:end #t
+             (ellipses)
+             (t# 1)
+             (t# 2)
+             (t# 3)
+             (t# 4)
+             (ellipses))))
+  
+@; Keep?
+@;{
 An alternative is to apply multiple transitions to the same
 track. To support this alternative, multitracks support the
 @racket[#:transitions] keyword, which takes a list of
@@ -464,115 +299,12 @@ producers are specified with the @racket[#:top] and
 @racket[#:bottom] keywords respectively, and must be
 producers found in the multitrack.
 
-@(split-minipage
-  @racketblock[(multitrack circ blue-color green-color bg
-                           #:transitions
-                           (list
-                            (composite-transition 0 0 1/2 1/2
-                                                  #:top circ
-                                                  #:bottom bg)
-                            (composite-transition 1/2 0 1/2 1/2
-                                                  #:top blue-color
-                                                  #:bottom bg)
-                            (composite-transition 0 1/2 1/2 1/2
-                                                  #:top green-color
-                                                  #:bottom bg)))
-              (define bg (clip "rect.mp4"))
-              (define circ (image "circ.png"))
-              (define green-color (color "green"))
-              (define blue-color (color "blue"))]
-  (centered
-   (make-playlist-timeline
-    #:end #t
-    (clip-frame
-     (lb-superimpose
-      (rt-superimpose
-       (lt-superimpose (scale-1080p (first rect-clip) 150)
-                       (scale-1080p circ-image 75))
-       (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "blue") 75))
-      (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 75)))
-    (clip-frame
-     (lb-superimpose
-      (rt-superimpose
-       (lt-superimpose (scale-1080p (second rect-clip) 150)
-                       (scale-1080p circ-image 75))
-       (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "blue") 75))
-      (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 75)))
-    (ellipses)
-    (clip-frame
-     (lb-superimpose
-      (rt-superimpose
-       (lt-superimpose (scale-1080p (ninth rect-clip) 150)
-                       (scale-1080p circ-image 75))
-       (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "blue") 75))
-      (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 75)))
-    (clip-frame
-     (lb-superimpose
-      (rt-superimpose
-       (lt-superimpose (scale-1080p (last rect-clip) 150)
-                       (scale-1080p circ-image 75))
-       (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "blue") 75))
-      (scale-1080p (filled-rectangle 50 50 #:draw-border? #f #:color "green") 75))))))
-
 The @racket[#:transitions] keyword also applies to
 playlists.
 This allows abstracting over both playlist and multitrack
 functions that insert transitions into both of these data
 representations without having to bother with list
-operations directly. Here is an example:
-
-@(minipage
-  @racketblock[(swiping-playlist (image "circ.png") (color "green"))
-               (swiping-playlist (color "green") (clip rect))
-               (define (swiping-playlist a b)
-                 (playlist a b
-                           #:transitions
-                           (list (swipe-transition
-                                  #:direction 'bottom
-                                  #:length 3
-                                  #:first a
-                                  #:second b))))]
-  (centered
-   (let ([size (clip-scale (blank 1))])
-     (make-playlist-timeline
-      #:end #t
-      (clip-frame circ-image)
-      (clip-frame
-       (vc-append
-        (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -1/4))
-        (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-                    0 (* (pict-height size) -3/4) 0 0)))
-      (clip-frame
-       (vc-append
-        (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -2/4))
-        (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-                    0 (* (pict-height size) -2/4) 0 0)))
-      (clip-frame
-       (vc-append
-        (inset/clip (clip-scale circ-image) 0 0 0 (* (pict-height size) -3/4))
-        (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-                    0 (* (pict-height size) -1/4) 0 0)))
-      (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-      (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-      (clip-frame
-       (vc-append
-        (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-                    0 0 0 (* (pict-height size) -1/4))
-        (inset/clip (first rect-clip) 0 (* (pict-height size) -3/4) 0 0)))
-      (clip-frame
-       (vc-append
-        (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-                    0 0 0 (* (pict-height size) -2/4))
-        (inset/clip (second rect-clip) 0 (* (pict-height size) -2/4) 0 0)))
-      (clip-frame
-       (vc-append
-        (inset/clip (clip-scale (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-                    0 0 0 (* (pict-height size) -3/4))
-        (inset/clip (third rect-clip) 0 (* (pict-height size) -1/4) 0 0)))
-      (clip-frame (fourth rect-clip))
-      (ellipses)
-      (clip-frame (ninth rect-clip))
-      (clip-frame (last rect-clip))))))
+operations directly. Here is an example:}
 
 @section{Filters}
 
@@ -580,34 +312,38 @@ Filters are similar to transitions, but they modify the
 behavior of only a single producer. For example, filters can
 remove the color from a clip or change a producer's aspect
 ratio. Thus, filters themselves are functions from producers
-to producers. As an example, the @racket[scale-filter]
-filter scales a producer by the given width and height,
-leading to a stretching effect. Here, the first integer
-scales the width, while the second one scales the height:
+to producers.
+
+Conference recordings frequently capture audio and video on
+separate tracks. Before splicing the tracks together,
+frequently add an envelope filter to provide a fading in and
+out feel. Filters can be applied directly as functions, or
+attached to producers with the @racket[#:filters] keyword.
+This is an example a filer being attached an audio track
+that is itself composited with the video of the talk above:
 
 @(split-minipage
-  #:split-location 0.45
-  @racketblock[(scale-filter (clip "rect.mp4"  1 3))]
-  (centered
-   (let ([size (scale (scale-1080p (blank 1) 150) 1 9)])
-     (apply make-playlist-timeline
-      #:end #t
-      (append
-       (build-list
-        6
-        (λ (n)
-          (clip-frame
-           (inset/clip
-            (scale (scale-1080p (list-ref rect-clip n) 150) 1 9)
-            0 (* (pict-height size) (+ -1/3)) 0 (* (pict-height size) (+ -1/3))))))
-       (list (ellipses))
-       (build-list
-        2
-        (λ (n)
-          (clip-frame
-           (inset/clip
-            (scale (scale-1080p (list-ref rect-clip (+ n 7)) 150) 1 9)
-            0 (* (pict-height size) (+ -1/3)) 0 (* (pict-height size) (+ -1/3)))))))))))
+  #:split-location 0.58
+  @racketblock[(multitrack
+                composed-talk
+                (clip "0000.wav"
+                      #:filters (list
+                                 (envelope-filter 50 #:direction 'in)
+                                 (envelope-filter 50 #:direction 'out))))]
+  (vc-append
+   25
+   (hc-append 20
+              (scale-to-fit (bitmap "res/sound-start.png") 90 30 #:mode 'distort)
+              (ellipses)
+              (scale-to-fit (bitmap "res/sound-end.png") 90 30 #:mode 'distort))
+   (make-playlist-timeline
+    #:end #t
+    (clip-scale (bitmap "res/rcon.png"))
+    (ellipses)
+    (clip-scale (bitmap "res/stephen.jpg"))
+    (ellipses)
+    (clip-scale (bitmap "res/rcon.png")))))
+
 
 @section{Properties and Dependent Clips}
 
@@ -628,90 +364,56 @@ Explicit properties must be added by the program itself.
   the value associated with @emph{key}. If the property is set
   both implicitly and explicitly, the explicit property has priority.}]
    @para{Explicit properties provide a protocol to
- communicate information from one clip to another. For example, a watermark can
- communicate whether it should be placed at the top or bottom of
- the screen:}
+ communicate information from one clip to another. Implicit
+ properties exist for the same purpose except that they store
+ information that are implicitly associated with a producer,
+ such as its length.
+ For example, the conference video can also have a watermark that is
+ the same length as the conference video.}
    (split-minipage
     @racketblock[(multitrack
-                  rect-clip
-                  (composite-transition 0 1/2 3/4 3/4)
-                  (image
-                   "circ.png"
-                   #:length (* 6 (get-property rect-clip 'ratio))))
-
-                 (define rect-clip
-                   (set-property (clip "rect.mp4" #:length 6) 'ratio 1/2))]
-  (centered
-   (make-playlist-timeline
-    #:end #t
-    (clip-frame
-     (lb-superimpose (scale-1080p (first rect-clip) 150)
-                     (scale-1080p circ-image 120)))
-    (clip-frame
-     (lb-superimpose (scale-1080p (second rect-clip) 150)
-                     (scale-1080p circ-image 120)))
-    (clip-frame
-     (lb-superimpose (scale-1080p (third rect-clip) 150)
-                     (scale-1080p circ-image 120)))
-    (clip-frame (fourth rect-clip))
-    (clip-frame (fifth rect-clip))
-    (clip-frame (sixth rect-clip)))))))
-
-Implicit properties store innate information about a clip.
-Returning to the watermark example, a multitrack can get the
-length of its main clip. That multitrack can then display
-that watermark for a portion of the clip:
-
-@(split-minipage
-  @racketblock[(multitrack
-                rect-clip
-                (composite-transition 0 1/2 3/4 3/4)
-                (image
-                 "circ.png"
-                 #:length (* (get-property rect-clip 'ratio)
-                             (get-property rect-clip 'length))))
-               
-               (define rect-clip
-                 (set-property (clip "rect.mp4" #:length 6) 'ratio 1/2))]
-  (centered
-   (make-playlist-timeline
-    #:end #t
-    (clip-frame
-     (lb-superimpose (scale-1080p (first rect-clip) 150)
-                     (scale-1080p circ-image 120)))
-    (clip-frame
-     (lb-superimpose (scale-1080p (second rect-clip) 150)
-                     (scale-1080p circ-image 120)))
-    (clip-frame
-     (lb-superimpose (scale-1080p (third rect-clip) 150)
-                     (scale-1080p circ-image 120)))
-    (clip-frame (fourth rect-clip))
-    (clip-frame (fifth rect-clip))
-    (clip-frame (sixth rect-clip)))))))
-
+                  (blank #f)
+                  (composite-transition 0 0 1/4 1/4)
+                  (clip "slides.mp4")
+                  (composite-transition 1/4 0 3/4 1)
+                  talk
+                  (composite-transition 0 1/4 1/4 3/4)
+                  (image "logo.png" #:length (producer-length talk)))]
+    (centered (make-playlist-timeline
+               #:end #t
+               (ellipses)
+               (t# 1)
+               (t# 2)
+               (t# 3)
+               (t# 4)
+               (ellipses))))))
 
 @section[#:tag "overview-rendering"]{From Programs to Videos}
 
-Video programs may describe standalone films or pieces of
+Video programs may describe standalone modules or pieces of
 a larger production. In the first case, users give Video
-files to a renderer. In the second case, other modules
-import Video modules before rendering.
+modules to a renderer. In the second case, other modules
+import the target module before rendering.
 
 A renderer converts standalone Video programs to traditional
 videos. This renderer allows creators to set various
 properties such as aspect ratio, frame rate, and even output
-format. If no output format is selected, Video plays a
-preview of the film. For example, here is the command to
-preview a clip that displays a green background:
+format. For example, the @racket[preview-video] function
+renders the video on the fly and plays it in a preview
+window:
 
 @(split-minipage
-  (centered @exec{raco video -h 1920 -w 1080 --fps 48 demo.vid})
-  (centered (scale (bitmap "res/sample.png") 0.08)))
+  (centered @racket[(preview-video "talk.vid")])
+  (centered (scale (bitmap "res/talk-preview.png") 0.08)))
 
 Every Video program is usable inside of other Video
 programs and general purpose Racket programs. Each module
 in the language exports one @racket[vid] identifier, that
 contains the described film.
+
+Modules written in Video export a data structure bound to
+@racket[vid]. This data structure can itself be used in
+large video projects through @racket[include-video].
 
 The top half of @figure-ref["video-use"] shows the program
 for the green video used above. The code to the right shows
@@ -720,77 +422,20 @@ itself a producer and can be used in larger projects, shown
 in the bottom half of @figure-ref["video-use"]. Video
 provides @racket[include-video] to import video files into
 larger contexts. This function imports the specified file
-and places the @racket[vid] struct where it is placed.
+and places the @racket[vid] struct where it is placed. For
+example, if a broadcaster for an already edited conference
+video wants to add an additional splash to the front, they
+could easily do so:
 
-@figure["video-use"
-        "Video program for green clip (top) and another program using the green clip (bottom)."]{
- @(split-minipage
-   #:split-location 0.4
-   @(minipage
-     #:size 0.5
-     (filebox "green.vid"
-              @racketmod[video
-                         (color "green")]))
-   (examples #:label #f
-             (eval:alts (require "demo.vid") (void))
-             (eval:alts vid (display "#<producer>"))))
-  
- @exact{\vspace{0.2cm}}
- 
- @(hline 500 0)
- 
- @exact{\vspace{0.5cm}}
- 
- @(split-minipage
-   @racketmod[video
-              (clip "rect.mp4")
-              (include-video "green.vid" #:length 1)
-              @image["circ.png"]]
-   (centered
-    (make-playlist-timeline
-     #:end #f
-     (clip-frame (first rect-clip))
-     (clip-frame (second rect-clip))
-     (ellipses)
-     (clip-frame (eighth rect-clip))
-     (clip-frame (last rect-clip))
-     (clip-frame (filled-rectangle 50 50 #:draw-border? #f #:color "green"))
-     (clip-frame circ-image)
-     (ellipses))))}
-
-@(type-table `(blank (-> Number Producer))
-             `(color (-> (U String (X Number Number Number)) Producer))
-             `(clip (-> String Producer))
-             `(image (-> String Producer))
-             `(playlist (-> (List (U Producer (-> Producer Producer Producer)))
-                            #\newline
-                            #:transitions
-                            (List (U/man (X (-> Producer Producer Producer) Producer Producer)
-                                         #\newline
-                                         (Ghost "\\texttt{\\#:transitions} [( ")
-                                         (Const " \\mid ")
-                                         (X (-> Producer Producer) Producer)))
-                            #\newline
-                            Producer))
-             `(multitrack (-> (List (U Producer (-> Producer Producer Producer)))
-                              #\newline
-                              #:transitions
-                              (List (U/man (X (-> Producer Producer Producer) Producer Producer)
-                                           #\newline
-                                           (Ghost "\\texttt{\\#:transitions} [( ")
-                                           (Const " \\mid ")
-                                           (X (-> Producer Producer) Producer)))
-                              #\newline
-                              Producer))
-             `(get-property (-> Producer String Any))
-             `(set-property (-> Producer String Any Producer))
-             `(attach-filter (-> Producer (-> Producer Producer) Producer))
-             `(grayscale-filter (-> Producer Producer))
-             `(cut-filter (-> Number Number (-> Producer Producer)))
-             `(scale-filter (-> Number Number (-> Producer Producer)))
-             `(translate-filter (-> Number Number (-> Producer Producer)))
-             `(fade-transition (-> Number (-> Producer Producer Producer)))
-             `(swipe-transition (-> String Number (-> Producer Producer Producer)))
-             `(composite-transition (-> Number Number Number Number
-                                        #\newline
-                                        (-> Producer Producer Producer))))
+@(split-minipage
+  @racketblock[(image "broadcast.png" #:length 100)
+               (include-video "talk.vid")]
+  (centered (make-playlist-timeline
+             #:end #t
+             (t# 1)
+             (t# 2)
+             (ellipses)
+             (t# 3)
+             (t# 4)
+             (t# 5)
+             (ellipses))))

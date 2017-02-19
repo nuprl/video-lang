@@ -28,7 +28,7 @@ section discusses the use of these editors, and how they
 interact with Video programs.
 
 @figure["video-gui" "Graphical Editor for Video Programs"]{
- @(scale (bitmap "res/video-gui.png") 0.3)}
+ @(scale (bitmap "res/video-gui.png") 0.2)}
 
 Consider the case where a hardware failure prevents a
 speaker's screen from being captured during a talk.
