@@ -30,7 +30,7 @@ doctrine. That is to say, Video is implemented in a DSL
 designed specifically for implementing Video, which itself
 is implemented in Racket (@secref{impl-ffi}).
 
-@section[#:tag "impl-create"]{Creating Languages - The Racket Way}
+@section[#:tag "impl-create"]{Creating Languages, the Racket Way}
 
 Creating DSLs following the Racket doctrine is straight
 forward and requires little effort. Language authors simply
@@ -80,7 +80,7 @@ otherwise equivalent language with lazy semantics.
  function application form, while @racket[#%lazy-app] is a
  lazy variant.}))
   
-@section[#:tag "impl-video"]{Video Editing as a Language}
+@section[#:tag "impl-video"]{The Essence of Video}
 
 Video's implementation is spread across several main
 components: a surface syntax, a core library, and a
@@ -186,7 +186,7 @@ structure compiles into a playlist that is bound to
 The compilation for @racket[#%plain-lambda] also follows
 this pattern.
 
-@section[#:tag "impl-ffi"]{Video - Behind the Scenes}
+@section[#:tag "impl-ffi"]{Video, Behind the Scenes}
 
 Rather than rendering files directly, Video employs a C
 library---the MLT Multimedia Framework@note{libmlt-url}---to
