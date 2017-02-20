@@ -7,6 +7,14 @@
 
 (define-cite cite citet gen-bib)
 
+(define SK-PhD
+  (make-bib
+   #:title "Linguistic Reuse"
+   #:author "Shriram Krishnamurthi"
+   #:is-book? #t
+   #:location (dissertation-location #:institution "Rice University")
+   #:date 2001))
+
 (define fowler
   (make-bib #:title "Domain-specific Languages"
             #:author (authors "Martin Fowler" "Rebecca Parsons")
