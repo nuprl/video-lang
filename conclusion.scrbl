@@ -2,7 +2,7 @@
 
 @(require "bib.rkt")
 
-@title[#:tag "conclusion"]{Star Trek: Beyond}
+@title[#:tag "conclusion"]{Star Trek Beyond}
 
 When Racketeers create new languages, they do not write interpreters or
  compilers. Instead they @emph{reuse} an existing language and its features
