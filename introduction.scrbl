@@ -8,18 +8,15 @@
 
 @title[#:tag "introduction"]{Being Iavor Diatchki}
 
-Imagine yourself being Iavor Diatchki. He is the friendly
-guy who tapes all the wonderful ICFP presentations and edits
-them into digestible YouTube video clips. Or imagine
-yourself being Leif Andersen, who plays Diatchki's role for
-RacketCon. When they create the video clips, they combine a
-feed of the presenter with the presenter's screen, the sound
-feed for the speaker, and yet another one for audience
-questions. Additionally, Diatchki and Andersen must add a
-start and end sequence to each video plus various watermarks
-throughout. Composing these feeds means overlaying
-them in such a manner that the result appears to be a
-holistic production from the perspective of the viewer.
+Imagine yourself being Iavor Diatchki. He is the friendly guy who tapes all
+the wonderful ICFP presentations and edits them into digestible YouTube
+video clips.  When he creates the video clips, he combines a feed of the
+presenter with the presenter's screen, the sound feed for the speaker, and
+yet another one for audience questions. Additionally, Diatchki
+must add a start and end sequence to each video plus various watermarks
+throughout. Composing these feeds means overlaying them in such a manner
+that the result appears to be a holistic production from the perspective of
+the viewer.
 
 Once one video is put together, the same process must be
 repeated for the next conference talk and the next and so
