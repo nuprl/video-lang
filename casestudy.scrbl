@@ -33,184 +33,106 @@ terse syntax enables the post-producer to focus on the
 unique aspects of each feed, such as combining multiple
 files together, noise reduction, and setting cut points.
 
-The remainder of this section provides a case study for
-Video: editing conference videos for
-RacketCon.@note[racketcon-url] We show the common utility
-functions that every conference talk shares. Next, we show
-how creators use these functions to streamline their editing
-process.
+This section is devoted to evaluating Videos ease of
+use.@note{Readers interested in the mechanics of how to use
+ Video to edit conference recordings can look in the previous
+ section (@secref{overiew}).} Specifically, we show that
+creating videos is so easy that the author for Video
+actually is able to create both Video and edit a bundle of
+conference recordings with less effort than it takes to edit
+those same talks by hand. This result is significant in two
+ways. First, it shows the power of embedded DSLs, and how
+they serve as a powerful mechanism for producing both
+simpler and more robust code with little effort. Second, it
+shows that the Racket design enables programmers to
+construct their own embedded DSLs with very little effort.
 
-@section{Compositing Videos}
+@section{Editing Videos}
 
-Playing the slide capture and speaker recording in lockstep
-is the first step in editing conference videos. The
-@racket[make-speaker-slide-composite] function composites
-the slide feed and the speaker feed into one producer. As
-before, @racket[background] is bound in the entire function,
-even though it is syntactically declared at the function's
-bottom. Both @racket[speaker] and @racket[slides] are placed
-on top of this background using
-@racket[composite-transition]. Finally, the editor adds a
-conference logo to the bottom left of the screen.
+As with many Racket-style DSLs, Video exists to ease an
+otherwise repetitive task; in this case, video editing. To
+demonstrate this, we compare the editing time for editing
+conference recordings for RacketCon 2015 and 2016. RacketCon
+2015 recordings are hand edited, while the 2016 ones are made
+with Video. Furthermore, Video's maiden program is the 2016
+recordings, which gives an idea for the ratio of effort
+Videos saves and the required to actually make Video.
 
-@(split-minipage
-  #:split-location 0.575
-  @racketblock[(code:comment "Combine the video feed for a conference recording")
-               (code:comment "Producer Producer -> Producer")
-               (define (make-speaker-slide-composite speaker slides)
-                 @multitrack[speaker slides logo background
-                             #:transitions
-                             @list[@composite-transition[0 0 3/10 1
-                                    #:top speaker
-                                    #:bottom background]
-                                   @composite-transition[0 1/2 3/10 1
-                                    #:top logo
-                                    #:bottom background]
-                                   @composite-transition[1/3 0 2/3 1
-                                    #:top slides
-                                    #:bottom background]]]
-                       @(define background
-                              @blank[@properties-ref[speaker
-                                                     'length]]))
+The RacketCon 2015 recordings are edited with Kdenlive, a
+traditional non-linear video editor. Additionally, two
+people are responsible for editing these videos. The
+conference date is Sept. 27, 2015 and the publish date for
+the conference recordings is Nov. 9, 2015. Thus, the delta
+from recording to publishing is 43 days.
 
-              (define logo @image["logo.jpg"])]
-  (centered
-   (scale-1080p (bitmap "rconframes/stephen50.jpg") 225)))
+Unlike the previous year, the RacketCon 2016 recordings are
+edited with Video. Additionally, only one person is
+responsible for editing the 2016 videos. The conference date
+is Sept. 18, 2016 and the publish date is Nov. 11, 2016.
+Thus, the delta for 2016 is 54 days, or 11 days longer than
+the previous year. On top of editing, this delta also
+represents the time spent creating the Video language.
 
-Editors next put a splash screen at the start and end of the
-video. Here, @racket[make-talk-video] uses a playlist to
-place the main talk video between the two logos.
-Additionally, two @racket[fade-transitions] smooths the
-transitions between the logos and the recording.
+@section{Itemized Effort}
 
-@(minipage
- @racketblock[(code:comment "Add conference logos to the front and end of a video.")
-              (code:comment "Producer -> Producer")
-              (define (make-talk-video main-talk)
-                (playlist begin-clip
-                          @fade-transition[200]
-                          main-talk
-                          @fade-transition[200]
-                          end-clip)
-                (define begin-clip @image[logo #:length 500])
-                (define end-clip @image[logo #:length 500]))]
- (centered
-  rcon-timeline))
+The two years have different production patterns. Precise
+records for the effort spent in 2015 do not exist, but the
+editors themselves provide anecdotes. First, picking an
+editing environment, and then creating a template for that
+environment takes a large amount of time. Once the template
+is set up, and a work-flow is established, editing can
+proceed reasonably quickly. The work, however, is monotonous
+and repetitive. Each editor must follow the exact same
+script of button presses to edit each recording. While there
+are plenty of talks, there are too few to merit the effort
+to create a script to press the buttons. Furthermore, each
+video has slightly different qualities, such as start and
+end times, that further complicates such a script.
 
-Finally, @racket[attach-audio] attaches a higher quality
-recording of presenter's audio to the video. Only one feed
-is provided because audience questions are not recorded to a
-separate track. An @racket[offset] parameter allows the
-function to start playing audio from the middle of the audio
-file. Finally, the function adds an enveloping effect to the
-start and end of the audio. This effect is analogous to the
-fade transition and enables the viewer to feel a natural
-start and end to the recording. Audio attachment happens
-after the conference logos so that audio plays in the
-background, even when a video is a splash screen.
+More precise records for 2016 do exist and are shown in
+@figure-ref["video-lenghts"]. This figure shows the length
+of each talk, the lines of code taken to implement them, and
+the time spend editing each video. The first video took
+significantly longer than the rest as it is the first real
+video created with the language. Additionally, equipment
+failure caused the morning slides to be lost; piecing them
+together takes additional time. Editing the later talks is significantly faster,
+with the longest bottleneck being previewing the talk.
 
-@(split-minipage
-  #:split-location 0.6
-  @racketblock[(code:comment "Add higher quality speaker recording")
-               (code:comment "Producer Number -> Producer")
-               (define (attach-audio video audio offset)
-                 (define cleaned-audio
-                   (cut-producer
-                    (attach-filter
-                     audio
-                     (envelope-filter 50 #:direction 'in)
-                     (envelope-filter 50 #:direction 'out)))
-                   #:end offset)
-                  (multitrack video cleaned-audio
-                              #:length (get-property video "length")))]
-  (vc-append
-   25
-   (hc-append 20
-              (scale-to-fit (bitmap "res/sound-start.png") 90 30 #:mode 'distort)
-              (ellipses)
-              (scale-to-fit (bitmap "res/sound-end.png") 90 30 #:mode 'distort))
-   (make-playlist-timeline
-    #:end #t
-    (clip-scale (bitmap "res/rcon.png"))
-    (ellipses)
-    (clip-scale (bitmap "res/stephen.jpg"))
-    (ellipses)
-    (clip-scale (bitmap "res/rcon.png")))))
-
-@section{Putting it all Together}
-
-Creators edit a conference video by composing the previous
-three functions together. While editors could do this by
-hand, @racket[make-conference-talk] provides a clean
-interface to generate processed recordings. This function
-takes parameters for the speaker video feed, the slide
-capture feed, the audio feed, and an offset for audio. It
-combines these feed by composing the previous three functions
-together.
-
-@racketblock[(define (make-conference-talk speaker slides audio offset)
-               @attach-audio[video audio offset]
-               @(define* _ @make-speaker-slides-composite[speaker slides])
-               @(define* _ @make-talk-video[_])
-               @(define video @make-talk-video[_]))]
-
-This function, which composes the previous three together,
-uses @racket[define*]. As with @racket[define], all
-variables bound with @racket[define*] are lifted to the
-function or module they are defined in. The difference is
-that @racket[define*] binds the same identifier multiple
-times, similarly to Racket's @racket[let*], or monadic bind.
-This enables programs to build up a temporary form that
-eventually gets used in a much larger binding.
-
-Using @racket[make-conference-talk] makes creating the video
-straightforward. @Figure-ref["video-example"] shows an
-example Video program for a single RacketCon talk. The
-entire program is 7 lines of code to describe a 20 minute
-talk. Recording devices split video and audio files into
-smaller chunks, which editors combine later using playlists.
-Additionally, the start and end times for the feeds are set
-with the @racket[#:start] and @racket[#:end] keywords. The
-@tt["conference-lib.vid"] library stores common utilities
-for putting together RacketCon videos. In particular, it
-defines @racket[make-conference-talk] as shown above.
-
-Running @exec{raco video} renders this file to an actual
-video. This command renders it to an @tt{MP4} file, rendered
-at 1080p and 48 frames a second. Once finished, the resulting video is
-@tt["chang.mp4"], stored in the same directory as the source.
-
-@exact{\vspace{0.5cm}}
-@(nested @exec{raco video --width 1920 --height 1080 --fps 48 --mp4 chang.vid})
-@exact{\vspace{0.5cm}}
-
-Using a common utilities file reduces the implementation
-costs of every conference video. To demonstrate this,
-@figure-ref["video-lengths"] shows the lines of code used to
-implement the RacketCon 2016 videos. Every video
-implementation is less than 10 lines of code. The shortest
-talk ``The Making of `Beautiful Racket'@exact{{}}'' is only
-5 lines because the present had no slides. Additionally,
-hardware failure caused a screen recording failure for the
-first five talks. A slide deck appears in each video to
-compensate for the loss, but increases the program's size.
-
-@figure-here["video-lengths" "Length of RacketCon Video Programs"]{
-@exact|{\begin{tabular}{@{}llrr@{}}\toprule
- Talk Title                           & Presenter                     & Run Time & Lines of Code \\
+@figure-here["video-lengths" "Editing Effort for RacketCon Video Programs"]{
+@exact|{\begin{tabular}{@{}llrrr@{}}\toprule
+ Talk Title                           & Presenter    & Length (min) & Lines of Code & Edit Time (h) \\
  \midrule
- Synthesis and Verification for All   & Emina Torlak                  & 1:00:07  & 9 \\
- Languages in an Afternoon            & Alexis King                   & 18:30    & 8 \\
- Generative Art with Racket           & Rodrigo Setti                 & 12:53    & 10 \\
- Racket is my Mjolnir                 & Geoffrey Knauth               & 28:26    & 8 \\
- Functional Lighting                  & Bruce Steinberg               & 14:14    & 10 \\
- Contracts for Security               & Scott Moore                   & 20:37    & 7 \\
- Type Systems as Macros               & Stephen Chang and Alex Knauth & 22:06    & 7 \\
- The Making of ``Beautiful Racket''   & Matthew Butterick             & 18:38    & 5 \\
- Population game simulation in Racket & Linh Chi Nguyen               & 18:07    & 7 \\
- Spelunking through JPEG with Racket  & Andy Wingo                    & 23:20    & 7 \\
- R-r-r-r-REMIX                        & Jay McCarthy                  & 20:25    & 8 \\
- Racket Does Dijkstra                 & Byron Davies                  & 22:25    & 7 \\
- Language Integrated Nitpicking       & Jack Firth                    & 17:23    & 8 \\
+ Synthesis and Verification for All   & Torlak       & 60:07        & 9             & 7 \\
+ Languages in an Afternoon            & King         & 18:30        & 8             & 2 \\
+ Generative Art with Racket           & Setti        & 12:53        & 10            & 1 \\
+ Racket is my Mjolnir                 & Knauth       & 28:26        & 8             & 0.67 \\
+ Functional Lighting                  & Steinberg    & 14:14        & 10            & 0.5 \\
+ Contracts for Security               & Moore        & 20:37        & 7             & 0.33 \\
+ Type Systems as Macros               & Chang/Knauth & 22:06        & 7             & 0.5 \\
+ The Making of ``Beautiful Racket''   & Butterick    & 18:38        & 5             & 0.1 \\
+ Population game simulation in Racket & Nguyen       & 18:07        & 7             & 0.33 \\
+ Spelunking through JPEG with Racket  & Wingo        & 23:20        & 7             & 0.5 \\
+ R-r-r-r-REMIX                        & McCarthy     & 20:25        & 8             & 0.5 \\
+ Racket Does Dijkstra                 & Davies       & 22:25        & 7             & 0.5 \\
+ Language Integrated Nitpicking       & Firth        & 17:23        & 8             & 0.67 \\
  \bottomrule
  \end{tabular}}|}
+
+In addition to the line counts in the previous figure, the
+talk recordings relied on a common @racketmodname[utils]
+module. This module is 326 lines long and provides a host of
+helper functions for building RacketCon videos. Most
+notably, this file defines @racket[make-conference-video],
+used to construct the conference video in the previous talk.
+This function is 66 lines long, and is primarily a
+description of a conference video given feeds for the
+presenter, slides, and audio.
+
+While the editing process for the 2016 recordings takes 11
+days longer than the proceeding year, only one person,
+rather than two people, worked on the videos. This gives a
+strong indication that not only is using Video significantly
+faster than a traditional NLVE, but creating Video is simple
+enough that it saves time, even if it is only used for
+editing the 2016 talks.

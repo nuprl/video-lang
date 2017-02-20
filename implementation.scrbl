@@ -189,7 +189,7 @@ this pattern.
 @section[#:tag "impl-ffi"]{Video - Behind the Scenes}
 
 Rather than rendering files directly, Video employs a C
-library---The MLT Multimedia Framework@note{libmlt-url}---to
+library---The MLT Multimedia Framework@note[mlt-url]---to
 do the actual rendering.MLT Multimedia Framework. This
 introduces a common design patterns for embedded DSLs.
 First, authors create or find an existing API for a task.
