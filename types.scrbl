@@ -185,9 +185,14 @@ checking. The rest of the section briefly presents the
 
 We implement Typed Video with Turnstile, a Racket DSL
 (introduced in@cite[tsam-popl]) for creating Typed DSLs using a concise,
-bidirectional type-judgement syntax, as seen in the definition. Turnstile introduces the
-@racket[define-syntax/typecheck] form, which defines a macro that incorporates
-type checking as part of macro processing.
+bidirectional type-judgement-like syntax, as seen in the @racket[λ]
+definition. Turnstile introduces the @racket[define-syntax/typecheck] form,
+which defines a macro that incorporates type checking as part of macro
+processing. Interleaving type checking and macros in this manner not only
+simplifies implementation of the type system, but also enables creating true
+abstractions on top of the host language. Contrast this with typed-DSL creation
+other functional languages, where type errors are often reported in host
+language terms.
 
 Next we briefly explain each line of the definition:
 
@@ -256,19 +261,22 @@ Roughly, here is a brief description of each line of the definition.
 @racket[(∀ Xs (→ τ_inX ... τ_outX #:when CX))], which is universally quantified
 over type variables @racket[Xs] and has side-condition @racket[CX].}
 
-@item{The macro peforms local type inference, computing the concrete types @racket[τs] at
-which to instantiate the polymorphic function.}
+@item{The macro peforms local type inference, computing the concrete types
+@racket[τs] at which to instantiate the polymorphic function.}
 
 @item{Next, the polymorphic function type is instantiated to concrete types
 @racket[(τ_in ... τ_out)] and a concrete side-condition @racket[C].}
 
 @item{The side-condition @racket[C] is reduced to a canonical form @racket[C*].}
 
-@item{If @racket[C*] is @racket[false], stop and report an error.}
+@item{If @racket[C*] is @racket[false], stop and report an error. This line
+demonstrates how our DSL creates true abstractions, since the error is reported
+in terms of the surface language rather than the host language.}
 
 @item{If @racket[C*] is still an exprsesion, propagate it.}
 
-@item{Check that the function arguments have the instantiated types. This premise uses the
+@item{Check that the function arguments have the instantiated types. This
+premise uses the
 "check" left bidirectional arrow. If a programmer does not explicitly implement
 a left-arrow version of a rule, Turnstile uses a standard subsumption rule by
 default.}
