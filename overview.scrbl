@@ -80,12 +80,15 @@ interested in Video's design, but want to see an analysis of
 its use can skip to @secref["case-study"]. That section
 shows how much effort goes into making conference
 recordings, both in terms of time and code length. First, we
-describe basic producers: images, clips, colors and so on.
-Then, we discuss the basics of how to combine these
-producers into playlists and multitracks. To make compelling
-examples, we simultaneously introduce transitions, filters,
-and properties. Finally, we describe the interface authors
-use to render their programs into traditional video files.
+provide Video's primary linguistic mechanisms, binding and
+functions. We show this through the definition of the
+@racket[make-confernce-video] function. Next, we describe
+basic producers: images, clips, colors and so on. Then, we
+discuss the basics of how to combine these producers into
+playlists and multitracks. To make compelling examples, we
+simultaneously introduce transitions, filters, and
+properties. Finally, we describe the interface authors use
+to render their programs into traditional video files.
 
 @section[#:tag "overview-functions"]{Functions and binding}
 
@@ -111,7 +114,9 @@ at the top on line 2 before the definitions. This figure
 also introduces @racket[define*]. Rather than creating a
 recursive definition, @racket[define*] replaces any old
 binding with that name with a new one. Video editors use
-this to build up large definitions from the inside out.
+this to build up large definitions from the inside out. The
+rest of the syntax in this figure are video-specific. We
+show how these forms are used to create videos.
 
 @figure["video-functions" "Some Text"]{
  @racketblock[
