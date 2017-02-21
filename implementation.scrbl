@@ -47,9 +47,9 @@ the same manner as a programmer augmenting the functionality
 of a library@cite[lal-pldi]. Unlike adding or removing
 features, modifying existing features requires a little more
 work than that. Specifically it must define the new
-primitive with a different name in terms of the old language
-it must then rename the primitive on export to what source
-programs in that language expect.
+primitive with a different name in terms of the old
+language. Additionally, the language must rename that primitive on
+export to what source programs in that language expect.
 
 Imagine writing a language where @racket[+] appends two
 strings together as well as adding numbers, based on the
@@ -57,11 +57,11 @@ kind of value passed to it. The @racket[+] provided by
 @racketmodname[racket/base] provides the function for adding
 numbers, while @racket[string-append] provides the function
 for strings. The language designer simply needs to define a
-function, @racket[string+], checks the type of its
-arguments, and dispatches to the correct function. From
-there, that developer needs to rename @racket[string+] to
-@racket[+] when providing functions. The resulting language
-implementation fits into 7 lines of code:
+function, @racket[string+], that dispatches to the correct
+function. From there, that developer needs to rename
+@racket[string+] to @racket[+] when exporting the language's
+primitives. The resulting language implementation fits into
+7 lines of code:
 
 @racketmod[
  racket/base
@@ -228,6 +228,13 @@ order. It simply defines the given @racket[id] (which is
 generally @racket[vid]) to the expressions as a playlist,
 and provides the playlist (lines 4-6).
 
+It is worth noting that @racket[video-begin] for function
+scope differs only in the base case. Rather than defining
+and providing an identifier for the resulting playlist, it
+must only return the constructed playlist. The recursive
+code (lines 7 through 17) remain the same for both function
+contexts and module contexts.
+
 @figure["video-begin" "Video Compilation"]{
 @RACKETBLOCK[
 (UNSYNTAX @exact{1}) (define-syntax (video-begin stx)
@@ -279,14 +286,15 @@ to convert these data types into data that MLT understands.
 The @racket[define-mlt] form is useful for hardening foreign
 functions. Racket programmers assume that an error occurs
 when a program is used incorrectly, such as a divide by zero
-error. Unfortunately, languages such as C do not make this
-guarantee. By using @racket[define-mlt], programmers must
-only specify a contract@cite[contracts-icfp] that properly
-wraps the input and outputs for the function. For example,
-consider a function that initializes a C library, @tt{
+or out of bounds lookup. Unfortunately, languages such as C
+do not make this guarantee. By using @racket[define-mlt],
+programmers must only specify a
+contract@cite[contracts-icfp] that properly wraps the inputs
+and outputs for the function. For example, consider a
+function that initializes a C library, @tt{
  mlt_profile_init}, that takes a string and returns either a
 profile object, or @tt{NULL} if there is an error. Rather
-than having to manually check the input and output types,
+than having to manually check the input and output values,
 the FFI simply just states input and output types, and
 errors if a bad input or output type passes through:
 
@@ -303,7 +311,7 @@ errors if a bad input or output type passes through:
  into structures that MLT can understand. It also defines the
  fields associated with the object, what their default values
  should be, and what struct it should inherit other
- properties from. For example, the following is the
+ fields from. For example, the following is the
  description of a Video level producer:}
 
    (nested
