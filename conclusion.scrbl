@@ -9,7 +9,7 @@ When Racketeers create new languages, they do not write interpreters or
  as much as possible, including the syntax and the run-time parts. As a
  result, the cost of creating, installing, and running programs in a real,
  working language is low. The Racket world dubs this idea ``linguistic
- re-use,'' and its inhabitants have practiced it for years@cite[SK-PhD].
+ re-use,'' and its inhabitants have practiced it for years.
 
 The key to Racket's linguistic reuse is its modular syntax
  system@cite[macros-icfp]. Every module specifies its implementation

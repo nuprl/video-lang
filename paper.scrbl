@@ -13,17 +13,19 @@
 @;authorinfo["Stephen Chang" "PLT @ Northeastern University" "stchang@ccs.neu.edu"]
 @;authorinfo["Matthias Felleisen" "PLT @ Northeastern University" "matthias@ccs.neu.edu"]
 
-@abstract{Creating videos from several feeds usually employs so-called
-non-linear editors. For many tasks, the use of these graphical tools
-demands a serious amount of repetitive work. As it turns out, this domain
-is an ideal candidate for the injection of a special-purpose functional
-scripting language that separates the imperative rendering effects from
-their description. This paper presents Video, a functional-declarative
-domain-specific language, its design, implementation, and
-evaluation. Abstractly put, the paper demonstrates why host languages for
-domain-specific languages must allow a context-sensitive manipulation of
-subject code.}
+@abstract{Conference videos combine several feeds into a single coherent
+movie. Producing such videos usually employs a lot of repetitive work with
+so-called non-linear editors. Fortunately, the domain of non-linear video
+editing naturally allows the injection of a functional-declarative
+scripting language with which it is possible to reduce a lot of the
+repetitive work. 
 
+This pearl presents the design of a video production language as an
+illustration of the Racket doctrine, which says that languages belong into
+the arsenal of software developers in the same was as type classes and
+functors. Additionally, the pearl explains how Racket's eco-system
+facilitates the addition of a type system. Finally, the pearl includes a
+brief evaluation of the usefulness of the language.}
 
 @include-section{introduction.scrbl}
 
