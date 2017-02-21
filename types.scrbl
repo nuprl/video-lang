@@ -156,56 +156,75 @@ constructor is applied to a non-support expression, the type defaults to a
 
 @section{Type Systems as Macros}
 
-Implementing our type system required one work day's worth of effort, thanks to
-the Racket ecosystem's ability to reuse linguistic components. Specifically, we
-reused the infrastructure of Racket's macro system in order to implement type
-checking, following the "Type Systems as Macros" approach@cite[tsam-popl]. As a
-result, Typed Video is an extension to, rather than a reimplementation, of the
-Video language. Further, implementing Typed Viedo required no changes to Video.
+Thanks to reuse of linguistic components, implementing Typed Video required one
+work-day's worth of effort. Specifically, we reused the infrastructure of
+Racket's macro system in order to implement type checking, following the "Type
+Systems as Macros" approach@cite[tsam-popl]. As a result, Typed Video is an
+extension to, rather than a reimplementation, of the Video language. Further,
+Creating Typed Video required no changes to Video.
 
-@Secref{implementation} introduced language creation as a series of syntactic
-extensions. We implemented our type system by directly extending these macros
-with type checking. For example, here are snippets of the @racket[λ] and
-function application rule implementations. Typed Video is implemented with
-Turnstile, another Racket DSL (introduced in@cite[tsam-popl]), which supports a
-concise, type-judgement-like syntax.
+@Secref{implementation} demonstrates language creation as a series of syntactic
+extensions. Our type system directly extends these macros with type
+checking. The rest of the section briefly presents the
+@racket[λ] and function application type rule implementations. Here is
+@racket[λ]:
 
 @codeblock[#:line-numbers 1]{
 (define-syntax/typecheck (λ {n ...} ([x : τ] ... #:when C) e) ≫
   [(n ...) ([x ≫ x- : τ] ...) ⊢ e ≫ e- ⇒ τ_out]
   #:with new-Cs (get-captured-Cs e-)
   ---------
-  [⊢ (video:λ (x- ...) e-) ⇒ (∀ (n ...) (→ τ ... τ_out #:when (and C new-Cs)))])}
+  [⊢ (Video:λ (x- ...) e-) ⇒ (∀ (n ...) (→ τ ... τ_out #:when (and C new-Cs)))])}
 
-Turnstile introduces the @racket[define-syntax/typecheck] form, which defines a
-macro that incorporates type checking. The input is a pattern match on syntax,
-here @racket[(λ {n} ([x : τ] ... #:when C) e)], which binds pattern variables
-n (the type variable), x (the λ parameters), τ (the type annotations), C (a
-side-condition), and e (the lambda body). An ellipses pattern matches
-zero-or-more of the preceding element.
+We implement Typed Video with Turnstile, a Racket DSL
+(introduced in@cite[tsam-popl]) for creating Typed DSLs using a concise,
+bidirectional type-judgement syntax, as seen in the definition. Turnstile introduces the
+@racket[define-syntax/typecheck] form, which defines a macro that incorporates
+type checking as part of macro processing.
 
-Turnstile utilizes bidirectional judgements to specify a rule's premises and
-conclusion. Since type checking is interleaved with macro processing, the
-judgements must reflect this. Thus, a Turnstile judgement @racket[[ctx ⊢ e ≫ e-
-⇒ τ_out]] is read "in context @racket[ctx], @racket[e] elaborates to
-@racket[e-] and has type @racket[τ_out]". Specifically, the second line of the
-definition elaborates the body of the lambda @racket[e] to @racket[e-],
-computing its type in the process. This elaboration and type checking occurs
-within the context of the necessary variables. Turnstile reuses Racket's
-lexical scoping to implement the type environment and thus a programmer need
-not write explicit "Γ"s in their rules.
+Next we briefly explain each line of the definition:
 
-The third line of the definition retrieves extra side-conditions computed
-during expansion of @racket[e]. Turnstile allows specifying propagation of not
-just types, but arbitrary metadata on the program tree, and we use this
-mechanism to compute the extra constraints.
+@itemlist[#:style 'ordered
 
-Finally, below the conclusion line, the definition specifes
-the output of the typechecking macro, which is an untyped Video term
-@racket[(video:λ (x- ...) e-)], along with its type @racket[(→ #:bind (X ...) τ
-... τ_out #:when (and C new-Cs))].
+@item{The type checking macro's input must match pattern @racket[(λ {n} ([x :
+τ] ... #:when C) e)], which binds pattern variables @racket[n] (the type
+variable), @racket[x] (the λ parameters), @racket[τ] (the type annotations),
+@racket[C] (a side-condition), and @racket[e] (the lambda body). Pattern
+variables may be subsequently used to construct new program fragments. An
+ellipses pattern matches zero-or-more of its preceding pattern any pattern
+variables in that pattern requires ellipses when subsequently used.}
 
-Here is the function application macro. To support linguistic reuse, Racket's compiler exposes overrideable hooks for most of its core forms. Here, we redefine the function application hook @racket[#%app], to add type checking.
+@item{Since type checking is interleaved with macro processing, Turnstile
+judgements must reflect this as well. Thus, a Turnstile judgement @racket[[ctx
+⊢ e ≫ e- ⇒ τ]] is read "in context @racket[ctx], @racket[e] elaborates to
+@racket[e-] and has type @racket[τ]". Specifically, the lambda body @racket[e]
+elaborates to to @racket[e-], simultaneously computing its type @racket[τ_out].
+
+This elaboration and type checking occurs in the context of the necessary
+variables. Turnstile reuses Racket's lexical scoping to implement the type
+environment and thus a programmer writes only new environment bindings (i.e.,
+explicit "Γ"s are not needed). Specifically, the premise uses two type
+envionments, one each for the type variables and lamba parameters,
+respectively, where the latter may contain references to the former.}
+
+@item{A @racket[#:with] premise binds additional pattern variables. Here,
+elaborating the lambda body @racket[e] may generate additional side-conditions,
+@racket[new-Cs], that must be satisfied by the function's inputs. Turnstile
+allows specifying propagation of not just types, but arbitrary metadata on the
+program tree, and we use this mechanism to compute the extra side-conditions.}
+
+@item{} @item{Finally, the outputs of our type checking macro is below the
+conclusion line: an untyped Video term @racket[(video:λ (x- ...) e-)] and along
+with its type @racket[(∀ (n ...) (→ τ ... τ_out #:when (and C new-Cs)))]. In
+Turnstile, types are represented using the same syntax data structures as
+terms.}
+
+]
+
+Here is our type-checking function application macro definition. To support
+linguistic reuse, Racket's compiler exposes overrideable hooks for most of its
+core forms. Here, we redefine the function application hook @racket[#%app], to
+add type checking.
 
 @codeblock[#:line-numbers 1]{
 (define-syntax/typecheck (#%app e_fn e_arg ...) ≫ 
@@ -213,11 +232,11 @@ Here is the function application macro. To support linguistic reuse, Racket's co
    #:with τs (solve Xs (τ_inX ...) (e_arg ...))
    #:with (τ_in ... τ_out C) (inst τs Xs (τ_inX ... τ_outX CX))
    #:with C* (type-eval C)
-   #:fail-unless C* (format "failed side-condition")
-   #:do[(unless (boolean? C*) (add-C C*))]
+   #:fail-unless C* "failed side-condition"
+   #:unless (boolean? C*) (add-C C*)
    [⊢ e_arg ≫ e_arg- ⇐ τ_in] ...
    --------
-   [⊢ (video:#%app e_fn- e_arg- ...) ⇒ τ_out])}
+   [⊢ (Video:#%app e_fn- e_arg- ...) ⇒ τ_out])}
 
 Roughly, here is a brief description of each line of the definition.
 @itemlist[#:style 'ordered
@@ -227,23 +246,27 @@ Roughly, here is a brief description of each line of the definition.
 ...].}
 
 @item{The function elaborates to @racket[e_fn-] and its type matches pattern
-@racket[(∀ Xs (→ τ_inX ... τ_outX #:when CX))], which is universally quanified
+@racket[(∀ Xs (→ τ_inX ... τ_outX #:when CX))], which is universally quantified
 over type variables @racket[Xs] and has side-condition @racket[CX].}
 
 @item{The macro peforms local type inference, computing the concrete types @racket[τs] at
-which to instantiate the polymorphic function type.}
+which to instantiate the polymorphic function.}
 
-@item{Next, the polymorphic function type is instantiated to concrete types.}
+@item{Next, the polymorphic function type is instantiated to concrete types
+@racket[(τ_in ... τ_out)] and a concrete side-condition @racket[C].}
 
-@item{The side-condition @racket[C] is evaluated.}
+@item{The side-condition @racket[C] is reduced to a canonical form @racket[C*].}
 
-@item{If the side-condition evaluates to false, stop and report an error.}
+@item{If @racket[C*] is @racket[false], stop and report an error.}
 
-@item{If the side-condition is still an exprsesion, propagate it.}
+@item{If @racket[C*] is still an exprsesion, propagate it.}
 
-@item{Type check the function arguments against the instantiated types.}
+@item{Check that the function arguments have the instantiated types. This premise uses the
+"check" left bidirectional arrow. If a programmer does not explicitly implement
+a left-arrow version of a rule, Turnstile uses a standard subsumption rule by
+default.}
 
-@item{} @item{The output of the macro is again an untyped Video term, along
+@item{} @item{The outputs of the macro are an untyped Video term along
 with its computed type.}
 
 ]
