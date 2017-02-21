@@ -143,6 +143,20 @@
                                              #:pages '(48 59)
                                              #:volume 7)))
 
+(define ats-pldi
+  (make-bib
+   #:title "Eliminating Array Bound Checking Through Dependent Types"
+   #:author (authors "Hongwei Xi" "Frank Pfenning")
+   #:location (proceedings-location "PLDI" #:pages '(249 257))
+   #:date 1998))
+
+(define tsam-popl
+  (make-bib
+   #:title "Type Systems as Macros"
+   #:author (authors "Stephen Chang" "Alex Knauth" "Ben Greenman")
+   #:location (proceedings-location "POPL" #:pages '(694 705))
+   #:date 2017))
+
 (define gstreamer-url (url "https://gstreamer.freedesktop.org/"))
 (define mlt-url (url "https://www.mltframework.org/"))
 (define shotcut-url (url "https://www.shotcutapp.com/"))
