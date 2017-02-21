@@ -1,5 +1,5 @@
 all:
 	racket setup.rkt
-	raco doodle
+	raco doodle --extra mathpartir.sty
 	open paper.pdf
 
