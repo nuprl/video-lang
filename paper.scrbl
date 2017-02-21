@@ -40,9 +40,6 @@ brief evaluation of the usefulness of the language.}
 @;{Overview of the API for Video and how it becomes a language.}
 @include-section{overview.scrbl}
 
-@;{A Video DSL saves time and energy in in the concrete case of editing conference videos.}
-@include-section{casestudy.scrbl}
-
 @;{Describe (at a high level) the implementation of Video.}
 @include-section{implementation.scrbl}
 
