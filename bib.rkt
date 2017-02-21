@@ -134,6 +134,15 @@
                                              #:pages '(132 141)
                                              #:volume 32)))
 
+(define contracts-icfp
+  (make-bib #:title "Contracts for Higher-order Functions"
+            #:author (authors "Robert Bruce Findler"
+                              "Matthias Felleisen")
+            #:date "2002"
+            #:location (proceedings-location "ICFP"
+                                             #:pages '(48 59)
+                                             #:volume 7)))
+
 (define gstreamer-url (url "https://gstreamer.freedesktop.org/"))
 (define mlt-url (url "https://www.mltframework.org/"))
 (define shotcut-url (url "https://www.shotcutapp.com/"))

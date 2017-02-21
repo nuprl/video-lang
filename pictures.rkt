@@ -71,13 +71,9 @@
                (string->number (car (regexp-match #rx"[0-9]+"
                                                   (path->string key))))))
   (make-list 10000 "missing-file.png")))
-         
 
 (define (t# n)
   (clip-frame (bitmap (list-ref talk-list n))))
 
 (define elided
-  (hc-append
-   (hline 10 0)
-   (text "elided" code-font small-font-size)
-   (hline 10 0)))
+  (text "⟨⋯elided⋯⟩" text-font small-font-size))

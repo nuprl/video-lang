@@ -46,7 +46,31 @@ features, and does not export unwanted ones. They do this in
 the same manner as a programmer augmenting the functionality
 of a library@cite[lal-pldi]. Unlike adding or removing
 features, modifying existing features requires a little more
-work than that. Specifically it @TODO{... explain ...}.
+work than that. Specifically it must define the new
+primitive with a different name in terms of the old language
+it must then rename the primitive on export to what source
+programs in that language expect.
+
+Imagine writing a language where @racket[+] appends two
+strings together as well as adding numbers, based on the
+kind of value passed to it. The @racket[+] provided by
+@racketmodname[racket/base] provides the function for adding
+numbers, while @racket[string-append] provides the function
+for strings. The language designer simply needs to define a
+function, @racket[string+], checks the type of its
+arguments, and dispatches to the correct function. From
+there, that developer needs to rename @racket[string+] to
+@racket[+] when providing functions. The resulting language
+implementation fits into 7 lines of code:
+
+@racketmod[
+ racket/base
+ (provide (except-out racket/base +)
+          (rename-out [string+ +]))
+ (define (string+ a b)
+   (cond [(and (string? a) (string? b)) (string-append a b)]
+         [(and (number? a) (number? b)) (+ a b)]
+         [else                          (error #,elided)]))]
 
 In addition to macro extensibility, Racket's metaprogramming
 system supports several interposition points that facilitate
@@ -182,27 +206,47 @@ data structure compiles into a playlist that is bound to
 The compilation for @racket[#%plain-lambda] also follows
 this pattern.
 
-@TODO{how do you know what a def vs expr is?}
+The lifting and combination that Video performs makes use of
+a common IR used by all Racket languages. The actual
+transformation used for compiling module level code is shown
+in @figure-ref["video-begin"], and is written using Racket's
+macro system@cite[macros-icfp]. First, the algorithm grabs
+the first expression and expands it to a common language
+(line 5). Next, the transformation sees if the expanded code
+is a list (lines 10 and 16), and if the first element of
+that list is one of several recognized symbols (lines 11-14)
+e.g. @racket[define] or @racket[provide]. If the first
+identifier is recognized, then the macro lifts it out of the
+@racket[video-begin], and recursively expands itself without
+the newly lifted expression (line 15). On the other hand, if
+the expanded is not one of the recognized forms, it is an
+expression and gets collected into the @racket[exprs]
+collection (line 17). Finally, once @racket[video-begin] has
+traversed every piece of syntax (line 3), the @racket[exprs]
+list contains all of the module's expressions in reverse
+order. It simply defines the given @racket[id] (which is
+generally @racket[vid]) to the expressions as a playlist,
+and provides the playlist (lines 4-6).
 
-@figure["video-begin" "Figure title"]{
+@figure["video-begin" "Video Compilation"]{
 @RACKETBLOCK[
- (define-syntax (video-begin stx)
-   (syntax-parse stx
-     [(_ id exprs)
-      #`(begin
-          (define id (playlist . #,(reverse (syntax->list #'exprs))))
-          (provide id))]
-     [(_ id exprs b1 . body)
-      (define expanded (local-expand #'b1 'module (UNSYNTAX elided)))
-      (syntax-parse expanded
-        [(id* . rest)
-         #:when (and (identifier? #'id*)
-                     (or (free-identifier=? #'id* provide)
-                         (free-identifier=? #'id* define-values)
-                         (UNSYNTAX elided)))
-         #`(begin #,expanded (video-begin id post-process exprs . body))]
-        [_
-         #`(video-begin id (#,expanded . exprs) . body)])]))]}
+(UNSYNTAX @exact{1}) (define-syntax (video-begin stx)
+(UNSYNTAX @exact{2})   (syntax-parse stx
+(UNSYNTAX @exact{3})     [(_ id exprs)
+(UNSYNTAX @exact{4})      #`(begin
+(UNSYNTAX @exact{5})          (define id (playlist . #,(reverse (syntax->list #'exprs))))
+(UNSYNTAX @exact{6})          (provide id))]
+(UNSYNTAX @exact{7})     [(_ id exprs b1 . body)
+(UNSYNTAX @exact{8})      (define expanded (local-expand #'b1 'module (UNSYNTAX elided)))
+(UNSYNTAX @exact{9})      (syntax-parse expanded
+(UNSYNTAX @exact{10})       [(id* . rest)
+(UNSYNTAX @exact{11})        #:when (and (identifier? #'id*)
+(UNSYNTAX @exact{12})                    (or (free-identifier=? #'id* provide)
+(UNSYNTAX @exact{13})                        (free-identifier=? #'id* define)
+(UNSYNTAX @exact{14})                        (UNSYNTAX elided)))
+(UNSYNTAX @exact{15})        #`(begin #,expanded (video-begin id post-process exprs . body))]
+(UNSYNTAX @exact{16})       [_
+(UNSYNTAX @exact{17})        #`(video-begin id (#,expanded . exprs) . body)])]))]}
 
 @section[#:tag "impl-ffi"]{Video, Behind the Scenes}
 
@@ -231,3 +275,55 @@ the second form is more complex, the premise is simple,
 @racket[define-constructor] defines the core data types for
 Video. Additionally, this form cooperates with the renderer
 to convert these data types into data that MLT understands.
+
+The @racket[define-mlt] form is useful for hardening foreign
+functions. Racket programmers assume that an error occurs
+when a program is used incorrectly, such as a divide by zero
+error. Unfortunately, languages such as C do not make this
+guarantee. By using @racket[define-mlt], programmers must
+only specify a contract@cite[contracts-icfp] that properly
+wraps the input and outputs for the function. For example,
+consider a function that initializes a C library, @tt{
+ mlt_profile_init}, that takes a string and returns either a
+profile object, or @tt{NULL} if there is an error. Rather
+than having to manually check the input and output types,
+the FFI simply just states input and output types, and
+errors if a bad input or output type passes through:
+
+@racketblock[
+ (define-mlt mlt-profile-init (_fun _string
+                                    -> [v : _mlt-profile-pointer/null]
+                                    -> (null-error v)))]
+
+@(compound-paragraph
+  (style #f '())
+  (list
+   @para{The more complex form, @racket[define-constructor],
+ interplays with the renderer to convert Video level objects
+ into structures that MLT can understand. It also defines the
+ fields associated with the object, what their default values
+ should be, and what struct it should inherit other
+ properties from. For example, the following is the
+ description of a Video level producer:}
+
+   (nested
+   (minipage
+    @racketblock[
+ (define-constructor producer service ([type #f] [source #f] [start -1] [end -1])
+   (define producer* (mlt-factory-producer (current-profile) type source))
+   (mlt-producer-set-in-and-out producer* start end)
+   (register-mlt-close mlt-producer-close producer*))])
+   
+   @exact{\vspace{0.2cm}})
+  
+   @para{The first form (after @racket[define-constructor])
+ gives the name of the struct, in this case
+ @racket[producer]. Next, the parent struct
+ (@racket[service]) is given. After that, all of the fields
+ relevant to producers and their default values are listed.
+ Finally, the code to convert this structure into one that
+ MLT understands is given. All of the fields listed earlier,
+ as well as the parent's fields are available in this
+ conversion code. Finally, the renderer calls this conversion
+ code at the point when it needs to operate over MLT objects
+ rather than Video ones.}))
