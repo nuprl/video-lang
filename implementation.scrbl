@@ -5,6 +5,7 @@
          scriblib/footnote
          (except-in scribble/core paragraph table)
          pict
+         "pictures.rkt"
          "utils.rkt"
          "bib.rkt"]
 
@@ -48,25 +49,25 @@ features, modifying existing features requires a little more
 work than that. Specifically it @TODO{... explain ...}.
 
 In addition to macro extensibility, Racket's metaprogramming
-system supports several interposition points @TODO{that facilitate
-language creation. (names names, at least)?} The purpose of these points is to allow
-language authors to alter the semantics of the relevant
-features to match the desired language semantics.
-
-One such location, @racket[#%app], is useful for changing
-the meaning of function application in a language. A
-developer can use a strict @racket[#%app] to turn a language
-with call-by-values semantics into one with call-by-need
+system supports several interposition points that facilitate
+language creation: @racket[#%app] for function application,
+@racket[#%module-begin] for modules, @racket[#%datum] for
+literals, @racket[#%provide] for module exports, and so on.
+The purpose of these points is to allow language authors to
+alter the semantics of the relevant features to match the
+desired language semantics.
+As an example, a developer can
+use a strict @racket[#%app] to turn a language with
+call-by-values semantics into one with call-by-need
 semantics. The @racketmodname[lazy/racket] language uses
 this interposition point to convert @racketmodname[racket],
 a language that employs strict semantics, into an otherwise
-equivalent language with lazy semantics.
-The @racket[#%app] protocol works because the
-Racket compiler places it in front of every function
-application. Thus, language authors only need to implement
-their version of @racket[#%app] in terms of an existing one.
-Using the example from above, lazy function application can
-be implemented as such:
+equivalent language with lazy semantics. The @racket[#%app]
+protocol works because the Racket compiler places it in
+front of every function application. Thus, language authors
+only need to implement their version of @racket[#%app] in
+terms of an existing one. Using the example from above, lazy
+function application can be implemented as such:
 
 @(nested (minipage @racketblock[
  (f a b c ...) @#,->text{compiles to} ((code:hilite @#,elem{internal @racket[#%app]}) f a b c ...)
@@ -102,27 +103,24 @@ expressions composing to form a larger Video, and even the lifted
 @racket[define] forms. Similarly to @racket[#%app],
 @racket[#%module-begin] gets placed at the start of every
 module. Video needs to define its own
-@racket[#%module-begin] to interpret change the module semantics. The
-following is a version of the conference talk module (that
-elides several forms), as Video compiles
-it: @TODO{move to figure}
+@racket[#%module-begin] to interpret change the module semantics.
 
-@figure["mod-begin" "A figure"]{
+@figure["mod-begin" "Compilation for a Video Module"]{
 @(3split-minipage
   #:size-a 0.38
   #:size-b 0.22
   #:size-c 0.40
   @racketmod0[
  video
- (image "splash.png" ...)
- (make-conf-video video ...)
- (define video ...)]
+ (image "splash.png" #,elided)
+ (make-conf-video video #,elided)
+ (define video #,elided)]
   (->text "compiles to")
   @racketblock0[
  ((code:hilite @#,elem{internal @racket[#%module-begin]})
-  (image "splash.png" ...)
-  (make-conf-video video ...)
-  (define video ...))])
+  (image "splash.png" #,elided)
+  (make-conf-video video #,elided)
+  (define video #,elided))])
  
  @exact{\vspace{0.4cm}}
 
@@ -134,9 +132,9 @@ it: @TODO{move to figure}
   (->text "compiles to")
   @racketblock0[
  (#%video-module-begin
-  (image "splash.png" ...)
-  (make-conf-video video ...)
-  (define video ...))])
+  (image "splash.png" #,elided)
+  (make-conf-video video #,elided)
+  (define video #,elided))])
 
  @exact{\vspace{0.4cm}}
  
@@ -148,10 +146,10 @@ it: @TODO{move to figure}
   (->text "compiles to")
   @racketblock0[
  (#%racket-module-begin
-  (define video ...)
+  (define video #,elided)
   (video-begin vid
-    (image "splash.png" ...)
-    (make-conf-video video ...)))])
+    (image "splash.png" #,elided)
+    (make-conf-video video #,elided)))])
   
  @exact{\vspace{0.4cm}}
  
@@ -163,26 +161,48 @@ it: @TODO{move to figure}
   (->text "compiles to")
   @racketblock0[
  (#%racket-module-begin
-  (define video ...)
+  (define video #,elided)
   (provide vid)
   (define vid
     (playlist
-     (image "splash.png" ...)
-     (make-conf-video video ...))))])
+     (image "splash.png" #,elided)
+     (make-conf-video video #,elided))))])
  @exact{\vspace{0.2cm}}}
 
-Here, @racket[#%video-module-begin] is Video's variant,
-while @racket[#%module-begin] is the standard one provided
-by @racketmodname[racket]. As described informally in preceding
-sections, @racket[#%video-module-begin] lifts the definitions to
-the top of the module, and collects the remaining expressions into
-one data-structure called @racket[video-begin]. This data
-structure compiles into a playlist that is bound to
+@Figure-ref["mod-begin"] shows the compilation of a module
+for a conference talk. Here, @racket[#%video-module-begin]
+is Video's variant, while @racket[#%racket-module-begin] is
+the standard one provided by @racketmodname[racket]. As
+described informally in preceding sections,
+@racket[#%video-module-begin] lifts the definitions to the
+top of the module, and collects the remaining expressions
+into one data-structure called @racket[video-begin]. This
+data structure compiles into a playlist that is bound to
 @racket[vid], and provides that playlist from the module.
 The compilation for @racket[#%plain-lambda] also follows
 this pattern.
 
 @TODO{how do you know what a def vs expr is?}
+
+@figure["video-begin" "Figure title"]{
+@RACKETBLOCK[
+ (define-syntax (video-begin stx)
+   (syntax-parse stx
+     [(_ id exprs)
+      #`(begin
+          (define id (playlist . #,(reverse (syntax->list #'exprs))))
+          (provide id))]
+     [(_ id exprs b1 . body)
+      (define expanded (local-expand #'b1 'module (UNSYNTAX elided)))
+      (syntax-parse expanded
+        [(id* . rest)
+         #:when (and (identifier? #'id*)
+                     (or (free-identifier=? #'id* provide)
+                         (free-identifier=? #'id* define-values)
+                         (UNSYNTAX elided)))
+         #`(begin #,expanded (video-begin id post-process exprs . body))]
+        [_
+         #`(video-begin id (#,expanded . exprs) . body)])]))]}
 
 @section[#:tag "impl-ffi"]{Video, Behind the Scenes}
 

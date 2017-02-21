@@ -75,3 +75,9 @@
 
 (define (t# n)
   (clip-frame (bitmap (list-ref talk-list n))))
+
+(define elided
+  (hc-append
+   (hline 10 0)
+   (text "elided" code-font small-font-size)
+   (hline 10 0)))
