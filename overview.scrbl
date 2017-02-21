@@ -87,6 +87,53 @@ examples, we simultaneously introduce transitions, filters,
 and properties. Finally, we describe the interface authors
 use to render their programs into traditional video files.
 
+@section[#:tag "overview-functions"]{Functions and binding}
+
+Functions and module scope are similar in Video. They both
+lift definitions and describe a video with the remaining
+expressions. The main difference is that functions provide a
+video, while functions return one.@note{It is also possible
+ to write functions for non-videos, we leave the details to
+ the documentation.} In effect, Video modules are first order
+functions that are capable of separate compilation. For the
+reason, the implementation and use of the
+@racket[make-conference-talk] function used in
+@figure-ref["video-example"] look syntactically similar. The
+upshot is that functions serve as a natural way to
+compose videos.
+
+The implementation for @racket[make-conference-talk] is
+shown in @figure-ref["video-functions"]. Lines 2-17 show
+internal definitions local to the function, while line 18 is
+the return value for the function. While the returned
+expression is at the bottom, it could just as easily appear
+at the top on line 2 before the definitions. This figure
+also introduces @racket[define*]. Rather than creating a
+recursive definition, @racket[define*] replaces any old
+binding with that name with a new one. Video editors use
+this to build up large definitions from the inside out.
+
+@figure["video-functions" "Some Text"]{
+ @racketblock[
+@#,exact{1} (define (make-conference-talk video slides audio offset)
+@#,exact{2}   (define clean-audio (playlist (blank offset)
+@#,exact{3}                                 (attach-filter audio
+@#,exact{4}                                                (envelope-filter 50 #:direction 'in)
+@#,exact{5}                                                (envelope-filter 50 #:direction 'out))))
+@#,exact{6}   (define* _ (multitrack (blank #f)
+@#,exact{7}                          (composite-transition 0 0 1/4 1/4)
+@#,exact{8}                          slides
+@#,exact{9}                          (composite-transition 1/4 0 3/4 1)
+@#,exact{10}                         video
+@#,exact{11}                         (composite-transition 0 1/4 1/4 3/4)
+@#,exact{12}                         (image "logo.png" #:length (producer-length talk))))
+@#,exact{13}  (define* _ (playlist (image "splash.png" #:length 100)
+@#,exact{14}                          (fade-transition #:length 50)
+@#,exact{15}                          _
+@#,exact{16}                          (fade-transition #:length 50)
+@#,exact{17}                          (image "splash.png" #:length 100)))
+@#,exact{18}  (multitrack _ clean-audio))]}
+
 @section[#:tag "overview-simple"]{Producers}
 
 The @emph{producer} is the most basic building block for

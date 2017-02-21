@@ -99,7 +99,7 @@ failure caused the morning slides to be lost; piecing them
 together takes additional time. Editing the later talks is significantly faster,
 with the longest bottleneck being previewing the talk.
 
-@figure-here["video-lengths" "Editing Effort for RacketCon Video Programs"]{
+@figure["video-lengths" "Editing Effort for RacketCon Video Programs"]{
 @exact|{\begin{tabular}{@{}llrrr@{}}\toprule
  Talk Title                           & Presenter    & Length (min) & Lines of Code & Edit Time (h) \\
  \midrule
