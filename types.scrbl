@@ -3,16 +3,24 @@
 @title[#:tag "types"]{Inspector Gadget}
 @(require (except-in scribble/manual cite) scribble/core racket/list "bib.rkt")
 
-@Secref{implementation} shows how the Racket ecosystem streamlines the creation
-of DSLs like Video. The effectiveness of a language, however, often hinges on
-both the design of the language itself, and the programming environment
-@emph{around} the language. In support of the latter, we enhance a Video
-programmer's workflow with two additional "gadgets": a static type system to
-help with debugging (described in this section) and a graphical
-interface (described in @secref{extensions}). In the process, we demonstrate
-that Racket's ecosystem, in additional to helping create languages, also
-provides the infrastructure to create tools in a straightforward manner.
+What use is a programming language without a dependent type system? Lots of
+course, as Video shows. After all, Video xis a scripting language, and most
+description of a conference video are no longer than a few lines. No real
+programmer needs types for such programs. For our typed friends, however,
+the existence of an untyped language might be inconceivable, and we
+therefore whipped together a dependent type system and its implementation
+in a single work day. 
 
+After explaining an imaginary rationale for a type system (secref{video-data}),
+the section presents the essential idea, type checking the length of producers,
+transitions (which are conceptually functions on producers), functions on
+transitions, and so on (@secref{index}). Next it is time to show some
+type-checking rules (@secref{type-system}). The final step is to once again
+demonstrate the power of Racket's syntax system, which cannot only modify the
+syntax of a base language but also add a type system---with more or less the
+familiar notation found in papers on fancy type systems (@secref{type-implementation}). 
+
+@; -----------------------------------------------------------------------------
 @section[#:tag "video-data"]{Video Data Types}
 
 Video programs primarily manipulate two types of data, producers and
@@ -35,7 +43,7 @@ While we could rely on dynamic checks to enforce length invariants, they might
 still generate errors too late, since rendering a video is the final step in
 the video editing process. Thus, we turn to a static type system.
 
-@section{Length Indexes}
+@section[#:tag "index"]{Length Indexes}
 
 To address this problem, we introduce Typed Video, which adds a lightweight
 dependent type system to Video. In Typed Video, the types of producers and
@@ -98,7 +106,7 @@ side-condition, it inherits the @racket[(>= n 400)] side-condition due to the
 call to @racket[add-intro]. Thus applying @racket[make-conference-talk] to a
 video shorter than 400 frames results in a type error.
 
-@section{The Type System}
+@section[#:tag "type-system"]{The Type System}
 
 @(define (mk-txt x) (list "\\texttt{" x "}"))
 @(define (inferrule . as)
@@ -161,7 +169,7 @@ commutative operations like addition. If the @tt{Producer} type constructor is
 applied to an unsupported term, the type defaults to a @tt{Producer} of
 infinite length.
 
-@section{Type Systems as Macros}
+@section[#:tag "type-implementation"]{Type Systems as Macros}
 
 Thanks to reuse of linguistic components, implementing Typed Video required one
 work-day's worth of effort. Specifically, we reused the infrastructure of
