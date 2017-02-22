@@ -32,22 +32,22 @@ automatically produces error messages, in terms of the surface language, from a
 user-written specifications, replacing the manually-written low-level
 validation code.
 
-Gibbons and Wu@cite[deep-shallow-icfp] present an alternative "deep"
-vs "shallow" characterization of DSLs. This view, however, seems further
-removed from the original purpose of DSLs, which is to help an "end user" solve
-a domain-specific problem@cite[hudak-dsl]. Deep embeddings implementing the DSL
-AST as algebraic data structure constructors. As a result, well-typed DSL terms
+Some researchers@cite[deep-shallow-icfp] have tried to present an
+alternative "deep" vs "shallow" characterization of DSLs. This view, however,
+seems removed from the original purpose of DSLs, which is to help an "end user"
+solve a domain-specific problem@cite[hudak-dsl]. Deep embeddings implement a
+DSL's AST as algebraic datatype constructors. As a result, well-typed DSL terms
 are also well-typed host terms. While this makes effective reuse of the type
 checker, this approach still falls short on reuse since it requires
 implementing a separate evaluator. This approach also requires advanced type
 system features@cite[gadt-popl gadt-icfp], however, which often produce obscure
-error messages that compromise the abstrations of the DSL.
+error messages that compromise the abstractions of the DSL.
 
 The "shallow" approach (e.g., as presented in @cite[hudak-dsl]) uses standard
-functions to build the DSL reuses the evaluator of the host language, and thus
-both reuses the evaluator of the host nad leverages the abstraction power of
-functions and types to hide implementation details. While this approach reuses
-the infrastructure of a host language, it mostly has limited flexibility to
-change features of the host. The "finally tagless" technique@cite[tagless-jfp]
-tries to improve on this flexibility somewhat via a clever encoding of types,
-but sacrifices reuse and abstraction in the process.
+functions to build the DSL and thus both reuses the evaluator of the host and
+leverages the abstraction power of functions and types to hide implementation
+details. While this approach reuses the infrastructure of a host language, it
+mostly has limited flexibility to change features of the host since it does not
+consider syntactic abstraction. The "finally tagless"
+technique@cite[tagless-jfp] tries to improve on the shallow approach via a
+clever encoding of types, but sacrifices reuse and abstraction in the process.
