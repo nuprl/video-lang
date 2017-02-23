@@ -1,40 +1,60 @@
 #lang scribble/sigplan
 
-@(require "bib.rkt")
+@(require "bib.rkt" scriblib/footnote)
 
 @title[#:tag "conclusion"]{Star Trek Beyond}
 
-When Racketeers create new languages, they do not write interpreters or
- compilers. Instead they @emph{reuse} an existing language and its features
- as much as possible, including the syntax and the run-time parts. As a
- result, the cost of creating, installing, and running programs in a real,
- working language is low. The Racket world dubs this idea ``linguistic
- re-use,'' and its inhabitants have practiced it for years.
+Imagine being Spok on the USS Enterprise. The ship's hyperlight-foorbar
+ sensors have scanned this paper, and it appears like a revelation, a first
+ glimpse of a new, alternative future---language-oriented programming. Now
+ use extremely rational thinking to reason through the consequences of this
+ insight. 
 
-The key to Racket's linguistic reuse is its modular syntax
- system@cite[macros-icfp]. Every module specifies its implementation
- language, and a language is merely a module that exports specific
- constructs. Hence, a developer can use the regular module export and
- import mechanisms to define most of a new language from a base
- language. The rest comes from new syntactic constructs and run-time
- elements. Installing such a new language takes as little effort as naming
- it in on the first line of a client module. Thus, a developer can create a
- language in one Emacs buffer and test it another one. The process is
- completely free of pain, which us why developers feel as free to develop a
- language as a library
+Clearly, in this alternative world, developers build languages with the
+ same ease as they build libraries (modules, structures, functors)
+ now. Some of these languages may sit at the surface, helping domain
+ experts formulate partial solutions to facets of the overall problem---in
+ their own languages. The language implementations will often just use
+ conventional programming techniques; at other times, developers will
+ develop create more languages to implement languages, like we did for the
+ creation of Video. In the end, the source code of applications will
+ contain deep hierarchies of languages, each layer closing the gap between
+ the ordinary constructs of conventional language (folds, monads,
+ structures, functors) and the concepts found in a problem domain (video
+ clips, transitions, filters; FFI protection, FFI bindings).
 
-In practice, developers proceed bottom-up. They find an existing library
- and API for a task. Next, they create Racket bindings for this API. As
- they create these bindings, they ensure to preserve the invariants of
- Racket. For example, if a function can segfault on some kind of data, the
- developer makes sure that the Racket wrapper never hands such data to the
- foreign function.  Finally, developers create functional front-end
- primitives and a syntax that makes programs in the new language concise.
+Two critical factors enable this brave new world of language-oriented
+ programming in the Racket eco-system. The first one is that developing
+ languages---@emph{real} languages---is a process without friction. A
+ language developer can edit a language implementation in one Emacs buffer,
+ save the file, and immediately run a second Emacs buffer with code written
+ in the language of the first one. Furthermore, the Racket syntax
+ system---with interposition points, advance syntax-transformer facilities,
+ syntax modules and so on---allows so much linguistic re-use that
+ developers create languages for a single-shot use. 
 
-Video represents an ideal application case to demonstrate this design
- recipe for languages. Editing videos makes it particularly easy to
- recognize the functional-declarative aspect of the process and to develop
- a invent a concise syntax for it. Even the addition of a rather useful
- type system took less than 12 hours. We hope that functional programmers
- of all stripes recognize the beauty of the Racket idea and invite them to
- translate the idea into their world. 
+The second factor is that Racket acts as a common substrate of the various
+ languages. Eventually programs in these ``little'' languages are
+ elaborated into core Racket programs. Their values become Racket
+ values.@note{For lazy Racket, this statement holds technically but
+ philosophically the values are one level off in the type hierarchy. As a
+ result, modules in lazy languages cannot be composed as easily as this
+ sentence claims.} As a result, developers can easily compose modules in
+ distinct languages. In other words, software systems are compositions of
+ many modules, each representing a solution of a facet of the problem, each
+ written in its most appropriate language. 
+
+Racket is the host of this multi-lingual paradise, and Video is a great
+ poem-level illustration of how this paradise works and what it
+ promises. Editing videos makes it particularly easy to recognize the
+ functional-declarative aspect of the process and to invent a concise
+ syntax for it. Implementing the language seemed to demand a syntactic
+ verbosity that ordinary abstractions cannot hide; implementing a one-shot
+ language to implement the Video language was natural.
+
+No, Racket by no means solve all problems that come with language-oriented
+ programming. But, it sets itself apart from many other approaches in the
+ same direction, and it already has numerous successes to show for.  We
+ hope that functional programmers of all stripes recognize the beauty of
+ LOP in general and Racket's approach in particular, and we invite them to
+ translate them into their world.
