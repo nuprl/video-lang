@@ -22,6 +22,17 @@
   (cc-superimpose blank-rect
                   (disk 10 #:color "yellow")))
 
+(define t#
+  (case-lambda
+    [(n) (t# "clip" n)]
+    [(t n)
+     (clip-frame (bitmap (build-path "rconframes"
+                                     (format "~a~a.png" t (~a n
+                                                              #:left-pad-string "0"
+                                                              #:min-width 5
+                                                              #:max-width 5
+                                                              #:align 'right)))))]))
+
 (define rect-clip-frames 10)
 (define rect-clip
   (build-list rect-clip-frames
@@ -41,17 +52,17 @@
    (ellipses)
    (clip-scale (bitmap "res/geoffrey.jpg"))
    (ellipses)
-   (clip-scale (bitmap "rconframes/stephen50.jpg"))
+   (t# "nlpip" 3)
    (ellipses)
-   (clip-scale (bitmap "rconframes/stephen75.jpg"))
+   (t# "nlpip" 6)
    (ellipses)
-   (clip-scale (bitmap "rconframes/stephen80.jpg"))
+   (t# "nlpip" 9)
    (ellipses)
-   (clip-scale (bitmap "rconframes/stephen100.jpg"))
+   (t# "nlpip" 12)
    (ellipses)
-   (clip-scale (bitmap "rconframes/stephen250.jpg"))
+   (t# "nlpip" 15)
    (ellipses)
-   (clip-scale (bitmap "rconframes/stephen300.jpg"))
+   (t# "nlpip" 18)
    (ellipses)
    (clip-scale (bitmap "res/alexis.jpg"))
    (ellipses)
@@ -72,8 +83,18 @@
                                                   (path->string key))))))
   (make-list 10000 "missing-file.png")))
 
-(define (t# n)
-  (clip-frame (bitmap (list-ref talk-list n))))
 
 (define elided
   (text "⟨⋯elided⋯⟩" text-font small-font-size))
+
+(define splash
+  (clip-frame (bitmap "res/rcon.png")))
+
+(define splash2
+  (clip-frame (vc-append
+               (hc-append (bitmap "res/racket.png")
+                          (bitmap "res/racket.png")
+                          (bitmap "res/racket.png"))
+               (hc-append (bitmap "res/racket.png")
+                          (bitmap "res/racket.png")
+                          (bitmap "res/racket.png")))))

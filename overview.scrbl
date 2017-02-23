@@ -156,12 +156,12 @@ a conference talk, into their files:
   (centered
    (make-playlist-timeline
     #:end #t
-    (t# 1)
-    (t# 2)
-    (t# 3)
+    (t# "clip" 4)
+    (t# "clip" 5)
+    (t# "clip" 6)
     (ellipses)
-    (t# 4)
-    (t# 5))))
+    (t# "clip" 18)
+    (t# "clip" 19))))
 
 Unlike clips, images are producers of an infinite stream of
 frames. Video's combination forms truncate these streams to
@@ -196,16 +196,16 @@ to form a single producer:
                          (clip "talk01.MTS"))]
   (centered (make-playlist-timeline
              #:end #t
-             (t# 1)
-             (t# 2)
+             (t# "clip" 4)
+             (t# "clip" 5)
              (ellipses)
-             (t# 3)
-             (t# 4)
-             (t# 5)
-             (t# 6)
+             (t# "clip" 18)
+             (t# "clip" 19)
+             (t# "clip" 20)
+             (t# "clip" 21)
              (ellipses)
-             (t# 7)
-             (t# 8))))
+             (t# "clip" 45)
+             (t# "clip" 46))))
 
 Developers cut playlist, and in general producer, lengths with the
 @racket[#:start] and @racket[#:end] keywords. This capacity is
@@ -225,13 +225,13 @@ talk finishes.
   (centered (make-playlist-timeline
              #:end #t
              (ellipses)
-             (t# 1)
-             (t# 2)
-             (t# 3)
+             splash
+             (t# "clip" 5)
+             (t# "clip" 6)
              (ellipses)
-             (t# 4)
-             (t# 5)
-             (t# 6)
+             (t# "clip" 45)
+             (t# "clip" 46)
+             splash
              (ellipses))))
 
 This example also introduces @racket[define]. Unlike
@@ -259,13 +259,13 @@ transition from logo to video:
       (centered (make-playlist-timeline
              #:end #t
              (ellipses)
-             (t# 1)
-             (t# 2)
-             (t# 3)
+             splash
+             (t# "trans" 9)
+             (t# "trans" 11)
              (ellipses)
-             (t# 4)
-             (t# 5)
-             (t# 6)
+             (t# "trans" 31)
+             (t# "trans" 10)
+             splash
              (ellipses))))
 
 Every transition in a playlist actually shortens the length
@@ -296,10 +296,10 @@ syntactically placed in the list to combine tracks:
   (centered (make-playlist-timeline
              #:end #t
              (ellipses)
-             (t# 1)
-             (t# 2)
-             (t# 3)
-             (t# 4)
+             (t# "pip" 2)
+             (t# "pip" 3)
+             (t# "pip" 4)
+             (t# "pip" 5)
              (ellipses))))
 
 This example uses @racket[composite-transition], which
@@ -331,10 +331,10 @@ slides go on the right:
   (centered (make-playlist-timeline
              #:end #t
              (ellipses)
-             (t# 1)
-             (t# 2)
-             (t# 3)
-             (t# 4)
+             (t# "npip" 2)
+             (t# "npip" 3)
+             (t# "npip" 4)
+             (t# "npip" 5)
              (ellipses))))
 
 This example modifies the previous example by adding a
@@ -381,7 +381,7 @@ the video of the talk above, @racket[compositied-talk]:
     #:end #t
     (clip-scale (bitmap "res/rcon.png"))
     (ellipses)
-    (clip-scale (bitmap "res/stephen.jpg"))
+    (t# "npip" 5)
     (ellipses)
     (clip-scale (bitmap "res/rcon.png")))))
 
@@ -423,10 +423,10 @@ Explicit properties must be added by the program itself.
     (centered (make-playlist-timeline
                #:end #t
                (ellipses)
-               (t# 1)
-               (t# 2)
-               (t# 3)
-               (t# 4)
+               (t# "nlpip" 2)
+               (t# "nlpip" 3)
+               (t# "nlpip" 4)
+               (t# "nlpip" 5)
                (ellipses))))))
 
 @section[#:tag "overview-rendering"]{From Programs to Videos}
@@ -457,7 +457,7 @@ Modules written in Video export a data structure bound to
 large video projects through @racket[include-video].
 
 The top half of @figure-ref["video-use"] shows the program
-for the green video used above. The code to the right shows
+for the video used above. The code to the right shows
 the contents of the @racket[vid] structure. This video is
 itself a producer and can be used in larger projects, shown
 in the bottom half of @figure-ref["video-use"]. Video
@@ -473,12 +473,11 @@ could easily do so:
                (include-video "talk.vid")]
   (centered (make-playlist-timeline
              #:end #t
-             (t# 1)
-             (t# 2)
+             splash2
              (ellipses)
-             (t# 3)
-             (t# 4)
-             (t# 5)
+             splash2
+             splash
+             splash
              (ellipses))))
 
 Unlike Racket programs, Video programs use
