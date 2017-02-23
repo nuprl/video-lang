@@ -47,8 +47,8 @@
   (bitmap b))
 
 (define matthias-suffix (if (regexp-match #px"matthias" (current-directory)) " O" ""))
-(define code-font (string-append "Linux Libertine Mono" matthias-suffix))
-(define text-font (string-append "Linux Libertine" matthias-suffix))
+(define code-font "Liberation Mono" #;(string-append "Linux Libertine Mono" matthias-suffix))
+(define text-font "Liberation Serif" #;(string-append "Linux Libertine" matthias-suffix))
 (define small-font-size 10)
 (define font-size 15)
 (define small-scale-factor 0.8)
@@ -212,4 +212,3 @@
     [#\newline "\\\\ & "]
     [(? keyword?) (format "\\texttt{\\~a}" type)]
     [_ (format "\\mathsf{~a}" type)]))
-
