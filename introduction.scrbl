@@ -43,24 +43,33 @@ This pearl presents @emph{Video} (@secref["overview"]), a scripting
 language for video production, and its IDE (@secref["extensions"]).  Video
 turns video editing upside down. Instead of sitting for hours on end in
 front of some NLVE GUI, a professional can now spend a few minutes in front
-of an IDE and voilà, a video clip pops out (@secref["case-study"]). Well, a
-Video program is just a sequence of expressions, which describe
-compositions of video clips, and definitions, which introduce constants for
-and functions on videos ; running this program rewrites this description
-into suitable ``assembly code'' for a video renderer. If it is really
-necessary, the code may include a video clip, which may of course come with
-embedded Video code, which may contain a video clip, . . . Did we mention
-turtles yet?@note{@url{en.wikipedia.org/wiki/Turtles_all_the_way_down} last
-visited Feb 20, 2017.}
+of an IDE and voilà, a video clip pops out. A Video program is just a
+sequence of expressions, which describe video clips, and definitions, which
+introduce constants for, and functions on, videos. Running such a program
+rewrites this description into suitable ``assembly code'' for a video
+renderer. 
+
+Speaking of an IDE, everyone knows that in this day and age a programming
+language comes with a whole suite of gadgets, that is, the programming
+environment @emph{around} the language. We therefore throw in an IDE
+(@secref{extensions}) and a type system (@secref{types}), not so much
+because these are needed for producing video channels for conference
+recordings, but because we could and because a real pearl deserves this
+much attention. Thus if it is really necessary, a Agda programmer may add
+types to Video modules, and Video code may include a video clip widget,
+which may of course come with embedded Video code, which may contain a
+video clip widget, . . . Did we mention turtles yet?@note{See
+@url{en.wikipedia.org/wiki/Turtles_all_the_way_down}, last visited Feb 20,
+2017.}
 
 Abstractly speaking, Video once again demonstrates the power of the Racket
 doctrine.  Racket hosts Video, an embedded domain-specific language.
 Implementing this language in Racket takes only a small effort because of
-Racket's powerful language production tools
-(@secref["implementation"]). Racket's tools also allow the addition of a
-useful type system in a matter of hours (@secref{types}).  In this spirit,
-the pearl really uses Video to illustrate the ease with which Racket
-developers create real languages as real-world problem-solving tools. It
-thus points out a key difference between the construction of embedded DSLs
-in boring functional languages, such as OCaml and Haskell, and the one
-true-blue kid on the block, Racket.
+Racket's powerful language production tools (@secref["implementation"]).
+Indeed, adding an IDE and a type system are also a matter of a few hours of
+thinking and coding. In this spirit, the pearl really uses Video to
+illustrate the ease with which Racket developers create @emph{real}
+languages as real-world problem-solving tools. It thus points out a key
+difference between the construction of embedded DSLs in boring functional
+languages, such as OCaml and Haskell, and the one true-blue kid on the
+block, Racket.

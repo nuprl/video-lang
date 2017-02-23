@@ -157,6 +157,61 @@
    #:location (proceedings-location "POPL" #:pages '(694 705))
    #:date 2017))
 
+(define stxparse-icfp
+  (make-bib
+   #:title "Fortifying Macros"
+   #:author (authors "Ryan Culpepper" "Matthias Felleisen")
+   #:location (proceedings-location "ICFP" #:pages '(235 246))
+   #:date 2010))
+
+(define racket-way
+  (make-bib
+   #:title "The Racket Way"
+   #:author "Matthew Flatt"
+   #:location "Strange Loop"
+   #:date 2012))
+
+; other "DSL" stuff
+(define gadt-icfp
+  (make-bib
+   #:title "Simple unification-based type inference for GADTs"
+   #:author (authors "Simon Peyton Jones"
+                     "Dimitrios Vytiniotis"
+                     "Stephanie Weirich"
+                     "Geoffrey Washburn")
+   #:location (proceedings-location "ICFP" #:pages '(50 61))
+   #:date 2006))
+(define deep-shallow-icfp
+  (make-bib
+   #:title "Folding domain-specific languages: deep and shallow embeddings (functional Pearl)"
+   #:author (authors "Jeremy Gibbons" "Nicolas Wu")
+   #:location (proceedings-location "ICFP" #:pages '(339 347))
+   #:date 2014))
+(define gadt-popl
+  (make-bib
+   #:title "Guarded recursive datatype constructors"
+   #:author (authors "Hongwei Xi" "Chiyan Chen" "Gang Chen")
+   #:location (proceedings-location "POPL" #:pages '(224 235))
+   #:date 2003))
+(define tagless-jfp
+  (make-bib
+   #:title "Finally Tagless, Partially Evaluated"
+   #:author (authors "Jacques Carette" "Oleg Kiselyov" "Chung-chieh Shan")
+   #:location (journal-location "JFP"
+                                #:pages '(509 543)
+                                #:volume 19
+                                #:number 5)
+   #:date 2009))
+(define hudak-dsl
+  (make-bib
+   #:title "Building Domain-Specific Embedded Languages"
+   #:author "Paul Hudak"
+   #:location (journal-location "ACM Comput. Surv."
+                                #:volume 28
+                                #:number "4es")
+   #:date 1996))
+   
+
 (define gstreamer-url (url "https://gstreamer.freedesktop.org/"))
 (define mlt-url (url "https://www.mltframework.org/"))
 (define shotcut-url (url "https://www.shotcutapp.com/"))

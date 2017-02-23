@@ -3,16 +3,24 @@
 @title[#:tag "types"]{Inspector Gadget}
 @(require (except-in scribble/manual cite) scribble/core racket/list "bib.rkt")
 
-@Secref{implementation} shows how the Racket ecosystem streamlines the creation
-of DSLs like Video. The effectiveness of a language, however, often hinges on
-both the design of the language itself, and the programming environment
-@emph{around} the language. In support of the latter, we enhance a Video
-programmer's workflow with two additional "gadgets": a static type system to
-help with debugging (described in this section) and a graphical
-interface (described in @secref{extensions}). In the process, we demonstrate
-that Racket's ecosystem, in additional to helping create languages, also
-provides the infrastructure to create tools in a straightforward manner.
+What use is a programming language without a dependent type system? Lots of
+course, as Video shows. After all, Video xis a scripting language, and most
+description of a conference video are no longer than a few lines. No real
+programmer needs types for such programs. For our typed friends, however,
+the existence of an untyped language might be inconceivable, and we
+therefore whipped together a dependent type system and its implementation
+in a single work day. 
 
+After explaining an imaginary rationale for a type system (secref{video-data}),
+the section presents the essential idea, type checking the length of producers,
+transitions (which are conceptually functions on producers), functions on
+transitions, and so on (@secref{index}). Next it is time to show some
+type-checking rules (@secref{type-system}). The final step is to once again
+demonstrate the power of Racket's syntax system, which cannot only modify the
+syntax of a base language but also add a type system---with more or less the
+familiar notation found in papers on fancy type systems (@secref{type-implementation}). 
+
+@; -----------------------------------------------------------------------------
 @section[#:tag "video-data"]{Video Data Types}
 
 Video programs primarily manipulate two types of data, producers and
@@ -22,20 +30,22 @@ transitions of improper lengths. For example, the following piece of code
 mistakenly tries to extract 16 frames from a producer that is only 10 frames
 long:
 @;
-@racketblock[(cut-producer (color "green" #:length 10) #:start 5 #:end 20)
-             @code:comment{CRASH (given producer must have length >= 16)}]
+@racketblock[
+(cut-producer (color "green" #:length 10) #:start 5 #:end 20)
+@code:comment{CRASH (given producer must have length >= 16)}]
 @;
 This second example attempts to use producers too short to incorporate the specified
 transition:
 @;
-@racketblock[(playlist (blank #:length 10) (fade-transition #:length 15) (color #:length 10))
-             @code:comment{CRASH (given producers must have length >= 15)}]
+@racketblock[
+(playlist (blank #:length 10) (fade-transition #:length 15) (color #:length 10))
+@code:comment{CRASH (given producers must have length >= 15)}]
 @;
 While we could rely on dynamic checks to enforce length invariants, they might
 still generate errors too late, since rendering a video is the final step in
 the video editing process. Thus, we turn to a static type system.
 
-@section{Length Indexes}
+@section[#:tag "index"]{Length Indexes}
 
 To address this problem, we introduce Typed Video, which adds a lightweight
 dependent type system to Video. In Typed Video, the types of producers and
@@ -54,8 +64,9 @@ lengths. Continuing the conference video editing example from earlier in the
 paper (@secref{overview}), a function @racket[add-slides] for combining the
 video of a speaker with their slides might have the following signature.
 
-@racketblock[(define (add-slides {n} [video : (Producer n)] [slides : (Producer n)] -> (Producer n))
-               (multitrack video slides background #:length (producer-length video)))]
+@racketblock[
+(define (add-slides {n} [video : (Producer n)] [slides : (Producer n)] -> (Producer n))
+  (multitrack video slides background #:length (producer-length video)))]
 @;
 This function binds a universally-quantified type variable @racket[n] (in Typed
 Video, type variables may only be bound to integer terms) and uses it to
@@ -65,15 +76,16 @@ In addition, a programmer may specify side-conditions involving these type
 variables. Here is an @racket[add-intro] function that adds an
 opening and ending sequence to a speaker's video.
 
-@racketblock[(code:comment "Add conference logos to the front and end of a video.")
-             (define (add-intro {n} [main-talk : (Producer n)] #:when (>= n 400) -> (Producer (+ n 600)))
-               (playlist begin-clip
-                         @fade-transition[#:length 200]
-                         main-talk
-                         @fade-transition[#:length 200]
-                         end-clip)
-               (define begin-clip @image["logo.png" #:length 500])
-               (define end-clip @image["logo.png" #:length 500]))]
+@racketblock[
+(code:comment "Add conference logos to the front and end of a video.")
+(define (add-intro {n} [main-talk : (Producer n)] #:when (>= n 400) -> (Producer (+ n 600)))
+  (playlist begin-clip
+            @fade-transition[#:length 200]
+	    main-talk
+	    @fade-transition[#:length 200]
+	    end-clip)
+  (define begin-clip @image["logo.png" #:length 500])
+  (define end-clip @image["logo.png" #:length 500]))]
 @;
 The @racket[add-intro] function specifies, with a @racket[#:when] keyword, that
 its input must be a producer of at least 400 frames, due to the use of two
@@ -84,21 +96,23 @@ Programmer-specified side-conditions may propagate to other
 functions. For example, here is a @racket[make-conference-talk]
 function (first introduced in @secref{overview}):
 
-@racketblock[(define (make-conference-talk {n} [video :  (Producer n)]
-                                               [slides : (Producer n)]
-                                               [audio :  (Producer n)]
-                                               [offset : Int] -> (Producer (+ n 600)))
-               @code:comment{...}
-               (define p1 (add-slides video slides))
-               (define p2 (add-intro p1))
-               @code:comment{...})]
+@racketblock[
+(define (make-conference-talk {n} [video  : (Producer n)]
+	                          [slides : (Producer n)]
+				  [audio  : (Producer n)]
+				  [offset : Int]
+				  -> (Producer (+ n 600)))
+  @code:comment{...}
+  (define p1 (add-slides video slides))
+  (define p2 (add-intro p1))
+  @code:comment{...})]
 @;
 Though @racket[make-conference-talk] does not specify an explicit
 side-condition, it inherits the @racket[(>= n 400)] side-condition due to the
 call to @racket[add-intro]. Thus applying @racket[make-conference-talk] to a
 video shorter than 400 frames results in a type error.
 
-@section{The Type System}
+@section[#:tag "type-system"]{The Type System}
 
 @(define (mk-txt x) (list "\\texttt{" x "}"))
 @(define (inferrule . as)
@@ -161,14 +175,15 @@ commutative operations like addition. If the @tt{Producer} type constructor is
 applied to an unsupported term, the type defaults to a @tt{Producer} of
 infinite length.
 
-@section{Type Systems as Macros}
+@; -----------------------------------------------------------------------------
+@section[#:tag "type-implementation"]{Type Systems as Macros}
 
-Thanks to reuse of linguistic components, implementing Typed Video required one
-work-day's worth of effort. Specifically, we reused the infrastructure of
-Racket's macro system in order to implement type checking, following the "Type
-Systems as Macros" approach@cite[tsam-popl]. As a result, Typed Video is an
-extension to, rather than a reimplementation, of the Video language. Further,
-Creating Typed Video required no changes to Video.
+The implementation of Typed Video relies on linguistic reuse and thus
+ creates a full-fledged programming language. Specifically, it reuses
+ Racket's syntax system to implement type checking, following
+ @citet[tsam-popl]'s type-Systems-as-macros approach. As a result, Typed
+ Video is an extension to, rather than a reimplementation, of the Video
+ language that requires no modification of the latter. 
 
 @Secref{implementation} demonstrates language creation as a series of syntactic
 extensions. Our type system directly extends these macros with type
