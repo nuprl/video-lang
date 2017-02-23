@@ -210,7 +210,16 @@
                                 #:volume 28
                                 #:number "4es")
    #:date 1996))
-   
+
+(define fortifying-jfp
+  (make-bib
+   #:title "Fortifying Macros"
+   #:author (authors "Ryan Culpepper")
+   #:date "2009"
+   #:location (journal-location "JFP"
+                                #:pages '(439 476)
+                                #:volume 22)))
+
 
 (define gstreamer-url (url "https://gstreamer.freedesktop.org/"))
 (define mlt-url (url "https://www.mltframework.org/"))

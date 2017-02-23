@@ -180,7 +180,7 @@ by creating its own @racket[#%module-begin] form.
 
 @Figure-ref["video-begin"] shows the implementation of
 @racket[#%module-begin] for Video, written using Racket's
-@racket[syntax-parse] system@TODO|{@cite[ryan]}|. As before, the syntax is
+@racket[syntax-parse] system@cite[fortifying-jfp]. As before, the syntax is
 defined with a different name, @racket[#%video-module-begin]
 (line 6), and is renamed on export (line 3). The
 implementation of @racket[#%video-module-begin] expands to
@@ -192,22 +192,22 @@ expressions into a playlist.
 The definition lifting @racket[video-begin] performs makes
 use of a common core language used by all Racket languages.
 First, the algorithm grabs the first expression and expands
-it to a common language (line 5). Next, the transformation
-sees if the expanded code is a list (lines 10 and 16), and
+it to a common language (line 18). Next, the transformation
+sees if the expanded code is a list (lines 20 and 24), and
 if the first element of that list is one of several
-recognized symbols (lines 11-14) e.g. @racket[define] or
+recognized symbols (lines 21-22) e.g. @racket[define] or
 @racket[provide]. If the first identifier is recognized,
 then the macro lifts it out of the @racket[video-begin], and
 recursively expands itself without the newly lifted
-expression (line 15). On the other hand, if the expanded is
+expression (line 23). On the other hand, if the expanded is
 not one of the recognized forms, it is an expression and
-gets collected into the @racket[exprs] collection (line 17).
+gets collected into the @racket[exprs] collection (line 25).
 Finally, once @racket[video-begin] has traversed every piece
-of syntax (line 3), the @racket[exprs] list contains all of
+of syntax (line 13), the @racket[exprs] list contains all of
 the module's expressions in reverse order. It simply defines
 the given @racket[id] (which is generally @racket[vid]) to
 the expressions as a playlist, and provides the playlist
-(lines 4-6).
+(lines 14-16).
 
 It is worth noting that @racket[video-begin] for function
 scope differs only in the base case. Rather than defining
