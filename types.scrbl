@@ -47,7 +47,8 @@ the specified transition:
 @;
 While old fashioned scripting languages generally rely on dynamic checks to
 enforce such conditions, modern scripting languages use a static type system
-instead. So does Typed Video.
+instead@cite[meijer-jfp #;meijer-icfp haskell-scripting-cufp]. So does Typed
+Video.
 
 @section[#:tag "index"]{Length Indexes}
 

@@ -204,6 +204,26 @@
                                 #:volume 28
                                 #:number "4es")
    #:date 1996))
+(define meijer-jfp
+  (make-bib
+   #:title "Server side web scripting in Haskell"
+   #:author "Erik Meijer"
+   #:location (journal-location "JFP" #:pages '(1 18)
+                                      #:volume 10
+                                      #:number 1)
+   #:date 2000))
+(define meijer-icfp
+  (make-bib
+   #:title "Calling hell from heaven and heaven from hell"
+   #:author (authors "Sigbjorn Finne" "Daan Leijen" "Erik Meijer" "Simon Peyton Jones")
+   #:location (proceedings-location "ICFP" #:pages '(114 125))
+   #:date 1999))
+(define haskell-scripting-cufp
+  (make-bib
+   #:title "Light-weight and type-safe scripting with Haskell"
+   #:author "Gabriel Gonzalez"
+   #:location (proceedings-location "CUFP Tutorials")
+   #:date 2015))
 
 (define fortifying-jfp
   (make-bib
