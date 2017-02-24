@@ -157,6 +157,7 @@
    #:location (proceedings-location "POPL" #:pages '(694 705))
    #:date 2017))
 
+#;
 (define stxparse-icfp
   (make-bib
    #:title "Fortifying Macros"

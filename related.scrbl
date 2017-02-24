@@ -22,7 +22,7 @@ validation code that often clutters the implementation; more commonly,
 validation is omitted, leaving Lisp macros that resemble naive rewrite rules
 that do not distinguish the DSL from the host language. Racket helps the
 creation of robust linguistic abstractions with a declarative DSL for writing
-macros@cite[stxparse-icfp]. Instead of low-level validation code, programmers
+macros@cite[fortifying-jfp]. Instead of low-level validation code, programmers
 write high-level specifications, which is compiled to produce error messages in
 terms of the surface language.
 
