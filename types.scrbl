@@ -126,8 +126,11 @@ that is not provably longer than 400 frames results in a type error:
 @section[#:tag "type-system"]{The Type System}
 
 @(define (mk-txt x) (list "\\texttt{" x "}"))
+@(define (ensuremath x)
+   (make-element (make-style "ensuremath" '(exact-chars)) x))
 @(define (inferrule #:name [name ""] . as)
    (define args (map mk-txt as))
+   (ensuremath
    (make-element (make-style (string-append "inferrule[" name "]")
                              '(exact-chars))
                  (cond [(= 1 (length args))
@@ -137,12 +140,15 @@ that is not provably longer than 400 frames results in a type error:
                         (define conclusion (car sgra))
                         (define premises (reverse (add-between (cdr sgra) "\\\\")))
                         (list premises "}{" conclusion)]
-                       [else (printf "shouldnt get here, args = ~a\n" args)])))
+                       [else (printf "shouldnt get here, args = ~a\n" args)]))))
 
 @(define (noindent)
    (make-element (make-style "noindent" '(exact-chars)) null))
 @(define (hspace x)
    (make-element (make-style "hspace" '(exact-chars))
+                 (string-append x "pt")))
+@(define (vspace x)
+   (make-element (make-style "vspace" '(exact-chars))
                  (string-append x "pt")))
 
 While Typed Video utilizes only existing type system ideas, it is nevertheless
@@ -152,14 +158,14 @@ into a language implementation.
 As previously mentioned, Video programmers already specify explicit video
 lengths in their programs and thus it is easy to lift this information to the
 type-level. For example, @figure-ref{type-rules} presents, roughly, a few rules
-for creating and consuming producers.  The first rule lifts the specified
+for creating and consuming producers.  The Color-n rule lifts the specified
 length to the expression's type. In the absence of a length argument, as in the
-second rule, the expression has type @tt{Producer}, which is syntactic sugar
-for @tt{(Producer ∞)}. The third says that if the given file @tt{f} on disk
+Color rule, the expression has type @tt{Producer}, which is syntactic sugar for
+@tt{(Producer ∞)}. The Clip rule says that if the given file @tt{f} on disk
 points to a video of length @tt{n},@note{Obviously, the soundness of our type
 system is now contingent on the correctness of this system call.}  then an
-expression @tt{(clip f)} has type @tt{(Producer n)}.  The fourth rule shows how
-producer lengths may be combined. Specifically, a @racket[playlist] appends
+expression @tt{(clip f)} has type @tt{(Producer n)}. The Playlist rule shows
+how producer lengths may be combined. Specifically, a @racket[playlist] appends
 producers together and thus their lengths are summed. If playlists interleave
 transitions between producers, the lengths of the transitions are subtracted
 from the total because each transition results in an overlapping of
@@ -167,19 +173,23 @@ producers. A type error is signaled if the computed length of a producer is
 negative.
 
 @figure["type-rules" "A few type rules for Typed Video"
+
+@centered[
 @inferrule[#:name "color-n" "e : String"]{(color e \#:length n) : (Producer n)}
-
+@hspace{64}
 @inferrule[#:name "color" "e : String"]{(color e) : Producer}
-
+]
+@vspace{10}
+@centered[
 @inferrule[#:name "clip" "f : File" "|f| = n"]{(clip f) : (Producer n)}
-
-@inferrule[#:name "playlist" "p/t <: (Producer n) \\textrm{or} p/t <: (Transition m)" "..."]{(playlist p/t ...) : (Producer (- (+ n ...) (+ m ...)))}
+@hspace{24}
+@inferrule[#:name "playlist" "p/t <: (Producer n) \\textrm{or} p/t <: (Transition m)" "..."]{(playlist p/t ...) : (Producer (- (+ n ...) (+ m ...)))}]
 ]
 
-The fourth rule uses Typed Video's subtyping relation. Here is the subtyping
+The Playlist rule uses Typed Video's subtyping relation. Here is the subtyping
 rule for the @tt{Producer} type:
 
-               @centered[@inferrule["m >= n"]{(Producer m) <: (Producer n)}]
+@centered[@inferrule["m >= n"]{(Producer m) <: (Producer n)}]
 
 @(noindent)Since Typed Video aims to prevent not-enough-frame errors, it is
 acceptable to supply a producer that is longer than expected but not shorter.
@@ -212,7 +222,8 @@ syntactic extensions from @secref{implementation}, which are used, unmodified,
 to construct the output of the type-checking pass.
 
 @figure["type-checking-macros" "Type checking macros"
-@codeblock[#:line-numbers 1]{#lang turnstile
+@codeblock[#:line-numbers 1]{
+
 (require (prefix-in untyped-video: video)) ; imports untyped Video identifiers with a prefix
 (provide λ #%app) ; exports Typed Video identifiers
 
