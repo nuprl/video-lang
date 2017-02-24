@@ -13,14 +13,14 @@ programmer needs types for such programs. For some, however,
 the existence of an untyped language might be inconceivable, and we
 therefore whipped together a dependent type system in a single work day. 
 
-After the rationale for such a type system (@secref{video-data}),
-we present the essential idea: type checking the length of producers,
+After explaining the rationale for such a type system (@secref{video-data}), we
+present the essential idea: type checking the length of producers,
 transitions (which are conceptually functions on producers), functions on
-transitions, and so on (@secref{index}). Then we examine a few
-type-checking rules (@secref{type-system}). Finally, we once again
-demonstrate the power of Racket's syntax system, which not only modifies the
-syntax of a base language but also adds a type system---with more or less the
-familiar notation found in papers on fancy type systems
+transitions, and so on (@secref{index}). Then we examine a few type-checking
+rules (@secref{type-system}). Finally, we once again demonstrate the power of
+Racket's syntax system, which not only modifies the syntax of a base language
+but also adds a type system---with more or less the familiar notation found in
+papers on fancy type systems
 (@secref{type-implementation}). 
 
 @; -----------------------------------------------------------------------------
@@ -221,7 +221,7 @@ the figure imports and prefixes the identifiers from untyped Video, i.e., the
 syntactic extensions from @secref{implementation}, which are used, unmodified,
 to construct the output of the type-checking pass.
 
-@figure["type-checking-macros" "Type checking macros"
+@figure["type-checking-macros" "Type checking syntax transformer definitions"
 @codeblock[#:line-numbers 1]{
 ; implemented with the Turnstile language
 (require (prefix-in untyped-video: video)) ; imports untyped Video identifiers with a prefix
@@ -246,14 +246,14 @@ to construct the output of the type-checking pass.
    [⊢ (untyped-video:#%app e_fn- e_arg- ...) ⇒ τ_out])}
 ]
 
-We implement our type checker with Turnstile, a Racket DSL introduced by
-Chang et al. for creating Typed DSLs. This DSL-generating-DSL uses a concise,
+We implement our type checker with Turnstile, a Racket DSL introduced by Chang
+et al. for creating Typed DSLs. This DSL-generating-DSL uses a concise,
 bidirectional type-judgement-like syntax, as seen in
 @figure-ref{type-checking-macros}'s @racket[define-syntax/typecheck]
-rules. These rules define macros that incorporate type checking as part
-of macro processing. Interleaving type checking and syntax elaboration in this
-manner not only simplifies implementation of the type system, but also enables
-creating true abstractions on top of the host language.
+rules. These rules define syntax transformers that incorporate type checking as
+part of syntax elaboration. Interleaving type checking and transformation in
+this manner not only simplifies implementation of the type system, but also
+enables creating true abstractions on top of the host language.
 
 Next we briefly explain each line of the @racket[λ] definition:
 
@@ -268,12 +268,12 @@ Next we briefly explain each line of the @racket[λ] definition:
 
 @(current-line 5)
 
-@with-linelabel{The type-checking macro's input must match pattern @racket[(λ
-{n} ([x : τ] ... #:when C) e)], which binds pattern variables @racket[n] (the
-type variable), @racket[x] (the λ parameters), @racket[τ] (the type
-annotations), @racket[C] (a side-condition), and @racket[e] (the lambda
+@with-linelabel{The type-checking transformer's input must match pattern
+@racket[(λ {n} ([x : τ] ... #:when C) e)], which binds pattern variables
+@racket[n] (the type variable), @racket[x] (the λ parameters), @racket[τ] (the
+type annotations), @racket[C] (a side-condition), and @racket[e] (the lambda
 body). Pattern variables may subsequently be used to construct new program
-fragments, e.g., the outputs of the macro. An ellipses pattern matches
+fragments, e.g., the outputs of the transformer. An ellipses pattern matches
 zero-or-more of its preceding pattern; any pattern variables in that pattern
 requires ellipses when subsequently used.}
 
@@ -288,7 +288,7 @@ the context of the free variables. Instead of propagating a type environment,
 Turnstile reuses Racket's lexical scoping to implement the type
 environment. This re-use greatly enhances the compositionality of languages
 and reduces effort so that a programmer gets away with specifying only new
-environment bindings. Specifically, the premise uses two type envionments, one
+environment bindings. Specifically, the premise uses two type environments, one
 each for the type variables and lambda parameters, respectively, where the
 latter may contain references to the former.}
 
@@ -301,13 +301,13 @@ the numeric side-conditions.}
 
 @with-linelabel{This line separates the premises from the conslusion.}
 
-@with-linelabel{The conclusion specifies the macro's outputs: an untyped Video
-term @racket[(untyped-video:λ (x- ...) e-)] along with its type @racket[(∀ (n
-...) (→ τ ... τ_out #:when (and C new-Cs)))]. In Turnstile, types are
-represented using the same syntax structures as terms.}
+@with-linelabel{The conclusion specifies the transformer's outputs: an untyped
+Video term @racket[(untyped-video:λ (x- ...) e-)] along with its type
+@racket[(∀ (n ...) (→ τ ... τ_out #:when (and C new-Cs)))]. In Turnstile, types
+are represented using the same syntax structures as terms.}
 
 The second part of @figure-ref{type-checking-macros} presents Typed Video's
-type-checking function application macro. It naturally interposes on Racket's
+function application rule. It naturally interposes on Racket's
 function application hook, @racket[#%app], via untyped Video's function
 application definition, to add type checking. Here is a brief description of
 each line of @racket[#%app]:
@@ -322,9 +322,9 @@ e_arg ...)], binding the function to @racket[e_fn] and all arguments to
 Xs (→ τ_inX ... τ_outX #:when CX))], which is universally quantified over type
 variables @racket[Xs] and has side-condition @racket[CX].}
 
-@with-linelabel{The macro peforms local type inference, computing the concrete
-types @racket[τs] at which to instantiate the polymorphic function. This call
-to @racket[solve] may use any constraint solver.}
+@with-linelabel{The transformer peforms local type inference, computing the
+concrete types @racket[τs] at which to instantiate the polymorphic
+function. This call to @racket[solve] may use any constraint solver.}
 
 @with-linelabel{Next, the polymorphic function type is instantiated to concrete
 types @racket[(τ_in ... τ_out)] and a concrete side-condition @racket[C].}
@@ -346,10 +346,10 @@ Turnstile uses a standard subsumption rule by default.}
 
 @(inc-line)
 
-@with-linelabel{The output of the macro consists of an untyped Video term along
-with its computed type.}
+@with-linelabel{The output of syntax transformation consists of an untyped
+Video term along with its computed type.}
 
-The rest of the type system implementation similarly utilizes the macro system
+The rest of the type system implementation similarly utilizes the syntax system
 to add the features described earlier in the section. For example, implementing
 polymorphism is straightforward because Turnstile reuses Racket's knowledge of
 a program's binding structure to automatically handle naming. Further, the "as

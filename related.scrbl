@@ -23,10 +23,10 @@ true abstractions. At best, Lisp and Scheme programmers write low-level
 validation code that clutters the implementation; more commonly, validation is
 omitted, leaving Lisp and Scheme macros that resemble naive rewrite rules that
 do not distinguish the DSL from the host language. Racket helps the creation of
-robust linguistic abstractions with a declarative DSL for writing
-macros@cite[fortifying-jfp]. Instead of low-level validation code, programmers
-write high-level specifications, which is compiled to produce error messages in
-terms of the surface language.
+robust linguistic abstractions with a declarative DSL for writing syntax
+transformers@cite[fortifying-jfp]. Instead of low-level validation code,
+programmers write high-level specifications, which is compiled to produce error
+messages in terms of the surface language.
 
 Some researchers@cite[deep-shallow-icfp] have tried to present an alternative
 ``deep'' vs ``shallow'' characterization of DSLs. This view seems to ignore
