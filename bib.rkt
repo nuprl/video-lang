@@ -220,6 +220,21 @@
                                 #:pages '(439 476)
                                 #:volume 22)))
 
+(define drscheme-jfp
+  (make-bib
+   #:title "DrScheme: A Programming Environment for Scheme"
+   #:author (authors "Robert Bruce Findler"
+                     "John Clements"
+                     "Cormac Flanagan"
+                     "Matthew Flatt"
+                     "Shriram Krishnamurthi"
+                     "Paul Steckler"
+                     "Matthias Felleisen")
+   #:date "2002"
+   #:location (journal-location "JFP"
+                                #:pages '(159 182)
+                                #:volume 12)))
+
 
 (define gstreamer-url (url "https://gstreamer.freedesktop.org/"))
 (define mlt-url (url "https://www.mltframework.org/"))
