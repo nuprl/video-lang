@@ -165,13 +165,6 @@
    #:location (proceedings-location "ICFP" #:pages '(235 246))
    #:date 2010))
 
-(define racket-way
-  (make-bib
-   #:title "The Racket Way"
-   #:author "Matthew Flatt"
-   #:location "Strange Loop"
-   #:date 2012))
-
 ; other "DSL" stuff
 (define gadt-icfp
   (make-bib

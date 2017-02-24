@@ -8,7 +8,7 @@
 
 @title[#:tag "introduction"]{Being Iavor Diatchki}
 
-Imagine yourself being Iavor Diatchki. He is the friendly guy who tapes all
+Imagine being Iavor Diatchki. He is the friendly guy who tapes all
 the wonderful ICFP presentations and edits them into digestible YouTube
 video clips.  When he creates the video clips, he combines a feed of the
 presenter with the presenter's screen, the sound feed for the speaker, and
