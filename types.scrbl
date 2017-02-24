@@ -223,7 +223,7 @@ to construct the output of the type-checking pass.
 
 @figure["type-checking-macros" "Type checking macros"
 @codeblock[#:line-numbers 1]{
-
+; implemented with the Turnstile language
 (require (prefix-in untyped-video: video)) ; imports untyped Video identifiers with a prefix
 (provide λ #%app) ; exports Typed Video identifiers
 
@@ -257,10 +257,18 @@ creating true abstractions on top of the host language.
 
 Next we briefly explain each line of the @racket[λ] definition:
 
+@(define current-line (make-parameter 1))
+@(define (inc-line) (current-line (add1 (current-line))))
 @(define (linelabel x . rst)
-   (apply para (noindent) (bold "line ") (bold (number->string x)) ": " rst))
+   (apply para
+     (noindent)
+     (bold "line ") (bold (number->string x)) ": " rst))
+@(define (with-linelabel . rst)
+   (begin0 (apply linelabel (current-line) rst) (inc-line)))
 
-@linelabel[5]{The type-checking macro's input must match pattern @racket[(λ
+@(current-line 5)
+
+@with-linelabel{The type-checking macro's input must match pattern @racket[(λ
 {n} ([x : τ] ... #:when C) e)], which binds pattern variables @racket[n] (the
 type variable), @racket[x] (the λ parameters), @racket[τ] (the type
 annotations), @racket[C] (a side-condition), and @racket[e] (the lambda
@@ -269,7 +277,7 @@ fragments, e.g., the outputs of the macro. An ellipses pattern matches
 zero-or-more of its preceding pattern; any pattern variables in that pattern
 requires ellipses when subsequently used.}
 
-@linelabel[6]{Since type checking is interleaved with syntax elaboration,
+@with-linelabel{Since type checking is interleaved with syntax elaboration,
 Turnstile type judgements are elaboration judgements as well. Specifically, a
 Turnstile judgement @racket[[ctx ⊢ e ≫ e- ⇒ τ]] is read ``in context
 @racket[ctx], @racket[e] elaborates to @racket[e-] and has type @racket[τ]''.
@@ -284,16 +292,16 @@ environment bindings. Specifically, the premise uses two type envionments, one
 each for the type variables and lambda parameters, respectively, where the
 latter may contain references to the former.}
 
-@linelabel[7]{A @racket[#:with] premise binds additional pattern
+@with-linelabel{A @racket[#:with] premise binds additional pattern
 variables. Here, elaborating the lambda body @racket[e] may generate additional
 side-conditions, @racket[new-Cs], that must be satisfied by the function's
 inputs. Turnstile allows specifying propagation of not just types, but
 arbitrary metadata on the program tree, and we use this mechanism to compute
 the numeric side-conditions.}
 
-@linelabel[8]{This line separates the premises from the conslusion.}
+@with-linelabel{This line separates the premises from the conslusion.}
 
-@linelabel[9]{The conclusion specifies the macro's outputs: an untyped Video
+@with-linelabel{The conclusion specifies the macro's outputs: an untyped Video
 term @racket[(untyped-video:λ (x- ...) e-)] along with its type @racket[(∀ (n
 ...) (→ τ ... τ_out #:when (and C new-Cs)))]. In Turnstile, types are
 represented using the same syntax structures as terms.}
@@ -304,37 +312,41 @@ function application hook, @racket[#%app], via untyped Video's function
 application definition, to add type checking. Here is a brief description of
 each line of @racket[#%app]:
 
-@linelabel[11]{The input syntax is matched against pattern @racket[(#%app e_fn
+@(inc-line)
+
+@with-linelabel{The input syntax is matched against pattern @racket[(#%app e_fn
 e_arg ...)], binding the function to @racket[e_fn] and all arguments to
 @racket[e_arg].}
 
-@linelabel[12]{The function elaborates to @racket[e_fn-] with type @racket[(∀
+@with-linelabel{The function elaborates to @racket[e_fn-] with type @racket[(∀
 Xs (→ τ_inX ... τ_outX #:when CX))], which is universally quantified over type
 variables @racket[Xs] and has side-condition @racket[CX].}
 
-@linelabel[13]{The macro peforms local type inference, computing the concrete
+@with-linelabel{The macro peforms local type inference, computing the concrete
 types @racket[τs] at which to instantiate the polymorphic function. This call
 to @racket[solve] may use any constraint solver.}
 
-@linelabel[14]{Next, the polymorphic function type is instantiated to concrete
+@with-linelabel{Next, the polymorphic function type is instantiated to concrete
 types @racket[(τ_in ... τ_out)] and a concrete side-condition @racket[C].}
 
 @;item{The side-condition @racket[C] is reduced to a canonical form @racket[C*].}
 
-@linelabel[15]{If @racket[C] is @racket[false], stop and report an
+@with-linelabel{If @racket[C] is @racket[false], stop and report an
 error. Though this paper truncates the code, Typed Video presents more details
 when reporting errors to the user. This line demonstrates how our DSL creates
 true abstractions, reporting errors in terms of the surface language rather
 than the host language.}
 
-@linelabel[16]{If @racket[C] is still an expression, propagate it.}
+@with-linelabel{If @racket[C] is still an expression, propagate it.}
 
-@linelabel[17]{Check that the function arguments have the instantiated
+@with-linelabel{Check that the function arguments have the instantiated
 types. This premise uses the ``check'' left bidirectional arrow. If a
 programmer does not explicitly implement a left-arrow version of a rule,
 Turnstile uses a standard subsumption rule by default.}
 
-@linelabel[19]{The output of the macro consists of an untyped Video term along
+@(inc-line)
+
+@with-linelabel{The output of the macro consists of an untyped Video term along
 with its computed type.}
 
 The rest of the type system implementation similarly utilizes the macro system
