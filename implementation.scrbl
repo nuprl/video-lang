@@ -232,14 +232,14 @@ interposition points, @racket[#%module-begin]@superscript{
   @racketmod0[
  video
  (image "splash.png" #,elided)
- (make-conf-video video #,elided)
+ (conference-talk video #,elided)
  (define video #,elided)]
   (->text "compiles to")
   @racketmod0[
  video
  (@#,elem{@racket[#%module-begin]@superscript{video}}
   (image "splash.png" #,elided)
-  (make-conf-video video #,elided)
+  (conference-talk video #,elided)
   (define video #,elided))])
  
  @exact{\vspace{0.4cm}}
@@ -254,7 +254,7 @@ interposition points, @racket[#%module-begin]@superscript{
  racket/base
  (#%video-module-begin
   (image "splash.png" #,elided)
-  (make-conf-video video #,elided)
+  (conference-talk video #,elided)
   (define video #,elided))])
 
  @exact{\vspace{0.4cm}}
@@ -271,7 +271,7 @@ interposition points, @racket[#%module-begin]@superscript{
   (define video #,elided)
   (video-begin vid
     (image "splash.png" #,elided)
-    (make-conf-video video #,elided)))])
+    (conference-video video #,elided)))])
   
  @exact{\vspace{0.4cm}}
  
@@ -289,7 +289,7 @@ interposition points, @racket[#%module-begin]@superscript{
   (define vid
     (playlist
      (image "splash.png" #,elided)
-     (make-conf-video video #,elided))))])
+     (conference-video video #,elided))))])
  @exact{\vspace{0.2cm}}}
 
 

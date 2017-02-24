@@ -57,8 +57,19 @@ the graphical and textual program in this manner allows
 users to edit videos in the style that is relavent for the
 task at hand. For example, the program in
 @figure-ref["video-gui"] shows an implementation of the
-@racket[make-conference-talk] function (used in
+@racket[conference-talk] function (used in
 @secref["overview"]), but now implemented using NLVE widges.
+
+Racket's graphical framework@cite[plt-tr3] facilitates the
+development of this prototype. The entire editor is
+implemented in less than 800 lines of code. Of this, 697
+lines are for the graphical editor itself, and 35 are for
+integration in Video programs. These lines are not counted
+in the 2,400 lines for Video's implementation. The code
+implementing these NLVE widgets is plain Racket code and is
+not interesting from a DSL creation perspective. We
+therefore do not provide details on its implementation but
+instead point to the manual for DrRacket@cite[plt-tr2].
 
 @figure["playlist-sample" "Slide reconstruction using magic numbers (left) and a NLVE widget (right)"]{
 @(split-minipage
@@ -72,14 +83,3 @@ task at hand. For example, the program in
                      10  50 15 33 250 42 20 65
                      13 9 25 37 25 13 30 39 45))]
   (centered (hc-append 5 (scale (bitmap "res/playlist-timeline.png") 0.40) (ellipses))))}
-
-Racket's graphical framework@cite[plt-tr3] facilitates the
-development of this prototype. The entire editor is
-implemented in less than 800 lines of code. Of this, 697
-lines are for the graphical editor itself, and 35 are for
-integration in Video programs. These lines are not counted
-in the 2,400 lines for Video's implementation. The code
-implementing these NLVE widgets is plain Racket code and is
-not interesting from a DSL creation perspective. We
-therefore do not provide details on its implementation but
-instead point to the manual for DrRacket@cite[plt-tr2].

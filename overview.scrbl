@@ -47,9 +47,10 @@ Video module and to incorporate it into a larger one.
 @figure["video-example" "A Conference Talk Video"]{
  @racketmod[
  video
- (make-conference-talk video slides audio 125)
- 
  (require "conference-lib.vid")
+ 
+ (conference-talk video slides audio 125)
+ (code:comment "; where")
  (define slides (clip "slides05.MTS" #:start 2900 #:end 80000))
  (define video  (playlist (clip "vid01.mp4") (clip "vid02.mp4")
                           #:start 3900 #:end 36850))
@@ -61,26 +62,26 @@ Video module and to incorporate it into a larger one.
 @Figure-ref["video-example"] shows a talk recording made
 with Video. The total running time for the talk is a little
 over 22 minutes. A library provides the
-@racket[make-conference-video] function which composites
+@racket[conference-talk] function which composites
 every videos for the conference.
 
 As mentioned, the first line of the program specifies that
 this module is written in the Video language. Next, the
 second line is the video this module describes. The third
 line imports the library that defines the
-@racket[make-conference-video] function. Finally, the
+@racket[conference-talk] function. Finally, the
 remainder is a sequence of definitions used in the second
 line. These definitions introduce auxiliary functions and
 constants, and can be placed at whatever positioning makes
 the program most readable.
 
-Showing the constructing of @racket[make-conference-talk]
+Showing the constructing of @racket[conference-talk]
 demonstrates Videos primitives and combinators, as well as
 how developers are productive with it.
 First, we
 provide Video's primary linguistic mechanisms, binding and
 functions. We show this through the definition of the
-@racket[make-confernce-video] function. Next, we describe
+@racket[confernce-video] function. Next, we describe
 basic producers: images, clips, colors and so on. Then, we
 discuss the basics of how to combine these producers into
 playlists and multitracks. To make compelling examples, we
@@ -98,12 +99,12 @@ video, while functions return one.@note{It is also possible
  the documentation.} In effect, Video modules are first order
 functions that are capable of separate compilation. For the
 reason, the implementation and use of the
-@racket[make-conference-talk] function used in
+@racket[conference-talk] function used in
 @figure-ref["video-example"] look syntactically similar. The
 upshot is that functions serve as a natural way to
 compose videos.
 
-The implementation for @racket[make-conference-talk] is
+The implementation for @racket[conference-talk] is
 shown in @figure-ref["video-functions"]. Lines 2-17 show
 internal definitions local to the function, while line 18 is
 the return value for the function. While the returned
@@ -118,7 +119,7 @@ show how these forms are used to create videos.
 
 @figure["video-functions" "Some Text"]{
  @racketblock[
-@#,exact{1} (define (make-conference-talk video slides audio offset)
+@#,exact{1} (define (conference-talk video slides audio offset)
 @#,exact{2}   (define clean-audio (playlist (blank offset)
 @#,exact{3}                                 (attach-filter audio
 @#,exact{4}                                                (envelope-filter 50 #:direction 'in)

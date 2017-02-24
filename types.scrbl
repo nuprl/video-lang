@@ -100,11 +100,11 @@ frames to the input. Here the additional frames come from the added beginning
 and end segments, minus the transition frames.
 
 Programmer-specified side-conditions may propagate to other functions. The
-@racket[make-conference-talk] function from @secref{overview} benefits from
+@racket[conference-talk] function from @secref{overview} benefits from
 this propagation:
 
 @racketblock[
-(define (make-conference-talk {n} [video  : (Producer n)]
+(define (conference-talk {n} [video  : (Producer n)]
 	                          [slides : (Producer n)]
 				  [audio  : (Producer n)]
 				  [offset : Int]
@@ -114,13 +114,13 @@ this propagation:
   (define p2 (add-bookend p1))
   @code:comment{...})]
 @;
-Even though @racket[make-conference-talk] does not specify an explicit
+Even though @racket[conference-talk] does not specify an explicit
 side-condition, it inherits the @racket[(>= n 400)] side-condition from
-@racket[add-bookend]. Thus applying @racket[make-conference-talk] to a video
+@racket[add-bookend]. Thus applying @racket[conference-talk] to a video
 that is not provably longer than 400 frames results in a type error:
 @;
 @racketblock[
-(make-conference-talk (blank 200) (blank 200) (blank 200) 0)
+(conference-talk (blank 200) (blank 200) (blank 200) 0)
 @code:comment{TYPE ERROR: Failed condition (>= n 400), inferred n = 200}]
 
 @section[#:tag "type-system"]{The Type System}
