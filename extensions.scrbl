@@ -26,7 +26,7 @@ section discusses the use of these editors, and how they
 interact with Video programs.
 
 @figure["video-gui" "Graphical Editor for Video Programs"]{
- @(scale (bitmap "res/video-gui.png") 0.2)}
+ @(scale (bitmap "res/video-gui.png") 0.4)}
 
 Consider the case where a hardware failure prevents a
 speaker's screen from being captured during a talk.
@@ -52,22 +52,13 @@ prototype NLVE (right):
                (list 10 15 16 16 21 30 30 19 3
                      10  50 15 33 250 42 20 65
                      13 9 25 37 25 13 30 39 45))]
-  (centered (scale (bitmap "res/playlist-timeline.png") 0.15)))
+  (centered (hc-append 5 (scale (bitmap "res/playlist-timeline.png") 0.40) (ellipses))))
 
 Graphical NLVEs are themselves producers and are first class
 objects in Video. They can be bound to a variable and
 further manipulated. Integrating the graphical and textual
 program in this manner allows users to edit videos in the
-style that is relavent for the task at hand. For example,
-the following program uses @racket[make-conference-talk]
-from @figure-ref["video-example"], but uses a NLVE to build
-the slides:
-
-@(minipage
-  (centered
-   (hc-append 10
-              (scale (bitmap "res/video+nlve.png") 0.4)
-              (vc-append 50 (blank) (ellipses #:offset 5)))))
+style that is relavent for the task at hand.
 
 In addition to placing graphical NLVEs in a program, code
 can also appear in the NLVEs. This extends the capability of
