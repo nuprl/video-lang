@@ -98,3 +98,87 @@
                (hc-append (bitmap "res/racket.png")
                           (bitmap "res/racket.png")
                           (bitmap "res/racket.png")))))
+
+
+(define language-tower
+  (let ()
+    (define (t str)
+      (text str text-font font-size))
+    (define racket
+      (cc-superimpose (rectangle 200 30)
+                      (t "Racket")))
+    (define syntax-parse
+      (cc-superimpose (rectangle 200 30)
+                      (t "Syntax Parse")))
+    (define video-ffi
+      (cc-superimpose (rectangle 90 30)
+                     (t "Video FFI")))
+
+    (define video
+      (cc-superimpose (rectangle 90 30)
+                      (t "Video")))
+    (define turnstyle
+      (cc-superimpose (rectangle 90 30)
+                      (t "Turnstyle")))
+    (define typed-video
+      (cc-superimpose (rectangle 90 30)
+                      (t "Typed Video")))
+    (let* ([acc (vc-append
+                 40
+                 (hc-append 100 video typed-video)
+                 (hc-append 100 video-ffi turnstyle)
+                 syntax-parse
+                 racket)]
+           [acc (pin-arrow-line 8 acc
+                                syntax-parse cb-find
+                                racket ct-find
+                                #:x-adjust-label 20
+                                #:label (t "built on"))]
+           [acc (pin-arrow-line 8 acc
+                                video-ffi cb-find
+                                syntax-parse (λ (a b)
+                                               (let-values ([(w h) (lt-find a b)])
+                                                 (values (+ w 5) h)))
+                                #:x-adjust-label 20
+                                #:label (t "built on"))]
+           [acc (pin-arrow-line 8 acc
+                                turnstyle cb-find
+                                syntax-parse (λ (a b)
+                                               (let-values ([(w h) (rt-find a b)])
+                                                 (values (- w 5) h)))
+                                #:x-adjust-label -40
+                                #:label (t "built on"))]
+           [acc (pin-arrow-line 8 acc
+                                video-ffi lc-find
+                                racket lc-find
+                                #:start-angle pi
+                                #:end-angle 0
+                                #:start-pull 1/3
+                                #:end-pull 2/3
+                                #:x-adjust-label -100
+                                #:label (t "built on"))]
+           [acc (pin-arrow-line 8 acc
+                                turnstyle rc-find
+                                racket rc-find
+                                #:start-angle 0
+                                #:end-angle pi
+                                #:start-pull 1/3
+                                #:end-pull 2/3
+                                #:x-adjust-label 100
+                                #:label (t "built on"))]
+           [acc (pin-arrows-line 8 acc
+                                 video cb-find
+                                 video-ffi ct-find
+                                 #:x-adjust-label 20
+                                 #:label (t "built on"))]
+           [acc (pin-arrow-line 8 acc
+                                typed-video cb-find
+                                turnstyle ct-find
+                                #:x-adjust-label -40
+                                #:label (t "built on"))]
+           [acc (pin-arrows-line 8 acc
+                                 video rc-find
+                                 typed-video lc-find
+                                 #:label (t "extends"))]
+           [acc (inset acc 100 0)])
+      acc)))
