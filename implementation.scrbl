@@ -15,8 +15,8 @@ Using the Racket ecosystem allows developers to implement
 languages quickly and easily. Furthermore, these languages
 compose so that modules written in one language can easily
 interact with modules in another. Best of all, the
-implementation of one language may take advantage of other
-languages. The upshot here is that implementing Video is as
+implementation of a language may take advantage of other
+language technology too. The upshot here is that implementing Video is as
 simple as implementing video-specific pieces, while leaving
 the general-purpose bits to Racket.
 
@@ -25,39 +25,40 @@ in Racket (@secref["impl-create"]), with Video serving as
 the running example (@secref["impl-video"]). Not only is
 Video a Racket DSL, but part of the implementation of Video
 is implemented using another DSL, one designed specifically
-for implementing Video. (@secref["impl-ffi"]).
+for implementing Video (@secref["impl-ffi"]).
 
 @section[#:tag "impl-create"]{Creating Languages, the Racket Way}
 
 Resuming the train of thought from @secref["rationale"],
-creating Racket DSLs simply means removing unwanted features
+creating Racket DSLs means removing unwanted features
 from some base language, adding new ones, and altering existing
 features to match the semantics of the new domain.
 
-Adding and removing features is simple because a language implementation is
-a module like any other module in Racket. Language authors
-create a module that defines the new features, export those
-features, and do not export unwanted ones. They do this in
-the same manner as a programmer augmenting the functionality
-of a library via a wrapper module. In contrast,
-modifying existing features requires a little more
-work than that. Specifically the module must define the new
-primitive with a different name in terms of the old
-language and name that primitive on
-export.
+Adding and removing features is simple, because a language
+implementation is a module like any other module in Racket.
+Language authors create a module that defines the new
+features, export those features, and do not export unwanted
+ones. They do so in the same manner as a programmer
+augmenting the functionality of a library via a wrapper
+module. In contrast, modifying existing features requires a
+little more work than that. Specifically the module must
+define a syntax transformation in terms of the old language
+using an arbitrary but distinct name, and rename that
+primitive on export.
 
 Imagine writing a language where variable reassignment
 (using @racket[set!] syntax) logs a warning of its use. The
 @racket[set!] provided by @racketmodname[racket/base]
 provides the functionality for reassignment, while
-@racket[log-warning] provides the logging functionality. The
-language designer needs to define a new syntax, let's call it
-@racket[warning:set!], that logs its use and performs the
-assignment. From there, that developer needs to rename
-@racket[warning:set!] to @racket[set!] when exporting the
-language's primitives. This renaming makes the new
-functionality available to anyone expecting @racket[set!] in
-the new language. Here is the resulting implementation:
+@racket[log-warning] from the same language provides the
+logging functionality. The language designer needs to define
+a new syntax, let's call it @racket[warning:set!], that logs
+its use and performs the assignment. From there, the
+developer needs to rename @racket[warning:set!] to
+@racket[set!] when exporting the language's primitives. This
+renaming makes the new functionality available to anyone
+expecting @racket[set!] in the nested language. Here is the
+resulting implementation:
 
 @racketmod[
  racket/base
@@ -86,13 +87,12 @@ equivalent language with lazy semantics. The @racket[#%app]
 protocol works because the Racket compiler places the marker in
 front of every function application. Thus, language authors
 only need to implement their version of @racket[#%app] in
-terms of an existing one. Using the pattern from above, lazy
-application is implemented as:
+terms of an existing one:
 
 @(nested (minipage @racketmod[
  racket/base
  (provide (rename-out #%lazy-app #%app)
-          (excpet-out racket/base #%app))
+          (excpet-out (all-from-out racket/base) #%app))
 
  (define-syntax (#%lazy-app stx)
    (syntax-parse stx
@@ -102,16 +102,16 @@ application is implemented as:
 @exact{\vspace{0.2cm}}
 
 When a programmer uses this new language, Racket inserts the
-language's @racket[#%app] at call sites, in this case,
+language's @racket[#%app] at call sites, in this case, a reference to
 @racket[#%app]@superscript{lazy}. From there, Racket
 resolves the renaming and expands @racket[#%lazy-app] into
 @racket[#%app]@superscript{internal}. The resulting
-expansion looks like:
+elaboration process looks like:
 
 @(nested (minipage @racketblock[
- (f a b c ...) @#,->text{compiles to} (@#,elem{@racket[#%app]@superscript{lazy}} f a b c ...)
-               @#,->text{compiles to} (#%lazy-app f a b c ...)
-               @#,->text{compiles to} (@#,elem{@racket[#%app]@superscript{internal}} (force f) (lazy a) (lazy b) (lazy c) ...)]))
+ (f a b c ...) @#,->text{elaborates to} (@#,elem{@racket[#%app]@superscript{lazy}} f a b c ...)
+               @#,->text{elaborates to} (#%lazy-app f a b c ...)
+               @#,->text{elaborates to} (@#,elem{@racket[#%app]@superscript{internal}} (force f) (lazy a) (lazy b) (lazy c) ...)]))
 
 @section[#:tag "impl-video"]{The Essence of Video}
 
@@ -120,13 +120,10 @@ components: a surface syntax, a core library, and a
 rendering layer. It consists of approximately 2,400 lines of
 code. Of that, about 90 lines are specific to the surface
 syntax, and 350 lines define the video-specific primitives
-the language uses.@note{The remaining lines are for
- the FFI and renderer.} The latter are
-implemented using standard functional programming
-techniques. They only serve as a thin wrapper of functions
-to Video's core data-types.
-
-@; #%plain-lambda -> #%lambda-begin?
+the language uses. The latter are implemented using standard
+functional programming techniques. They only serve as a thin
+wrapper of functions to Video's core data-types. The
+remaining lines are for the FFI and renderer.
 
 Surface syntax is where Video uses two of Racket's
 interposition points, namely @racket[#%module-begin] and
@@ -138,10 +135,11 @@ language, while still being able to reinterpret both whole modules
 and local pieces.
 
 Similar to @racket[#%app], @racket[#%module-begin] gets
-placed at the start of every module. This enables languages
-authors to implemented reinterpret context sensitive
-transofmrations. It is with @racket[#%module-begin] that
-Video can lift definitions and collect expressions.
+placed at the start of every module and wraps the entire
+contents of that module. This enables languages authors to
+implement context-sensitive transofmrations. It is with
+@racket[#%module-begin] that Video can lift definitions and
+collect expressions.
 
 @figure["video-begin" "Video Compilation"]{
 @racketblock[
@@ -186,18 +184,17 @@ accumulating expressions into a playlist.
 
 As with @racket[#%video-module-begin], the definition for
 @racket[video-begin] uses pattern matching. Lines 13 and 17
-are the two pattern cases for the transformation, one for
-when the module is empty, and a recursive case that handles
-the first expression. First, the algorithm grabs the first
+specify the two pattern cases for the transformation, one for
+when the module is empty and another one that handles
+the non-empty sequence. In this second case, the transformer grabs the first
 expression and expands it to a common language (line 18).
-This common language is simply fully expanded Racket code,
-and thus uses the same syntax across all DSLs. Next, the
-transformation checks whether if the expanded code is a list
+This common language is simply elaborated Racket code.
+Next, the transformation checks whether the elaborated code is a list
 (lines 20 and 24), and if the first element of that list is
-one of several recognized symbols (lines 21-22) e.g.
+one of several recognized identifiers (lines 21-22), e.g.,
 @racket[define] or @racket[provide]. If the first identifier
-is recognized, then the transformation lifts it out of the
-@racket[video-begin], and recursively calls itself without
+is recognized, then the transformer lifts it out of the
+@racket[video-begin] and recursively calls itself without
 the newly lifted expression (line 23). Otherwise, it is an
 expression and gets collected into the @racket[exprs]
 collection (line 25). Finally, once @racket[video-begin] has
@@ -208,21 +205,20 @@ pattern defines the given @racket[id] (which is generally
 @racket[vid]) to the expressions bundled as a playlist and
 provides the playlist (lines 14-16).
 
-It is worth noting that @racket[video-begin] for function
-scope differs only in the base case. Rather than defining
-and providing an identifier for the resulting playlist, it
-mainly returns the constructed playlist. The recursive
-call (lines 7 through 17) remains the same.
+The @racket[video-begin] transformer also works for function
+scope. It differs only in the base case. Rather than
+defining and providing an identifier for the resulting
+playlist, it mainly returns the constructed playlist. The
+recursive call (lines 7 through 17) remains the same.
+Naturally, the definitions can be abstracted still.
 
 @Figure-ref["mod-begin"] shows the syntax elaboration of a
 module using the Video specific @racket[#%module-begin]
-form. The expanding module describes the running conference
+form. The elaborated module describes the running conference
 talk example. Here, @racket[#%module-begin]@superscript{
  video} is Video's variant, while
 @racket[#%module-begin]@superscript{internal} is the one
-provided by @racketmodname[racket]. As with all
-interposition points, @racket[#%module-begin]@superscript{
- video} gets resolved to @racket[#%video-module-begin].
+provided by @racketmodname[racket].
 
 @figure["mod-begin" "Compilation for a Video Module"]{
 @(3split-minipage
@@ -234,7 +230,7 @@ interposition points, @racket[#%module-begin]@superscript{
  (image "splash.png" #,elided)
  (conference-talk video #,elided)
  (define video #,elided)]
-  (->text "compiles to")
+  (->text "elaborates to")
   @racketmod0[
  video
  (@#,elem{@racket[#%module-begin]@superscript{video}}
@@ -249,7 +245,7 @@ interposition points, @racket[#%module-begin]@superscript{
   #:size-b 0.22
   #:size-c 0.40
   (blank)
-  (->text "compiles to")
+  (->text "elaborates to")
   @racketmod0[
  racket/base
  (#%video-module-begin
@@ -264,7 +260,7 @@ interposition points, @racket[#%module-begin]@superscript{
   #:size-b 0.22
   #:size-c 0.40
   (blank)
-  (->text "compiles to")
+  (->text "elaborates to")
   @racketmod0[
  racket/base
  (@#,elem{@racket[#%module-begin]@superscript{internal}}
@@ -280,7 +276,7 @@ interposition points, @racket[#%module-begin]@superscript{
   #:size-b 0.22
   #:size-c 0.40
   (blank)
-  (->text "compiles to")
+  (->text "elaborates to")
   @racketmod0[
  racket/base
  (@#,elem{@racket[#%module-begin]@superscript{internal}}
@@ -295,24 +291,22 @@ interposition points, @racket[#%module-begin]@superscript{
 
 @section[#:tag "impl-ffi"]{Video, Behind the Scenes}
 
-Video relies on a C library---the MLT Multimedia
+Video relies on bindings to a C library---the MLT Multimedia
 Framework@note[mlt-url]---to perform the rendering of video
 descriptions to files or streams.
 
-As it turns out, the Racket doctrine actually applies
+As it turns out, the Racket doctrine actually applies to
 the step of adding bindings too. That is to say, because
 the task of importing bindings manually is daunting, we created
-make a DSL instead. For example, Video employs a
-one-off DSL just for building its internal data structures.
+a DSL for just this task instead.
 The implementation of this DSL is small but eliminates so
 much boilerplate code  that the entire implementation of the DSL in
 combination with the actual back-end of Video is smaller
 than an otherwise identical back-end that does not use a
-DSL. Thus, creating the DSL reduces enough effort that it
-offsets the cost of creating it, even though it is used
-@bold{only once}.
+DSL. In short, creating the DSL sufficiently reduces the overall effort that it
+offsets the startup cost, even though it is used @bold{only once}.
 
-The auxiliary DSL @TODO{rejects?} two forms:
+The auxiliary DSL injects two forms into Racket:
 @racket[define-mlt] and @racket[define-constructor]. The
 first form introduces a small DSL that combines with the
 Racket FFI to facilitate the import of bindings from MLT.
@@ -325,10 +319,10 @@ into data that MLT understands.
   (style #f '())
   (list
    @para{The @racket[define-mlt] form is useful for hardening foreign
-functions.@TODO{Something apple pie?} By using @racket[define-mlt],
+functions. By using @racket[define-mlt],
 programmers must only specify a
-contract@cite[contracts-icfp] that properly wraps the inputs
-and outputs for the function. Consider @tt{mlt_profile_init}, a
+contract@cite[contracts-icfp] that describes the valid inputs
+and outputs. Consider @tt{mlt_profile_init}, a
 function that initializes a C library.
 It takes a string and returns either a
 profile object or @tt{NULL} if there is an error. Rather
@@ -342,7 +336,7 @@ the FFI just states input and output types:}
 
 @para{
 @exact{\vspace{0.2cm}}
-It errors if a bad input or output type passes through}))
+It errors if a bad input or output type passes through this interface.}))
 
 @(compound-paragraph
   (style #f '())
@@ -376,3 +370,17 @@ It errors if a bad input or output type passes through}))
  conversion code. The renderer calls this conversion
  code at the point when it needs to operate over MLT objects
  rather than Video ones.}))
+
+@TODO{The above paragraph is trying to say that structs
+ created with @racket[define-constructor] have primarily
+ three additions over regular structs. First, they inherit
+ some additional properties of object-oriented behavior above
+ and beyond what structs give. (Namely, dynamic dispatch and
+ copy constructors). Second, nicer construtors that can take
+ advantage of the parent fields without needing to specify
+ them every time the constructor is called. Third, a body
+ that converts the struct to a binary format that MLT
+ understands. This conversion function has direct access to
+ all of the fields defined in the struct, including parent
+ fields. I tried to trim this information down to stuff
+ pertinent to the paper.}

@@ -22,8 +22,8 @@ clips, and effects playing in sequence. The NLVE @emph{
  renders} these tracks by playing them all simultaneously,
 placing one track on top of the other. Obviously a screen
 displaying the result can only play a single track for
-video;@note{Audio tracks can actually be played together,
- and audio editors do this.} by convention this is the last
+video;@note{Audio tracks can actually be played together;
+ audio editors do this.} by convention this is the last
 or top track. Video editors use effects to @emph{composite}
 tracks together. That is, effects splice two or more tracks
 together so that they appear on the screen at the same time.
