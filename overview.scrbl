@@ -444,44 +444,44 @@ Explicit properties must be added by the program itself.
 
 Video programs may describe standalone modules or pieces of
 a larger production. In the first case, users give Video
-modules to a renderer. In the second case, other modules
-import the target module before rendering.
+modules to a renderer that either plays the videos on a
+screen, or saves them to a file. In the second case, other modules import the
+video defined by the target module.
 
 A renderer converts standalone Video programs to traditional
-videos. This renderer allows creators to set various
-properties such as aspect ratio, frame rate, and even output
-format. For example, the @racket[preview-video] function
-renders the video on the fly and plays it in a preview
-window:
+videos. Having a dedicated rendering pass allows developers
+to set various properties such as aspect ratio, frame rate,
+and even output format. The simplest renderer,
+@racket[preview-video], consumes a path to a Video module,
+and plays the video in a newly opened window. Here is an
+example of a conference talk given to @racket[preview-talk]:
 
 @(split-minipage
-  (centered @racket[(preview-video "talk.vid")])
+  (centered @racketinput[(preview-video "talk.vid")])
   (centered (scale (bitmap "res/talk-preview.png") 0.08)))
 
-Every Video module is also usable inside of other Video
-programs and general-purpose Racket programs. Each module
-in the language exports one @racket[vid] identifier, that
-contains the described film.
+As with functions, Video modules compose to form larger
+programs. Each Video module an identifier named
+@racket[vid]. When evaluated, this @racket[vid] identifier
+is the video described by that module. Thus, another module
+can use the video by requiring the appropriate module, and
+put the @racket[vid] identifier where appropriate.
+Alternatively, the @racket[include-video] form does both
+steps at the same time.
 
-Modules written in Video export a data structure bound to
-@racket[vid]. This data structure can itself be used in
-large video projects through @racket[include-video].
-
-The top half of @figure-ref["video-use"] shows the program
-for the video used above. The code to the right shows
-the contents of the @racket[vid] structure. This video is
-itself a producer and can be used in larger projects, shown
-in the bottom half of @figure-ref["video-use"]. Video
-provides @racket[include-video] to import video files into
-larger contexts. This function imports the specified file
-and places the @racket[vid] struct where it is placed. For
-example, if a broadcaster for an already edited conference
-video wants to add an additional splash to the front, they
-could easily do so:
+The left half of @figure-ref["video-use"] shows a program
+split into multiple modules, while the right half is the
+resulting video. This program describes the running
+conference talk example, but now with an additional splash
+screen on the front.@note{Imagine if you will, an
+ organization rebroadcasting the video, but putting their own
+ logo in the front.} The first line displays the additional
+logo, while the second line is the video @tt{talk.vid} describes.
 
 @(split-minipage
-  @racketblock[(image "broadcast.png" #:length 100)
-               (include-video "talk.vid")]
+  @racketmod[video
+             (image "splash.png" #:length 100)
+             (include-video "talk.vid")]
   (centered (make-playlist-timeline
              #:end #t
              splash2
@@ -491,11 +491,3 @@ could easily do so:
              splash
              (ellipses))))
 
-Unlike Racket programs, Video programs use
-@racket[include-video] to reduce naming conflicts. That is,
-rather than requiring several videos at the module level,
-renaming the newly imported @racket[vid] identify to
-something unique, and placing that identifier in the
-appropriate place, developers simply insert
-@racket[include-video] at the point where they want the
-imported video to go.
