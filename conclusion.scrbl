@@ -1,6 +1,6 @@
 #lang scribble/sigplan
 
-@(require "bib.rkt" "pictures.rkt" scriblib/footnote)
+@(require scriblib/figure "bib.rkt" "pictures.rkt" scriblib/footnote)
 
 @title[#:tag "conclusion"]{Star Trek Beyond}
 
@@ -62,4 +62,7 @@ No, Racket by no means solves all problems that come with language-oriented
  language-oriented-programming in general and Racket's approach in particular,
  and we invite them to translate them into their world.
 
-@language-tower
+@figure["language-tower" @list{The Tower of Languages} #:style center-figure-style]{
+  @language-tower[.8]}
+
+
