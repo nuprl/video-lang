@@ -148,7 +148,7 @@
                               "Matthew Flatt"
                               "Matthias Felleisen")
             #:date "2011"
-            #:location (proceedings-location "PLDI"
+            #:location (proceedings-location "Programming Languages Design and Implementation"
                                              #:pages '(132 141)
                                              #:volume 32)))
 
