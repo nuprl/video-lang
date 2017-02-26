@@ -7,6 +7,23 @@
 
 (define-cite cite citet gen-bib)
 
+(define culpepper-scp
+  (make-bib #:title "Debugging hygienic macros"
+            #:author (authors "Ryan Culpepper" "Matthias Felleisen")
+            #:location (journal-location "Science of Computer Programming"
+                                         #:pages '(496 515)
+                                         #:number "7"
+                                         #:volume "75")
+            #:date "2010"))
+
+(define bc:lazy
+  (make-bib
+    #:author (authors "Eli Barzilay" "John Clements")
+    #:title "Laziness without all the hard work"
+    #:location (proceedings-location "Proc. Works. Funcational and Declarative Programming in Education" 
+		 #:pages '(9 13))
+    #:date 2005))
+
 (define SK-PhD
   (make-bib
    #:title "Linguistic Reuse"
