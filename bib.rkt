@@ -7,6 +7,50 @@
 
 (define-cite cite citet gen-bib)
 
+(define short? #f)
+(define-syntax define/short
+  (syntax-rules ()
+    [(_ i e e*) (define i (if short? e e*))]
+    [(_ i e) (define i e)]))
+
+(define IEEE "IEEE ")
+(define ACM "ACM ")
+(define International "Intl. ")
+(define Conference "Conf. ")
+(define Workshop "Wksp. ")
+(define Journal "J. ")
+(define Symposium "Sym. ")
+(define Transactions "Trans. ")
+(set! Transactions "")
+(set! Conference "")
+
+(define/short lfp "LFP" "LISP and Functional Programming")
+(define/short popl "POPL" (string-append ACM Symposium "Principles of Programming Languages"))
+
+(define kffd:hygiene
+  (make-bib #:title "Hygienic macro expansion"
+            #:author (authors "Eugene Kohlbecker"
+                              "Daniel P. Friedman"
+                              "Matthias Felleisen"
+                              "Bruce Duba")
+            #:is-book? #f
+            #:location (proceedings-location lfp)
+            #:date "1986"))
+
+(define kw:mbe
+  (make-bib #:title "Macro-by-example: deriving syntactic transformations from their specifications"
+            #:author (authors "Eugene Kohlbecker" "Mitchell Wand")
+            #:location (proceedings-location popl #:pages '(77 84))
+            #:date "1987"))
+
+
+(define bo:ffi
+  (make-bib
+    #:author (authors "Eli Barzilay" "Dimitry Orlovsky")
+    #:title "Foreign Interface for PLT Scheme"
+    #:location (proceedings-location "Scheme and Funcational Programming")
+    #:date 2004))
+
 (define culpepper-scp
   (make-bib #:title "Debugging hygienic macros"
             #:author (authors "Ryan Culpepper" "Matthias Felleisen")
