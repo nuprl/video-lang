@@ -20,7 +20,7 @@
   (make-bib
     #:author (authors "Eli Barzilay" "John Clements")
     #:title "Laziness without all the hard work"
-    #:location (proceedings-location "Proc. Works. Funcational and Declarative Programming in Education" 
+    #:location (proceedings-location "Workshop on Funcational and Declarative Programming in Education" 
 		 #:pages '(9 13))
     #:date 2005))
 
@@ -49,7 +49,8 @@
 		      "Jay McCarthy"
 		      "Sam Tobin-Hochstadt")
    #:date "2015"
-   #:location (proceedings-location "SNAPL" #:pages '(113 128))))
+   #:location (proceedings-location "Summit on Advances in Programming Languages"
+                                    #:pages '(113 128))))
 
 (define plt-tr1
   (make-bib #:title    "Reference: Racket"
@@ -85,7 +86,7 @@
   (make-bib #:title "Slideshow: Functional Presentations"
             #:author (authors "Matthew Flatt" "Robby Findler")
             #:date "2006"
-            #:location (journal-location "JFP"
+            #:location (journal-location "Journal of Functional Programming"
                                          #:pages '(593 619)
                                          #:volume 16)))
 
@@ -93,7 +94,7 @@
   (make-bib #:title "Scribble: Closing the Book on Ad Hoc Documentation Tools"
             #:author (authors "Matthew Flatt" "Eli Barzilay" "Robert Bruce Findler")
             #:date "2009"
-            #:location (proceedings-location "ICFP"
+            #:location (proceedings-location "International Conference on Functional Programming"
                                              #:pages '(109 120)
                                              #:volume 14)))
 
@@ -101,7 +102,7 @@
   (make-bib #:title "Applescript"
             #:author (authors "William R. Cook")
             #:date "2007"
-            #:location (proceedings-location "HOPL"
+            #:location (proceedings-location "History of Programming Languages"
                                              #:pages '("1-1" "1-21")
                                              #:volume 3)))
 
@@ -135,7 +136,7 @@
   (make-bib #:title "Composable and Compilable Macros, You Want It when?"
             #:author (authors "Matthew Flatt")
             #:date "2002"
-            #:location (proceedings-location "ICFP"
+            #:location (proceedings-location "International Conference on Functional Programming"
                                              #:pages '(72 83)
                                              #:volume 7)))
 
@@ -156,7 +157,7 @@
             #:author (authors "Robert Bruce Findler"
                               "Matthias Felleisen")
             #:date "2002"
-            #:location (proceedings-location "ICFP"
+            #:location (proceedings-location "International Conference on Functional Programming"
                                              #:pages '(48 59)
                                              #:volume 7)))
 
@@ -164,14 +165,14 @@
   (make-bib
    #:title "Eliminating Array Bound Checking Through Dependent Types"
    #:author (authors "Hongwei Xi" "Frank Pfenning")
-   #:location (proceedings-location "PLDI" #:pages '(249 257))
+   #:location (proceedings-location "Programming Languages Design and Implementation" #:pages '(249 257))
    #:date 1998))
 
 (define tsam-popl
   (make-bib
    #:title "Type Systems as Macros"
    #:author (authors "Stephen Chang" "Alex Knauth" "Ben Greenman")
-   #:location (proceedings-location "POPL" #:pages '(694 705))
+   #:location (proceedings-location "Principles of Programming Languages" #:pages '(694 705))
    #:date 2017))
 
 #;
@@ -179,7 +180,7 @@
   (make-bib
    #:title "Fortifying Macros"
    #:author (authors "Ryan Culpepper" "Matthias Felleisen")
-   #:location (proceedings-location "ICFP" #:pages '(235 246))
+   #:location (proceedings-location "International Conference on Functional Programming" #:pages '(235 246))
    #:date 2010))
 
 ; other "DSL" stuff
@@ -190,25 +191,25 @@
                      "Dimitrios Vytiniotis"
                      "Stephanie Weirich"
                      "Geoffrey Washburn")
-   #:location (proceedings-location "ICFP" #:pages '(50 61))
+   #:location (proceedings-location "International Conference on Functional Programming" #:pages '(50 61))
    #:date 2006))
 (define deep-shallow-icfp
   (make-bib
    #:title "Folding domain-specific languages: deep and shallow embeddings (functional Pearl)"
    #:author (authors "Jeremy Gibbons" "Nicolas Wu")
-   #:location (proceedings-location "ICFP" #:pages '(339 347))
+   #:location (proceedings-location "International Conference on Functional Programming" #:pages '(339 347))
    #:date 2014))
 (define gadt-popl
   (make-bib
    #:title "Guarded recursive datatype constructors"
    #:author (authors "Hongwei Xi" "Chiyan Chen" "Gang Chen")
-   #:location (proceedings-location "POPL" #:pages '(224 235))
+   #:location (proceedings-location "Principles of Programming Languages" #:pages '(224 235))
    #:date 2003))
 (define tagless-jfp
   (make-bib
    #:title "Finally Tagless, Partially Evaluated"
    #:author (authors "Jacques Carette" "Oleg Kiselyov" "Chung-chieh Shan")
-   #:location (journal-location "JFP"
+   #:location (journal-location "Journal of Functional Programming"
                                 #:pages '(509 543)
                                 #:volume 19
                                 #:number 5)
@@ -217,7 +218,7 @@
   (make-bib
    #:title "Building Domain-Specific Embedded Languages"
    #:author "Paul Hudak"
-   #:location (journal-location "ACM Comput. Surv."
+   #:location (journal-location "ACM Computing Surveys"
                                 #:volume 28
                                 #:number "4es")
    #:date 1996))
@@ -225,21 +226,22 @@
   (make-bib
    #:title "Server side web scripting in Haskell"
    #:author "Erik Meijer"
-   #:location (journal-location "JFP" #:pages '(1 18)
-                                      #:volume 10
-                                      #:number 1)
+   #:location (journal-location "Journal of Functional Programming"
+                                #:pages '(1 18)
+                                #:volume 10
+                                #:number 1)
    #:date 2000))
 (define meijer-icfp
   (make-bib
    #:title "Calling hell from heaven and heaven from hell"
    #:author (authors "Sigbjorn Finne" "Daan Leijen" "Erik Meijer" "Simon Peyton Jones")
-   #:location (proceedings-location "ICFP" #:pages '(114 125))
+   #:location (proceedings-location "International Conference on Functional Programming" #:pages '(114 125))
    #:date 1999))
 (define haskell-scripting-cufp
   (make-bib
    #:title "Light-weight and type-safe scripting with Haskell"
    #:author "Gabriel Gonzalez"
-   #:location (proceedings-location "CUFP Tutorials")
+   #:location (proceedings-location "Commercial Users of Functional Programming Tutorials")
    #:date 2015))
 
 (define fortifying-jfp
@@ -247,7 +249,7 @@
    #:title "Fortifying Macros"
    #:author (authors "Ryan Culpepper")
    #:date "2009"
-   #:location (journal-location "JFP"
+   #:location (journal-location "Journal of Functional Programming"
                                 #:pages '(439 476)
                                 #:volume 22)))
 
@@ -262,7 +264,7 @@
                      "Paul Steckler"
                      "Matthias Felleisen")
    #:date "2002"
-   #:location (journal-location "JFP"
+   #:location (journal-location "Journal of Functional Programming"
                                 #:pages '(159 182)
                                 #:volume 12)))
 
