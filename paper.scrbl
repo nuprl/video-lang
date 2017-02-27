@@ -13,19 +13,23 @@
 @;authorinfo["Stephen Chang" "PLT @ Northeastern University" "stchang@ccs.neu.edu"]
 @;authorinfo["Matthias Felleisen" "PLT @ Northeastern University" "matthias@ccs.neu.edu"]
 
-@abstract{Conference videos combine several feeds into a single coherent
-movie. Producing such videos usually employs a lot of repetitive work with
-so-called non-linear editors. Fortunately, the domain of non-linear video
-editing naturally allows the injection of a functional-declarative
-scripting language with which it is possible to reduce a lot of the
-repetitive work. 
-
-This pearl presents the design of a video production language as an
-illustration of the Racket doctrine, which says that languages belong in
-the arsenal of software developers in the same way as type classes and
-functors. Additionally, the pearl explains how Racket's eco-system
-facilitates the addition of a type system. Finally, the pearl includes a
-brief evaluation of the usefulness of the language.}
+@abstract{The Racket doctrine tells developers to narrow the gap between
+the language of the problem domain and the language of programming---every
+time they encounter such a gap. This pearl illustrates this point with the
+creation of a relatively simple domain-specific language for editing
+videos. Video professionals traditionally use non-linear editor, GUI tools
+that require a lot of repetitive manual work for the production of a series
+of similar recordings, say those of a conference. As it turns out, video
+editing naturally splits the work into a declarative phase and an
+imperative step at the end. Hence it is natural to create a
+functional-declarative language for the first phase, which reduces a lot of
+manual labor. For the injection of types into this scripting language,
+Racket once again reduces a language gap, namely, the one between the
+domain experts designing type-checking rules and the implementation
+language. In short, the development of the video editing language cleanly
+demonstrates how the Racket doctrine naturally leads to the creation of
+language hierarchies, analogous to the hierarchies of modules found in
+conventional functional languages.}
 
 @include-section{introduction.scrbl}
 
