@@ -175,15 +175,17 @@ negative.
 
 @figure["type-rules" @list{A few type rules for Typed Video}]{
 @centered[
-@inferrule[#:name "color-n" "e : String"]{(color e \#:length n) : (Producer n)}
+@inferrule[#:name "color-n" "$\\Gamma\\vdash$ e : String"]{$\Gamma\vdash$ (color e \#:length n) : (Producer n)}
 @hspace{64}
-@inferrule[#:name "color" "e : String"]{(color e) : Producer}
+@inferrule[#:name "clip" "$\\Gamma\\vdash$ f : File" "|f| = n"]{$\Gamma\vdash$ (clip f) : (Producer n)}
 ]
 @vspace{10}
 @centered[
-@inferrule[#:name "clip" "f : File" "|f| = n"]{(clip f) : (Producer n)}
-@hspace{24}
-@inferrule[#:name "playlist" "p/t <: (Producer n) \\textrm{or} p/t <: (Transition m)" "..."]{(playlist p/t ...) : (Producer (- (+ n ...) (+ m ...)))}]
+@inferrule[#:name "color" "$\\Gamma\\vdash$ e : String"]{$\Gamma\vdash$ (color e) : Producer}
+@hspace{16}
+@inferrule[#:name "playlist" "$\\Gamma\\vdash$ p/t : $\\tau$"
+                             "$\\tau$ <: (Producer n) \\textrm{or} $\\tau$ <: (Transition m)" "..."]{
+                              $\Gamma\vdash$ (playlist p/t ...) : (Producer (- (+ n ...) (+ m ...)))}]
 }
 
 The Playlist rule uses Typed Video's subtyping relation. Here is the subtyping
