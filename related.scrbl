@@ -6,7 +6,7 @@
 
 @title[#:tag "related"]{The Related Suspects}
 
-Two main principles guide the Racket Way of creating DSLs@cite[manifesto]:
+Two main principles guide the Racket Way of creating DSLs@cite[racket-workbench-challenge]:
 @bold{reuse} and @bold{abstraction}.
 
 Reusing existing language components greatly helps DSL @emph{creators}, who are

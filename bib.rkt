@@ -341,6 +341,20 @@
                                     #:number 4
                                     #:pages '(295 326))))
 
+(define racket-workbench-challenge
+  (make-bib
+   #:title "Languages the Racket Way"
+   #:author (authors "Daniel Feltey"
+                     "Spencer P. Florence"
+                     "Tim Knutson"
+                     "Vincent St-Amour"
+                     "Ryan Culpepper"
+                     "Matthew Flatt"
+                     "Robert Bruce Findler"
+                     "Matthias Felleisen")
+   #:date "2016"
+   #:location (proceedings-location "Language Workbench Challenge")))
+
 (define gstreamer-url (url "https://gstreamer.freedesktop.org/"))
 (define mlt-url (url "https://www.mltframework.org/"))
 (define shotcut-url (url "https://www.shotcutapp.com/"))
