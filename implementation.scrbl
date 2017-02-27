@@ -36,28 +36,41 @@ features to match the semantics of the new domain.
 
 Adding and removing features is simple, because a language
 implementation is a module like any other module in Racket.
-A language developer creates a module that defines the new
-features, exports those features, and does not export unwanted
-ones. They do so in the same manner as a programmer who 
-augments the functionality of a library via a wrapper
-module. In contrast, modifying existing features requires a
-little more work than that. Specifically the module must
-define a syntax transformation in terms of the old language,
-using a distinct name, and rename that primitive on export.
+Removing feature is simply a matter of not re-providing them
+from the host language. Line 4 uses the @racket[except-out]
+keyword to remove the definition of @racket[set!] from
+@racketmodname[racket/base]. Also on line 4,
+@racket[all-from-out] re-exports all of features in
+@racketmodname[racket/base].
 
+In addition to these operations, adding new features is simply a matter of
+defines the new features and exporting them.
+They do so in the same manner as a programmer who augments the
+functionality of a library via a wrapper module.
+
+In contrast, modifying existing features requires a little more
+work than that. Specifically the module must define a syntax
+transformation in terms of the old language, using a
+distinct name, and rename that primitive on export.
+
+@(define *line-no 0)
+@(define (line-no)
+   (set! *line-no  (+ *line-no 1))
+   (define line-no (format (if (< *line-no 10) "0~a" "~a") *line-no))
+   @exact{\tt @line-no})
 @figure["racket-boo" @list{Logging assignment statements to expose
  ill-behaved functional programmers}]{
-@racketmod[
- racket/base
-
- (provide (rename-out boo:set! set!)
-          (except-out (all-from-out racket/base) set!))
-
- (define-syntax (boo:set! stx)
-   (syntax-parse stx
-     [(_ id val)
-      #'(begin (log-warning "Boo!!! Reassigning ~a" id)
-               (set! id val))]))]
+@racketblock[
+@#,line-no[] @#,hash-lang[] racket/base
+@#,line-no[]
+@#,line-no[] (provide (rename-out boo:set! set!)
+@#,line-no[]          (except-out (all-from-out racket/base) set!))
+@#,line-no[]
+@#,line-no[] (define-syntax (boo:set! stx)
+@#,line-no[]   (syntax-parse stx
+@#,line-no[]     [(_ id val)
+@#,line-no[]      #'(begin (log-warning "Boo!!! Reassigning ~a" id)
+@#,line-no[]               (set! id val))]))]
 }
 
 Let's illustrate this idea with a simple example. Functional programmers do
@@ -66,7 +79,7 @@ admit to their use (via Java) are booed on stage.@note{Clojure has the largest, 
 successful community of commercial functional programmers. One of the
 authors witnessed this booing at a recent Clojure conference.} So, imagine
 creating a language like Racket that logs a boo-warning of any use of
-@racket[set], Racket's variable reassignment form. The @racket[set!] provided
+@racket[set!], Racket's variable reassignment form. The @racket[set!] provided
 by @racketmodname[racket/base] provides the functionality for reassignment,
 while @racket[log-warning] from the same language provides the logging
 functionality. All we have to do is define a new syntax transformer, say   
@@ -77,20 +90,21 @@ makes the revised @racket[set!] functionality available to programmers who use t
 improved Functions-first variant of Racket. @Figure-ref{racket-boo} displays the complete
 solution. 
 
+@(set! *line-no 0)
 @figure["lazy-racket" @list{An essential element of Lazy Racket}]{
-@(minipage @racketmod[
- racket/base
-
- (provide (rename-out #%lazy-app #%app)
-          (excpet-out (all-from-out racket/base) #%app))
-
- (define-syntax (#%lazy-app stx)
-   (syntax-parse stx
-     [(_ rater rand ...)
-      #'(#%app (force rater) (lazy rand)  ...)]))])
+@(minipage @racketblock[
+@#,line-no[] @#,hash-lang[] racket/base
+@#,line-no[]
+@#,line-no[] (provide (rename-out #%lazy-app #%app)
+@#,line-no[]          (except-out (all-from-out racket/base) #%app))
+@#,line-no[]
+@#,line-no[] (define-syntax (#%lazy-app stx)
+@#,line-no[]   (syntax-parse stx
+@#,line-no[]     [(_ rater rand ...)
+@#,line-no[]      #'(#%app (force rater) (lazy rand)  ...)]))])
 }
 
-Also recall that Racket's syntax system supports several interposition
+Now recall that Racket's syntax system supports several interposition
 points that facilitate language creation: @racket[#%app] for function
 application, @racket[#%module-begin] for module boundaries,
 @racket[#%datum] for literals, and so on.  The purpose of these points is
@@ -128,10 +142,11 @@ The curious reader may wish to step through the elaboration via DrRacket's
 syntax debugger@cite[culpepper-scp].
 
 Video's implementation consists of three major components and accounts for
-approximately 2,400 lines of code: a syntax, a run-time library, and a
+approximately 2,400 lines of code: a surface syntax, a run-time library, and a
 rendering layer. Of the code, about 90 lines are specific to the syntax and
-350 lines define the video-specific primitives the language uses. The
-latter serve as functional adapters of imperative functions that work on
+350 lines define the video-specific primitives the language uses. The remaining
+lines are for the FFI and renderer.
+The video-specific primitives serve as adapters to imperative actions that work on
 Video's core data-types; they are implemented using standard functional
 programming techniques.  The following sub-section covers the
 implementation of Video's syntax, and the third one presents the
@@ -146,70 +161,65 @@ points define the lexical scope of modules and functions. As with
 @racket[#%app], using these forms enables language developers to
 simultaneously reuse Racket syntax and re-interpret it. 
 
-Similar to @racket[#%app], @racket[#%module-begin] gets
-inserted at the start of every module and wraps the entire
+Similar to @racket[#%app], @racket[#%module-begin] is
+inserted at the start of every module and wraps the
 contents of that module. Hence, a re-interpretation may 
 easily implement context-sensitive transformations. In the case of Video,
 the re-implementation of @racket[#%module-begin] lifts definitions to the
 beginning of the module and collects the remaining expressions into a
 playlist. 
 
-@(define *line-no 0)
-@(define (line-no)
-   (set! *line-no  (+ *line-no 1))
-   (define line-no (format (if (< *line-no 10) "0~a" "~a") *line-no))
-   @exact{\tt @line-no})
-
+@(set! *line-no 0)
 @figure["video-begin" "Video Compilation"]{
-@racketmod[
+@racketblock[
 #:escape L
-racket/base
-
-(L @line-no[])   (provide (rename-out [#%video-module-begin module-begin])
-(L @line-no[])            (except-out #%module-begin racket/base))
+(L @line-no[]) (L @hash-lang[]) racket/base
+(L @line-no[])
+(L @line-no[]) (provide (rename-out [#%video-module-begin module-begin])
+(L @line-no[])          (except-out #%module-begin racket/base))
 (L @line-no[])  
-(L @line-no[])   (define-syntax (#%video-module-begin stx)
-(L @line-no[])     (syntax-parse stx
-(L @line-no[])       [(_ body ...)
-(L @line-no[])        #'(#%module-begin (video-begin vid (provide vid) () body ...))]))
+(L @line-no[]) (define-syntax (#%video-module-begin stx)
+(L @line-no[])   (syntax-parse stx
+(L @line-no[])     [(#%video-module-begin body ...)
+(L @line-no[])      #'(#%module-begin (video-begin vid (provide vid) () body ...))]))
 (L @line-no[])  
-(L @line-no[])  (define-syntax (video-begin stx)
-(L @line-no[])    (syntax-parse stx
-(L @line-no[])      [(video-begin vid code exprs)
-(L @line-no[])       #`(begin
-(L @line-no[])           (define vid (playlist . #,(reverse (syntax->list #'exprs))))
-(L @line-no[])           code)]
-(L @line-no[])      [(video-begin vid code exprs b1 body ...)
-(L @line-no[])       (define expanded (local-expand #'b1 'module (L elided)))
-(L @line-no[])       (syntax-parse expanded
-(L @line-no[])         [(id*:id rest ...)
-(L @line-no[])          #:when (matches-one-of? #'id* (list #'provide #'define (L elided)))
-(L @line-no[])          #`(begin #,expanded (video-begin vid code body ...))]
-(L @line-no[])         [else
-(L @line-no[])          #`(video-begin id (#,expanded . exprs) . body)])]))
+(L @line-no[]) (define-syntax (video-begin stx)
+(L @line-no[])   (syntax-parse stx
+(L @line-no[])     [(video-begin vid export exprs)
+(L @line-no[])      #:with (e ...) (reverse (syntax->list #'exprs))                     
+(L @line-no[])      #'(begin
+(L @line-no[])          (define vid (playlist e ...))
+(L @line-no[])          export)]
+(L @line-no[])     [(video-begin vid export (exprs ...) b1 body ...)
+(L @line-no[])      (syntax-parse (local-expand #'b1 'module (L elided))
+(L @line-no[])        [(id*:id rest ...)
+(L @line-no[])         #:when (matches-one-of? #'id* (list #'provide #'define (L elided)))
+(L @line-no[])         #'(begin this-syntax (video-begin vid export body ...))]
+(L @line-no[])        [else
+(L @line-no[])         #'(video-begin id export (this-syntax exprs ...) body ...)])]))
 ]
 }
 
-@Figure-ref["video-begin"] shows the essence of the
+@Figure-ref["video-begin"] shows the essence of Video's
 @racket[#%module-begin] syntax transformer. It is written in Racket's
 @racket[syntax-parse] language@cite[fortifying-jfp], a vast improvement over
-Kohlbecker et al's Scheme macros@cite[kffd:hygiene kw:mbe]. As
+Scheme macro system@cite[kffd:hygiene kw:mbe hygenic-lisp closures-lfp syntax-lfp]. As
 before, the transformer is defined with a different name,
-@racket[#%video-module-begin] (line 4), and is renamed on
-export (line 1). The implementation of
+@racket[#%video-module-begin] (line 6), and is renamed on
+export (line 3). The implementation of
 @racket[#%video-module-begin] dispatches to
-@racket[video-begin] (line 7), the workhorse of the module. This auxiliary syntax
-transformer consumes four pieces: an identifier (@racket[vid]), a piece of
-@racket[code] formulated in terms of the identifier, a list of expressions,
+@racket[video-begin] (line 9), the workhorse of the module. This auxiliary syntax
+transformer consumes four pieces: an identifier (@racket[vid]), a piece of code
+(@racket[export]) formulated in terms of the identifier, a list of expressions (@racket[e ...]),
 and the module's body, which is represented as a potentially empty sequence
-of expressions. In the case of @racket[#%video-module-begin], the four
+of expressions (@racket[body ...]). In the case of @racket[#%video-module-begin], the four
 pieces are @racket[vid], @racket[(provide vid)], @racket[()], and the module
 body. 
 
-The @racket[video-begin] syntax transformer (lines 9--22) is responsible
+The @racket[video-begin] syntax transformer (lines 11--24) is responsible
 for lifting definitions to the beginning of the module body and
-accumulating expressions into a playlist. The definition for
-@racket[video-begin] uses pattern matching again. Lines 11 and 15 specify
+accumulating expressions into a @racket[playlist]. The definition for
+@racket[video-begin] uses pattern matching again. Lines 13 and 18 specify
 the two pattern cases, one for when the module body is
 empty and another one that handles a non-empty sequence of body
 expressions:
@@ -218,23 +228,25 @@ expressions:
 
 @item{Once @racket[video-begin] has traversed every piece of syntax (line 11), 
 @racket[exprs] contains all of the original module body's expressions in
-reverse order. The generated output (lines 12-14) defines the
+reverse order. The generated output (lines 15--17) defines the
 given @racket[vid] to stand for the list of expressions
 bundled as a playlist.  The last piece of the @racket[begin] block is
 @racket[code].}
 
 @item{In the second case, the transformer expands the first term
-up to the point where it can decide whether it is a definition (line 16).  
-Next, the transformer uses @racket[syntax-parse] to  check whether the
-elaborated code is a syntax list (lines 18 and 20) with a recognized
-identifier in the first position (lines 18--19), e.g., @racket[define] and
+up to the point where it can decide whether it is a definition (line 19).  
+Next, the transformer uses @racket[syntax-parse] to check whether the
+elaborated code is a syntax list (lines 20 and 23) with a recognized
+identifier in the first position (lines 22), e.g., @racket[define] and
 @racket[provide].  
 
+@itemlist[
+ @item{
 If so, the transformer lifts the first term out of the @racket[video-begin]
-and recursively calls itself without the newly lifted expression (line 20).
-
+and recursively calls itself without the newly lifted expression (line 22).}
+@item{
 Otherwise, it is an expression and gets collected into the @racket[exprs]
-collection (line 22).}
+collection (line 24).}]}
 
 ]
 The astute reader may wonder about the generated @racket[begin] blocks. As
@@ -243,8 +255,8 @@ sequences at the module top-level into a simple sequence of terms.
 
 The syntax transformer for function bodies also uses @racket[video-begin]. 
 Instead of handing over @racket[(provide vid)], the call in the function
-transformer merely passes along @racket[vid], because functions return the
-produced playlist, they do not export it. 
+transformer merely passes along @racket[vid], because functions @emph{return} the
+produced @racket[playlist], they do not export it. 
 
 @Figure-ref["mod-begin"] shows the syntax elaboration of a
 module using the Video specific @racket[#%module-begin]
@@ -326,16 +338,19 @@ provided by @racketmodname[racket].
 @; -----------------------------------------------------------------------------
 @section[#:tag "impl-ffi"]{Video, Behind the Scenes}
 
-Video relies on bindings to a C library---the MLT Multimedia Framework---to
-perform the rendering of video descriptions to files or streams. It
-exploits Racket's FFI language for this purpose@cite[bo:ffi].
+Video relies on bindings to a C library to perform the
+rendering of video descriptions to files or streams. It
+exploits Racket's FFI language for this
+purpose@cite[bo:ffi]. While Video uses the MLT Multimedia
+Framework, any suitable multimedia library can easily take
+its place.
 
 As it turns out, the Racket doctrine actually applies to the step of adding
 bindings too. That is to say, because the task of importing bindings
 manually is daunting, the implementation uses a DSL for just this task. It
 turns out that, once again, the effort of implementing this auxiliary DSL
 plus writing a single program in it is smaller than the effort of just
-writing down the FFI bindings. In short, creating the DSL sufficiently
+writing down the FFI bindings. In other words, creating the DSL sufficiently
 reduces the overall effort that it offsets the startup cost, even though it
 is used @emph{only once}.
 
@@ -393,5 +408,5 @@ For its second purpose, @racket[define-constructor] introduces the body of
  conversion code at the point when it needs to operate over MLT objects
  rather than Video ones.
 
-The implementation of this Video FFI adds nothing to the ideas of the
- previous section, which is why its details are omitted. 
+The implementation of this Video FFI reiterates the same ideas
+from this section, and thus the details are omitted.

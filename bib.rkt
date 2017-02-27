@@ -312,6 +312,34 @@
                                 #:pages '(159 182)
                                 #:volume 12)))
 
+(define hygenic-lisp
+  (make-bib
+   #:title "Hygienic Macros Through Explicit Renaming"
+   #:author (authors "William Clinger")
+   #:date "1991"
+   #:location (proceedings-location "Lisp Pointers"
+                                    #:pages '(25 28))))
+
+(define closures-lfp
+  (make-bib
+   #:title "Syntactic Closures"
+   #:author (authors "Alan Bawden"
+                     "Jonathan Rees")
+   #:date "1988"
+   #:location (proceedings-location "Lisp and Functional Programming"
+                                    #:pages '(86 95))))
+
+(define syntax-lfp
+  (make-bib
+   #:title "Syntactic Abstraction in Scheme"
+   #:author (authors "R. Kent Dybvig"
+                     "Robert Hieb"
+                     "Carl Bruggeman")
+   #:date "1993"
+   #:location (journal-location "Lisp and Symbolic Computation"
+                                    #:volume 5
+                                    #:number 4
+                                    #:pages '(295 326))))
 
 (define gstreamer-url (url "https://gstreamer.freedesktop.org/"))
 (define mlt-url (url "https://www.mltframework.org/"))

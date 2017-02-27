@@ -63,9 +63,8 @@ exploits all of the above, plus of course, the ability to
 supply additional run-time primitives with a new language
 
 Due to the ease of developing and installing languages in the Racket
-eco-system, language creation has become a critical arrow@margin-note*{We
-considered ``war head'' but decided against it to appease the peacnicks on
-the PC.} in the quiver of software-engineering tools, of comparable status
+eco-system, language creation has become a critical ``warhead''
+in the arsenal of software-engineering tools, of comparable status
 as Haskell's type classes and ML's functors. When developers realize that
 it is best to express themselves in the language of a domain, they do not
 hesitate to develop a matching programming language. After all, domain

@@ -40,11 +40,7 @@ Two critical factors enable this brave new world of language-oriented
 
 The second factor is that Racket acts as a common substrate. Eventually
  programs in these ``little'' languages are elaborated into core Racket
- programs. Their values become Racket values.@note{For lazy Racket, this
- statement holds technically but philosophically the values are one level off
- in the type hierarchy. As a result, modules in lazy languages cannot be
- composed with modules in strict languages as easily as this sentence
- claims.} As a result, developers can easily compose modules in distinct
+ programs. Their values become Racket values. As a result, developers can mostly compose modules in distinct
  languages, meaning software systems are compositions of many modules, each
  representing a solution of a facet of the problem, each written in its most
  appropriate language.

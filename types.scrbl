@@ -2,9 +2,9 @@
 
 @title[#:tag "types"]{The Bodyguard}
 @(require (except-in scribble/manual cite)
-	  (only-in "utils.rkt" exact)
+          "utils.rkt"
           scriblib/figure scriblib/footnote
-          scribble/core
+          (except-in scribble/core paragraph)
           racket/list "bib.rkt")
 
 What use is a programming language without a dependent type system? Lots of
@@ -83,16 +83,15 @@ In addition, a programmer may specify side-conditions involving type
 variables. Here is the @racket[add-bookend] function, which adds an
 opening and ending sequence to a speaker's video:
 
+@(nested (minipage
 @racketblock[
 (code:comment "Add conference logos to the front and end of a video.")
 (define (add-bookend {n} [main-talk : (Producer n)] #:when (>= n 400) -> (Producer (+ n 600)))
-  (playlist begin-clip
-            @fade-transition[#:length 200]
+  (playlist begin-clip @fade-transition[#:length 200]
 	    main-talk
-	    @fade-transition[#:length 200]
-	    end-clip)
+	    @fade-transition[#:length 200] end-clip)
   (define begin-clip @image["logo.png" #:length 500])
-  (define end-clip @image["logo.png" #:length 500]))]
+  (define end-clip @image["logo.png" #:length 500]))]))
 @;
 The @racket[add-bookend] function specifies with a @racket[#:when] keyword that
 its input must be a producer of at least 400 frames because it uses two

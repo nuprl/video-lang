@@ -2,6 +2,7 @@
 
 @require[scriblib/footnote
          scriblib/figure
+         (except-in scribble/manual cite)
          "pictures.rkt"
          "bib.rkt"
          "utils.rkt"]
@@ -14,9 +15,7 @@ finally creates a YouTube channel for the whole conference.  When he
 creates the video clips, he combines a feed of the presenter with the
 presenter's screen, the sound feed for the speaker, and yet another one for
 audience questions. Additionally, Diatchki must add a start and end
-sequence to each video plus various watermarks throughout. Composing these
-feeds means overlaying them in such a manner that the result appears to be
-a holistic production from the perspective of the viewer.
+sequence to each video plus various watermarks throughout.
 
 Once one video is put together, the same process must be
 repeated for the next conference talk and the next and so
@@ -30,7 +29,7 @@ community is well equipped to create one.}
 @; embedded in Racket@cite[plt-tr1]
 
 The problem cries out for a declarative language, especially
-because the state of the art for video editors suggests (see
+because the state of the art for video editing suggests (see
 @secref["background"]) that professionals in this domain already think
 ``functionally.'' To wit, professionals speak of ``non-linear video
 editing'' (NLVE) to highlight the idea that the process is

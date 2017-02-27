@@ -53,10 +53,7 @@ work.  The entire editor is implemented in less than 800 lines of code. Of
 this, approximately 700 lines are for the graphical editor itself, and 50
 are for the integration with Video. These lines are not counted in the 2,400
 lines for Video's implementation. The code implementing these NLVE widgets
-is plain Racket code and is not interesting from a DSL creation
-perspective. We therefore omit details on the implementation.@note{The
-reader may wish to check the manual for DrRacket@cite[plt-tr2]
-to understand how the embedding of editors works.}
+is plain Racket code and therefore we omit details of the implementation.
 
 @figure["playlist-sample" @list{Slide reconstruction using magic numbers (left) and a NLVE widget (right)}]{
 @(split-minipage
