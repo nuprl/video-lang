@@ -36,8 +36,8 @@ features to match the semantics of the new domain.
 
 Adding and removing features is simple, because a language
 implementation is a module like any other module in Racket.
-Language developer create a module that defines the new
-features, export those features, and do not export unwanted
+A language developer creates a module that defines the new
+features, exports those features, and does not export unwanted
 ones. They do so in the same manner as a programmer who 
 augments the functionality of a library via a wrapper
 module. In contrast, modifying existing features requires a
@@ -65,7 +65,7 @@ not like assignment statements, and at Clojure conferences programmers who
 admit to their use (via Java) are booed on stage.@note{Clojure has the largest, most
 successful community of commercial functional programmers. One of the
 authors witnessed this booing at a recent Clojure conference.} So, imagine
-create a language like Racket that logs a boo-warning of any use of
+creating a language like Racket that logs a boo-warning of any use of
 @racket[set], Racket's variable reassignment form. The @racket[set!] provided
 by @racketmodname[racket/base] provides the functionality for reassignment,
 while @racket[log-warning] from the same language provides the logging
@@ -127,7 +127,7 @@ application. Here is what the complete elaboration process looks like:
 The curious reader may wish to step through the elaboration via DrRacket's
 syntax debugger@cite[culpepper-scp].
 
-Video's implementation consists of three major components account for
+Video's implementation consists of three major components and accounts for
 approximately 2,400 lines of code: a syntax, a run-time library, and a
 rendering layer. Of the code, about 90 lines are specific to the syntax and
 350 lines define the video-specific primitives the language uses. The
@@ -143,7 +143,7 @@ implementation of the renderers.
 The syntax implementation of Video uses two of Racket's interposition
 points, namely @racket[#%module-begin] and @racket[#%plain-lambda]. These
 points define the lexical scope of modules and functions. As with
-@racket[#%app], using these forms enables language developer to
+@racket[#%app], using these forms enables language developers to
 simultaneously reuse Racket syntax and re-interpret it. 
 
 Similar to @racket[#%app], @racket[#%module-begin] gets

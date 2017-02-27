@@ -161,7 +161,7 @@ one. Video scripts use this binding form to build up large objects from the insi
 out using definition chaining. 
 
 The rest of the syntax in this figure is video-specific and explained in
-the remaining subsections. The latter use the @code{conference-talk} function
+the remaining subsections. The latter uses the @code{conference-talk} function
 as an example to motivate essential Video forms.
 
 @(define *line-no 0)
@@ -251,7 +251,7 @@ provides two main ways for combining them:
 playlists play clips in sequence, while multitracks play
 clips in parallel.
 
-The playlist is the simpler of the two compositing form.
+The playlist is the simpler of the two compositing forms.
 Playlists are syntactically similar to Racket lists. Any producer
 can be put in a playlist including another playlist. Each
 clip in the playlist plays in succession. Frequently, video
