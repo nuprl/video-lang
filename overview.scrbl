@@ -151,9 +151,9 @@ Video modules are first-order entities that can be compiled separately,
 while functions are actually first-class values. 
 
 Take a second look at the implementation for @racket[conference-talk],
-shown in @figure-ref["video-functions"]. Lines 1--3 shows the function
+shown in @figure-ref["video-functions"]. Lines 1--4 shows the function
 header.  The rest of the code describes the function body (lines
-4--21). Functions in Video are declarative; in particular, line 4 is the
+5--23). Functions in Video are declarative; in particular, line 5 is the
 producer returned by this function. The function definition also introduces
 the @racket[define*] syntax. Rather than creating a recursive function definition,
 @racket[define*] replaces any binding with that name with a new
@@ -179,24 +179,24 @@ video
 @#,line-no[] (code:comment "Describes an edited conference video with appropriate feeds")
 @#,line-no[] (code:comment "Producer Producer Producer Positive-Integer -> Producer")
 @#,line-no[] (define (conference-talk video slides audio offset)
-@#,line-no[]   (multitrack _ clean-audio)
+@#,line-no[]   (multitrack clean-video clean-audio)
 @#,line-no[]   (code:comment "where")
 @#,line-no[]   (define clean-audio (playlist (blank offset)
 @#,line-no[]                                 (attach-filter audio
 @#,line-no[]                                                (envelope-filter 50 #:direction 'in)
 @#,line-no[]                                                (envelope-filter 50 #:direction 'out))))
-@#,line-no[]  (define* _ (multitrack (blank #f)
-@#,line-no[]                         (composite-transition 0 0 1/4 1/4)
-@#,line-no[]                         slides
-@#,line-no[]                         (composite-transition 1/4 0 3/4 1)
-@#,line-no[]                         video
-@#,line-no[]                         (composite-transition 0 1/4 1/4 3/4)
-@#,line-no[]                         (image "logo.png" #:length (producer-length talk))))
-@#,line-no[]  (define* _ (playlist (image "splash.png" #:length 100)
-@#,line-no[]                       (fade-transition #:length 50)
-@#,line-no[]                       _
-@#,line-no[]                       (fade-transition #:length 50)
-@#,line-no[]                       (image "splash.png" #:length 100))))]}
+@#,line-no[] (define spliced-video (multitrack (blank #f)
+@#,line-no[]                                   (composite-transition 0 0 1/4 1/4)
+@#,line-no[]                                   slides
+@#,line-no[]                                   (composite-transition 1/4 0 3/4 1)
+@#,line-no[]                                   video
+@#,line-no[]                                   (composite-transition 0 1/4 1/4 3/4)
+@#,line-no[]                                   (image "logo.png" #:length (producer-length talk))))
+@#,line-no[] (define clean-video (playlist (image "splash.png" #:length 100)
+@#,line-no[]                               (fade-transition #:length 50)
+@#,line-no[]                               spliced-video
+@#,line-no[]                               (fade-transition #:length 50)
+@#,line-no[]                               (image "splash.png" #:length 100))))]}
 
 @; -----------------------------------------------------------------------------
 @section[#:tag "overview-simple"]{Producers}
