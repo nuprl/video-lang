@@ -320,7 +320,7 @@ Video term @racket[(untyped-video:λ (x- ...) e-)] along with its type
 @racket[(∀ (n ...) (→ τ ... τ_out #:when (and C new-Cs)))]. In Turnstile, types
 are represented using the same syntax structures as terms.}
 
-@exact{\vspace{0.3cm}}
+@exact{\vspace{0.4cm}}
 
 The second part of @figure-ref{type-checking-macros} presents Typed Video's
 function application rule. It naturally interposes on Racket's
@@ -365,7 +365,7 @@ Turnstile uses a standard subsumption rule by default.}
 @with-linelabel{The generated code consists of an untyped Video term along
 with its computed type.} 
 
-@exact{\vspace{0.3cm}}
+@exact{\vspace{0.4cm}}
 
 The rest of the implementation is similar. For example, implementing
 polymorphism is straightforward because Turnstile reuses Racket's knowledge
