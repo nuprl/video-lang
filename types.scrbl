@@ -271,6 +271,7 @@ Next we briefly explain each line of the @racket[λ] definition:
 @(define (inc-line) (current-line (add1 (current-line))))
 @(define (linelabel x . rst)
    (apply para
+          @exact{\vspace{0.2cm}}
      (noindent)
      (bold "line ") (bold (number->string x)) ": " rst))
 @(define (with-linelabel . rst)
@@ -319,6 +320,8 @@ Video term @racket[(untyped-video:λ (x- ...) e-)] along with its type
 @racket[(∀ (n ...) (→ τ ... τ_out #:when (and C new-Cs)))]. In Turnstile, types
 are represented using the same syntax structures as terms.}
 
+@exact{\vspace{0.3cm}}
+
 The second part of @figure-ref{type-checking-macros} presents Typed Video's
 function application rule. It naturally interposes on Racket's
 function application hook, @racket[#%app], via untyped Video's function
@@ -362,9 +365,12 @@ Turnstile uses a standard subsumption rule by default.}
 @with-linelabel{The generated code consists of an untyped Video term along
 with its computed type.} 
 
+@exact{\vspace{0.3cm}}
+
 The rest of the implementation is similar. For example, implementing
 polymorphism is straightforward because Turnstile reuses Racket's knowledge
 of a program's binding structure to automatically handle naming. Further,
 the ``as macros'' approach facilitates implementation of rules for both
 terms and types, and thus the implementation type-level computations also
 resembles the rules in @figure-ref{type-checking-macros}.
+
