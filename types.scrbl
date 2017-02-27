@@ -233,8 +233,8 @@ to construct the output of the type-checking pass.
 
 @figure["type-checking-macros" @list{Type-checking vis syntax transformers}]{
 @racketmod[
-turnstile 
-@#,line-no[]
+turnstile
+
 @#,line-no[](require (prefix-in untyped-video: video)) ; imports untyped Video identifiers with a prefix
 @#,line-no[](provide λ #%app) ; exports Typed Video identifiers
 @#,line-no[]
@@ -277,7 +277,7 @@ Next we briefly explain each line of the @racket[λ] definition:
 @(define (with-linelabel . rst)
    (begin0 (apply linelabel (current-line) rst) (inc-line)))
 
-@(current-line 5)
+@(current-line 4)
 
 @with-linelabel{The type-checking transformer's input must match pattern
 @racket[(λ {n ...} ([x : τ] ... #:when C) e)], which binds pattern variables

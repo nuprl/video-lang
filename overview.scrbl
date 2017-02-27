@@ -151,9 +151,9 @@ Video modules are first-order entities that can be compiled separately,
 while functions are actually first-class values. 
 
 Take a second look at the implementation for @racket[conference-talk],
-shown in @figure-ref["video-functions"]. Line 1-3 shows the function
+shown in @figure-ref["video-functions"]. Lines 1--3 shows the function
 header.  The rest of the code describes the function body (lines
-4-21). Functions in Video are declarative; in particular, line 4 is the
+4--21). Functions in Video are declarative; in particular, line 4 is the
 producer returned by this function. The function definition also introduces
 the @racket[define*] syntax. Rather than creating a recursive function definition,
 @racket[define*] replaces any binding with that name with a new

@@ -154,7 +154,7 @@ the re-implementation of @racket[#%module-begin] lifts definitions to the
 beginning of the module and collects the remaining expressions into a
 playlist. 
 
-@(define *line-no 1)
+@(define *line-no 0)
 @(define (line-no)
    (set! *line-no  (+ *line-no 1))
    (define line-no (format (if (< *line-no 10) "0~a" "~a") *line-no))
@@ -164,7 +164,7 @@ playlist.
 @racketmod[
 #:escape L
 racket/base
-(L @line-no[]) 
+
 (L @line-no[])   (provide (rename-out [#%video-module-begin module-begin])
 (L @line-no[])            (except-out #%module-begin racket/base))
 (L @line-no[])  
@@ -195,10 +195,10 @@ racket/base
 @racket[syntax-parse] language@cite[fortifying-jfp], a vast improvement over
 Kohlbecker et al's Scheme macros@cite[kffd:hygiene kw:mbe]. As
 before, the transformer is defined with a different name,
-@racket[#%video-module-begin] (line 6), and is renamed on
-export (line 3). The implementation of
+@racket[#%video-module-begin] (line 4), and is renamed on
+export (line 1). The implementation of
 @racket[#%video-module-begin] dispatches to
-@racket[video-begin] (line 9), the workhorse of the module. This auxiliary syntax
+@racket[video-begin] (line 7), the workhorse of the module. This auxiliary syntax
 transformer consumes four pieces: an identifier (@racket[vid]), a piece of
 @racket[code] formulated in terms of the identifier, a list of expressions,
 and the module's body, which is represented as a potentially empty sequence
@@ -206,35 +206,35 @@ of expressions. In the case of @racket[#%video-module-begin], the four
 pieces are @racket[vid], @racket[(provide vid)], @racket[()], and the module
 body. 
 
-The @racket[video-begin] syntax transformer (lines 11--24) is responsible
+The @racket[video-begin] syntax transformer (lines 9--22) is responsible
 for lifting definitions to the beginning of the module body and
 accumulating expressions into a playlist. The definition for
-@racket[video-begin] uses pattern matching again. Lines 13 and 17 specify
+@racket[video-begin] uses pattern matching again. Lines 11 and 15 specify
 the two pattern cases, one for when the module body is
 empty and another one that handles a non-empty sequence of body
 expressions:
 @;
 @itemlist[
 
-@item{Once @racket[video-begin] has traversed every piece of syntax (line 13), 
+@item{Once @racket[video-begin] has traversed every piece of syntax (line 11), 
 @racket[exprs] contains all of the original module body's expressions in
-reverse order. The generated output (lines 14-16) defines the
+reverse order. The generated output (lines 12-14) defines the
 given @racket[vid] to stand for the list of expressions
 bundled as a playlist.  The last piece of the @racket[begin] block is
 @racket[code].}
 
 @item{In the second case, the transformer expands the first term
-up to the point where it can decide whether it is a definition (line 18).  
+up to the point where it can decide whether it is a definition (line 16).  
 Next, the transformer uses @racket[syntax-parse] to  check whether the
-elaborated code is a syntax list (lines 20 and 23) with a recognized
-identifier in the first position (lines 21-22), e.g., @racket[define] and
+elaborated code is a syntax list (lines 18 and 20) with a recognized
+identifier in the first position (lines 18--19), e.g., @racket[define] and
 @racket[provide].  
 
 If so, the transformer lifts the first term out of the @racket[video-begin]
-and recursively calls itself without the newly lifted expression (line 22).
+and recursively calls itself without the newly lifted expression (line 20).
 
 Otherwise, it is an expression and gets collected into the @racket[exprs]
-collection (line 24).}
+collection (line 22).}
 
 ]
 The astute reader may wonder about the generated @racket[begin] blocks. As
