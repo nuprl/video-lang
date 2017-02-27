@@ -48,7 +48,7 @@
   (make-bib
     #:author (authors "Eli Barzilay" "Dimitry Orlovsky")
     #:title "Foreign Interface for PLT Scheme"
-    #:location (proceedings-location "Scheme and Funcational Programming")
+    #:location (proceedings-location "Workshop on Scheme and Funcational Programming")
     #:date 2004))
 
 (define culpepper-scp

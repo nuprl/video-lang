@@ -121,9 +121,9 @@
                            syntax-parse
                            racket)]
            [acc (pin-arrow-line 8 acc syntax-parse cb-find racket ct-find
-                                #:x-adjust-label 20 #:label builds-on)]
+                                #:x-adjust-label 25 #:label builds-on)]
            [acc (pin-arrow-line 8 acc video-ffi cb-find syntax-parse (offset lt-find -5)
-                                #:x-adjust-label 20 #:label builds-on)]
+                                #:x-adjust-label 25 #:label builds-on)]
            [acc (pin-arrow-line 8 acc turnstyle cb-find syntax-parse (offset rt-find 5)
                                 #:x-adjust-label -40 #:label builds-on)]
            [acc (pin-arrow-line 8 acc video-ffi lc-find racket lc-find
@@ -133,7 +133,7 @@
                                 #:x-adjust-label 100 #:label builds-on
                                 #:start-angle 0 #:end-angle pi #:start-pull 1/3 #:end-pull 2/3)]
            [acc (pin-arrow-line 8 acc video cb-find video-ffi ct-find
-                                #:x-adjust-label 20 #:label builds-on)]
+                                #:x-adjust-label 25 #:label builds-on)]
            [acc (pin-arrow-line 8 acc typed-video cb-find turnstyle ct-find
                                 #:x-adjust-label -40 #:label builds-on)]
            [acc (pin-arrow-line 8 acc typed-video lc-find video rc-find

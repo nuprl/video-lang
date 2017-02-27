@@ -30,7 +30,7 @@ community is well equipped to create one.}
 @; embedded in Racket@cite[plt-tr1]
 
 The problem cries out for a declarative language, especially
-because the state of the art of video editors suggests (see
+because the state of the art for video editors suggests (see
 @secref["background"]) that professionals in this domain already think
 ``functionally.'' To wit, professionals speak of ``non-linear video
 editing'' (NLVE) to highlight the idea that the process is
