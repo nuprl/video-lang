@@ -62,7 +62,7 @@ Racket is the host of this multi-lingual paradise, and Video is a poetic
  the scripting language, whose core provides nothing but functions and
  variables and list comprehension and similar linguistic features.
 
-Similarly, a linguistic gap shows up for implementation of Typed Video, an
+Similarly, a linguistic gap shows up for the implementation of Typed Video, an
  extension of Video. Here the domain expert is a type-system designer, who
  uses type-checking rules to design type systems. Once again, the gap between
  an ordinary functional language and this language of type-system designers

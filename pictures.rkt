@@ -107,7 +107,7 @@
     (define syntax-parse (cc-superimpose (rectangle 200 30) (t "Syntax Parse")))
     (define video-ffi (cc-superimpose (rectangle 90 30) (t "Video FFI")))
     (define video (cc-superimpose (rectangle 90 30) (t "Video")))
-    (define turnstyle (cc-superimpose (rectangle 90 30) (t "Turnstyle")))
+    (define turnstyle (cc-superimpose (rectangle 90 30) (t "Turnstile")))
     (define typed-video (cc-superimpose (rectangle 90 30) (t "Typed Video")))
     (define offset
       (λ (rt-find delta-w)
