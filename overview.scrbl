@@ -86,7 +86,7 @@ Video module and to incorporate it into a larger video.
 @Figure-ref{video-script} displays a simple Video script. It consists of five
 expressions, each describing a piece of a video clip. Right below the third
 part of the video description, it also contains two definitions, which
-introduce one name each so that the preceding @tt{multitrack} description
+introduce one name each so that the preceding @code{multitrack} description
 does not become too deeply nested. When the renderer turns this script into
 an actual video, it turns the five pieces into sequence of images, taking
 into account the transitions between the first and second fragment and the
@@ -116,7 +116,7 @@ the audio processing, and create a suitable library.
 @Figure-ref["video-example"] shows what more or less the same script looks
 like after a Video programmer has encapsulated an abstraction over the
 script in @figure-ref{video-script} as a utility library. This program use
-the imported @tt{conference-talk} function to combine a recording of the
+the imported @code{conference-talk} function to combine a recording of the
 speaker, a capture of the slides, and the audio. It even begins and ends
 the video with the conference logo.  As mentioned, the first line of the
 program specifies that this module is written in the Video language. Next,
@@ -146,7 +146,7 @@ scoping rules and assigns different meaning. Function and module scope are
 similar in Video. In both cases, the definitions are valid in the entire
 scope---that is, the entire module or the entire function body.  The
 remaining expressions describe a video playlist. The semantic difference is
-that modules @tt{provide} a video, while functions return one. Furthermore,
+that modules @code{provide} a video, while functions return one. Furthermore,
 Video modules are first-order entities that can be compiled separately,
 while functions are actually first-class values. 
 
@@ -161,7 +161,7 @@ one. Video scripts use this binding form to build up large objects from the insi
 out using definition chaining. 
 
 The rest of the syntax in this figure is video-specific and explained in
-the remaining subsections. The latter use the @tt{conference-talk} function
+the remaining subsections. The latter use the @code{conference-talk} function
 as an example to motivate essential Video forms.
 
 @(define *line-no 0)

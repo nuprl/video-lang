@@ -30,9 +30,9 @@ related purpose, a language module provides the constructs of a programming
 language.
 
 In Racket, every module starts with a one-line language specification. For
-example, the specification @tt{#lang racket/base}---pronounced ``hash lang
+example, the specification @code{#lang racket/base}---pronounced ``hash lang
 racket base''---tells Racket and a potential reader that the module is
-written in the @tt{racket/base} language. Roughly speaking, the specified
+written in the @code{racket/base} language. Roughly speaking, the specified
 language is the first import into the module. From an implementation
 perspective, the language specification points to a file that provides a
 language, approximately speaking, a suite of linguistic features and

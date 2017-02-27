@@ -161,11 +161,11 @@ lengths in their programs and thus it is easy to lift this information to the
 type-level. For example, @figure-ref{type-rules} presents, roughly, a few rules
 for creating and consuming producers.  The Color-n rule lifts the specified
 length to the expression's type. In the absence of a length argument, as in the
-Color rule, the expression has type @tt{Producer}, which is syntactic sugar for
-@tt{(Producer ∞)}. The Clip rule says that if the given file @tt{f} on disk
-points to a video of length @tt{n},@note{Obviously, the soundness of our type
+Color rule, the expression has type @code{Producer}, which is syntactic sugar for
+@code{(Producer ∞)}. The Clip rule says that if the given file @tt{f} on disk
+points to a video of length @code{n},@note{Obviously, the soundness of our type
 system is now contingent on the correctness of this system call.}  then an
-expression @tt{(clip f)} has type @tt{(Producer n)}. The Playlist rule shows
+expression @code{(clip f)} has type @tt{(Producer n)}. The Playlist rule shows
 how producer lengths may be combined. Specifically, a @racket[playlist] appends
 producers together and thus their lengths are summed. If playlists interleave
 transitions between producers, the lengths of the transitions are subtracted
@@ -189,7 +189,7 @@ negative.
 }
 
 The Playlist rule uses Typed Video's subtyping relation. Here is the subtyping
-rule for the @tt{Producer} type:
+rule for the @code{Producer} type:
 
 @centered[@inferrule["m >= n"]{(Producer m) <: (Producer n)}]
 
@@ -197,12 +197,12 @@ rule for the @tt{Producer} type:
 acceptable to supply a producer that is longer than expected but not shorter.
 
 In addition to requiring non-negative video lengths, Typed Video imposes
-additional restrictions on the terms that may appear in a @tt{Producer}
+additional restrictions on the terms that may appear in a @code{Producer}
 type. For example, application of arbitrary functions is disallowed to prevent
 non-termination of type checking; only addition, subtraction, and a few Video
-primitives are supported, which simplifies type checking. If the @tt{Producer}
+primitives are supported, which simplifies type checking. If the @code{Producer}
 type constructor is applied to an unsupported term, the type defaults to a
-@tt{Producer} of infinite length. Similar restrictions are imposed on
+@code{Producer} of infinite length. Similar restrictions are imposed on
 side-conditions. Despite these restrictions, Typed Video works well in practice
 and can type check all our example programs, includnig those for the RacketCon
 2016 video proceedings.
