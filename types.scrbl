@@ -156,22 +156,24 @@ While Typed Video utilizes only existing type system ideas, it is nevertheless
 instructive to inspect a few of its rules before we explain how to turn them
 into a language implementation.
 
+@(define (sc str) (elem str #:style (style "textsc" '(exact-chars))))
+
 As previously mentioned, Video programmers already specify explicit video
 lengths in their programs and thus it is easy to lift this information to the
 type-level. For example, @figure-ref{type-rules} presents, roughly, a few rules
-for creating and consuming producers.  The Color-n rule lifts the specified
-length to the expression's type. In the absence of a length argument, as in the
-Color rule, the expression has type @code{Producer}, which is syntactic sugar for
-@code{(Producer ∞)}. The Clip rule says that if the given file @tt{f} on disk
-points to a video of length @code{n},@note{Obviously, the soundness of our type
-system is now contingent on the correctness of this system call.}  then an
-expression @code{(clip f)} has type @tt{(Producer n)}. The Playlist rule shows
-how producer lengths may be combined. Specifically, a @racket[playlist] appends
-producers together and thus their lengths are summed. If playlists interleave
-transitions between producers, the lengths of the transitions are subtracted
-from the total because each transition results in an overlapping of
-producers. A type error is signaled if the computed length of a producer is
-negative.
+for creating and consuming producers.  The @sc{Color-n} rule lifts the
+specified length to the expression's type. In the absence of a length argument,
+as in the @sc{Color} rule, the expression has type @code{Producer}, which is
+syntactic sugar for @code{(Producer ∞)}. The @sc{Clip} rule says that if the
+given file @tt{f} on disk points to a video of length @code{n},@note{Obviously,
+the soundness of our type system is now contingent on the correctness of this
+system call.} then an expression @code{(clip f)} has type @tt{(Producer
+n)}. The @sc{Playlist} rule shows how producer lengths may be
+combined. Specifically, a @racket[playlist] appends producers together and thus
+their lengths are summed. If playlists interleave transitions between
+producers, the lengths of the transitions are subtracted from the total because
+each transition results in an overlapping of producers. A type error is
+signaled if the computed length of a producer is negative.
 
 @figure["type-rules" @list{A few type rules for Typed Video}]{
 @centered[
@@ -199,12 +201,12 @@ acceptable to supply a producer that is longer than expected but not shorter.
 In addition to requiring non-negative video lengths, Typed Video imposes
 additional restrictions on the terms that may appear in a @code{Producer}
 type. For example, application of arbitrary functions is disallowed to prevent
-non-termination of type checking; only addition, subtraction, and a few Video
-primitives are supported, which simplifies type checking. If the @code{Producer}
-type constructor is applied to an unsupported term, the type defaults to a
-@code{Producer} of infinite length. Similar restrictions are imposed on
+non-termination; only addition, subtraction, and a few Video primitives are
+supported, which simplifies type checking. If the @code{Producer} type
+constructor is applied to an unsupported natural-number term, the type defaults
+to a @code{Producer} of infinite length. Similar restrictions are imposed on
 side-conditions. Despite these restrictions, Typed Video works well in practice
-and can type check all our example programs, includnig those for the RacketCon
+and can type check all our example programs, including those for the RacketCon
 2016 video proceedings.
 
 @; -----------------------------------------------------------------------------
@@ -244,8 +246,8 @@ turnstile
 @#,line-no[]
 @#,line-no[](define-syntax/typecheck (#%app e_fn e_arg ...) ≫ 
 @#,line-no[]   [⊢ e_fn ≫ e_fn- ⇒ (∀ Xs (→ τ_inX ... τ_outX #:when CX))]
-@#,line-no[]   #:with τs (solve Xs (τ_inX ...) (e_arg ...))
-@#,line-no[]   #:with (τ_in ... τ_out C) (inst τs Xs (τ_inX ... τ_outX CX))
+@#,line-no[]   #:with solved-τs (solve Xs (τ_inX ...) (e_arg ...))
+@#,line-no[]   #:with (τ_in ... τ_out C) (inst solved-τs Xs (τ_inX ... τ_outX CX))
 @#,line-no[]   #:fail-unless (not (false? C)) "failed side-condition"
 @#,line-no[]   #:unless (boolean? C) (add-C C)
 @#,line-no[]   [⊢ e_arg ≫ e_arg- ⇐ τ_in] ...
@@ -259,7 +261,7 @@ et al. for creating Typed DSLs. This DSL-generating-DSL uses a concise,
 bidirectional type-judgement-like syntax, as seen in
 @figure-ref{type-checking-macros}'s @racket[define-syntax/typecheck]
 rules. These rules define syntax transformers that incorporate type checking as
-part of syntax elaboration. Interleaving type checking and transformation in
+part of syntax elaboration. Interleaving type checking and elaboration in
 this manner not only simplifies implementation of the type system, but also
 enables creating true abstractions on top of the host language.
 
@@ -277,8 +279,8 @@ Next we briefly explain each line of the @racket[λ] definition:
 @(current-line 5)
 
 @with-linelabel{The type-checking transformer's input must match pattern
-@racket[(λ {n} ([x : τ] ... #:when C) e)], which binds pattern variables
-@racket[n] (the type variable), @racket[x] (the λ parameters), @racket[τ] (the
+@racket[(λ {n ...} ([x : τ] ... #:when C) e)], which binds pattern variables
+@racket[n] (the type variables), @racket[x] (the λ parameters), @racket[τ] (the
 type annotations), @racket[C] (a side-condition), and @racket[e] (the lambda
 body).}
 
@@ -299,7 +301,7 @@ the context of the free variables. Instead of propagating a type environment,
 Turnstile reuses Racket's lexical scoping to implement the type
 environment. This re-use greatly enhances the compositionality of languages
 and reduces effort so that a programmer gets away with specifying only new
-environment bindings. Specifically, the premise uses two type environments, one
+environment bindings. Specifically, the first premise uses two type environments, one
 each for the type variables and lambda parameters, respectively, where the
 latter may contain references to the former.}
 
@@ -310,7 +312,7 @@ inputs. Turnstile allows specifying propagation of not just types, but
 arbitrary metadata on the program tree, and we use this mechanism to compute
 the numeric side-conditions.}
 
-@with-linelabel{This line separates the premises from the conslusion.}
+@with-linelabel{These dashes separate the premises from the conslusion.}
 
 @with-linelabel{The conclusion specifies the transformer's outputs: an untyped
 Video term @racket[(untyped-video:λ (x- ...) e-)] along with its type
@@ -334,7 +336,7 @@ Xs (→ τ_inX ... τ_outX #:when CX))], which is universally quantified over ty
 variables @racket[Xs] and has side-condition @racket[CX].}
 
 @with-linelabel{The transformer peforms local type inference, computing the
-concrete types @racket[τs] at which to instantiate the polymorphic
+concrete types @racket[solved-τs] at which to instantiate the polymorphic
 function. This call to @racket[solve] may use any constraint solver.}
 
 @with-linelabel{Next, the polymorphic function type is instantiated to concrete
