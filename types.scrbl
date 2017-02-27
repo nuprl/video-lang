@@ -2,6 +2,7 @@
 
 @title[#:tag "types"]{The Bodyguard}
 @(require (except-in scribble/manual cite)
+	  (only-in "utils.rkt" exact)
           scriblib/figure scriblib/footnote
           scribble/core
           racket/list "bib.rkt")
@@ -57,8 +58,8 @@ of producers and transitions are indexed by natural-number terms
 corresponding to their lengths. The rest of the type system resembles a
 simplified version of Xi and Pfenning's ATS@cite[ats-pldi].
 
-Such a type system does not impose too much of a burden in our domain of video
-editing. Indeed, it works well in practice because Video programmers are
+Such a type system does not impose too much of a burden in our domain.
+Indeed, it works well in practice because Video programmers are
 already accustomed to specifying explicit length information in their
 programs. For example, the snippets from @secref{video-data} produce static
 type error messages in Typed Video. In general, the type system ensures that
@@ -95,7 +96,7 @@ opening and ending sequence to a speaker's video:
 @;
 The @racket[add-bookend] function specifies with a @racket[#:when] keyword that
 its input must be a producer of at least 400 frames because it uses two
-200-frame transitions. Moreover, the result type says that the output adds 600
+200-frame transitions. The result type says that the output adds 600
 frames to the input. Here the additional frames come from the added beginning
 and end segments, minus the transition frames.
 
@@ -105,10 +106,10 @@ this propagation:
 
 @racketblock[
 (define (conference-talk {n} [video  : (Producer n)]
-	                          [slides : (Producer n)]
-				  [audio  : (Producer n)]
-				  [offset : Int]
-				  -> (Producer (+ n 600)))
+	                     [slides : (Producer n)]
+			     [audio  : (Producer n)]
+			     [offset : Int]
+           -> (Producer (+ n 600)))
   @code:comment{...}
   (define p1 (add-slides video slides))
   (define p2 (add-bookend p1))
@@ -172,8 +173,7 @@ from the total because each transition results in an overlapping of
 producers. A type error is signaled if the computed length of a producer is
 negative.
 
-@figure["type-rules" "A few type rules for Typed Video"
-
+@figure["type-rules" @list{A few type rules for Typed Video}]{
 @centered[
 @inferrule[#:name "color-n" "e : String"]{(color e \#:length n) : (Producer n)}
 @hspace{64}
@@ -184,7 +184,7 @@ negative.
 @inferrule[#:name "clip" "f : File" "|f| = n"]{(clip f) : (Producer n)}
 @hspace{24}
 @inferrule[#:name "playlist" "p/t <: (Producer n) \\textrm{or} p/t <: (Transition m)" "..."]{(playlist p/t ...) : (Producer (- (+ n ...) (+ m ...)))}]
-]
+}
 
 The Playlist rule uses Typed Video's subtyping relation. Here is the subtyping
 rule for the @tt{Producer} type:
@@ -221,30 +221,36 @@ the figure imports and prefixes the identifiers from untyped Video, i.e., the
 syntactic extensions from @secref{implementation}, which are used, unmodified,
 to construct the output of the type-checking pass.
 
-@figure["type-checking-macros" "Type checking syntax transformer definitions"
-@codeblock[#:line-numbers 1]{
-; implemented with the Turnstile language
-(require (prefix-in untyped-video: video)) ; imports untyped Video identifiers with a prefix
-(provide λ #%app) ; exports Typed Video identifiers
+@(define *line-no 0)
+@(define (line-no)
+   (set! *line-no  (+ *line-no 1))
+   (define line-no (format (if (< *line-no 10) "0~a " "~a ") *line-no))
+   @exact{\tt @line-no})
 
-@;codeblock[#:line-numbers 1]{
-(define-syntax/typecheck (λ {n ...} ([x : τ] ... #:when C) e) ≫
-  [(n ...) ([x ≫ x- : τ] ...) ⊢ e ≫ e- ⇒ τ_out]
-  #:with new-Cs (get-captured-Cs e-)
-  ----------------------------------
-  [⊢ (untyped-video:λ (x- ...) e-) ⇒ (∀ (n ...) (→ τ ... τ_out #:when (and C new-Cs)))])
-
-@;codeblock[#:line-numbers 1]{
-(define-syntax/typecheck (#%app e_fn e_arg ...) ≫ 
-   [⊢ e_fn ≫ e_fn- ⇒ (∀ Xs (→ τ_inX ... τ_outX #:when CX))]
-   #:with τs (solve Xs (τ_inX ...) (e_arg ...))
-   #:with (τ_in ... τ_out C) (inst τs Xs (τ_inX ... τ_outX CX))
-   #:fail-unless (not (false? C)) "failed side-condition"
-   #:unless (boolean? C) (add-C C)
-   [⊢ e_arg ≫ e_arg- ⇐ τ_in] ...
-   ------------------------------
-   [⊢ (untyped-video:#%app e_fn- e_arg- ...) ⇒ τ_out])}
+@figure["type-checking-macros" @list{Type-checking vis syntax transformers}]{
+@racketmod[
+turnstile 
+@#,line-no[]
+@#,line-no[](require (prefix-in untyped-video: video)) ; imports untyped Video identifiers with a prefix
+@#,line-no[](provide λ #%app) ; exports Typed Video identifiers
+@#,line-no[]
+@#,line-no[](define-syntax/typecheck (λ {n ...} ([x : τ] ... #:when C) e) ≫
+@#,line-no[]  [(n ...) ([x ≫ x- : τ] ...) ⊢ e ≫ e- ⇒ τ_out]
+@#,line-no[]  #:with new-Cs (get-captured-Cs e-)
+@#,line-no[]  ----------------------------------
+@#,line-no[]  [⊢ (untyped-video:λ (x- ...) e-) ⇒ (∀ (n ...) (→ τ ... τ_out #:when (and C new-Cs)))])
+@#,line-no[]
+@#,line-no[](define-syntax/typecheck (#%app e_fn e_arg ...) ≫ 
+@#,line-no[]   [⊢ e_fn ≫ e_fn- ⇒ (∀ Xs (→ τ_inX ... τ_outX #:when CX))]
+@#,line-no[]   #:with τs (solve Xs (τ_inX ...) (e_arg ...))
+@#,line-no[]   #:with (τ_in ... τ_out C) (inst τs Xs (τ_inX ... τ_outX CX))
+@#,line-no[]   #:fail-unless (not (false? C)) "failed side-condition"
+@#,line-no[]   #:unless (boolean? C) (add-C C)
+@#,line-no[]   [⊢ e_arg ≫ e_arg- ⇐ τ_in] ...
+@#,line-no[]   ------------------------------
+@#,line-no[]   [⊢ (untyped-video:#%app e_fn- e_arg- ...) ⇒ τ_out])
 ]
+}
 
 We implement our type checker with Turnstile, a Racket DSL introduced by Chang
 et al. for creating Typed DSLs. This DSL-generating-DSL uses a concise,
@@ -272,15 +278,18 @@ Next we briefly explain each line of the @racket[λ] definition:
 @racket[(λ {n} ([x : τ] ... #:when C) e)], which binds pattern variables
 @racket[n] (the type variable), @racket[x] (the λ parameters), @racket[τ] (the
 type annotations), @racket[C] (a side-condition), and @racket[e] (the lambda
-body). Pattern variables may subsequently be used to construct new program
+body).}
+
+@; if the readers don't understand this by now, we're lost
+@;{Pattern variables may be used to construct new program
 fragments, e.g., the outputs of the transformer. An ellipses pattern matches
 zero-or-more of its preceding pattern; any pattern variables in that pattern
-requires ellipses when subsequently used.}
+requires ellipses when used.}
 
 @with-linelabel{Since type checking is interleaved with syntax elaboration,
 Turnstile type judgements are elaboration judgements as well. Specifically, a
 Turnstile judgement @racket[[ctx ⊢ e ≫ e- ⇒ τ]] is read ``in context
-@racket[ctx], @racket[e] elaborates to @racket[e-] and has type @racket[τ]''.
+@racket[ctx], @racket[e] elaborates to @racket[e-] and has type @racket[τ].''
 
 Thus the lambda body @racket[e] elaborates to to @racket[e-], simultaneously
 computing its type @racket[τ_out]. This elaboration and type checking occurs in
@@ -346,13 +355,12 @@ Turnstile uses a standard subsumption rule by default.}
 
 @(inc-line)
 
-@with-linelabel{The output of syntax transformation consists of an untyped
-Video term along with its computed type.}
+@with-linelabel{The generated code consists of an untyped Video term along
+with its computed type.} 
 
-The rest of the type system implementation similarly utilizes the syntax system
-to add the features described earlier in the section. For example, implementing
-polymorphism is straightforward because Turnstile reuses Racket's knowledge of
-a program's binding structure to automatically handle naming. Further, the "as
-macros" approach facilitates implementation of rules for both terms and types,
-and thus the implementation type-level computations also resembles the rules in
-@figure-ref{type-checking-macros}.
+The rest of the implementation is similar. For example, implementing
+polymorphism is straightforward because Turnstile reuses Racket's knowledge
+of a program's binding structure to automatically handle naming. Further,
+the ``as macros'' approach facilitates implementation of rules for both
+terms and types, and thus the implementation type-level computations also
+resembles the rules in @figure-ref{type-checking-macros}.

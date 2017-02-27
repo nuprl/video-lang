@@ -10,12 +10,14 @@ Two main principles guide the Racket Way of creating DSLs@cite[manifesto]:
 @bold{reuse} and @bold{abstraction}.
 
 Reusing existing language components greatly helps DSL @emph{creators}, who are
-unlikely to be programming language researchers. As the old adage goes, "don't
-build languages from scratch"@cite[hudak-dsl]. To aid reuse, Racket allows
+unlikely to be programming language researchers. As the old adage goes, ``don't
+build languages from scratch'' @cite[hudak-dsl]. To aid reuse, Racket allows
 componentwise interposition of every core form.
 
-DSL @emph{users} are even further removed from the PL world, and thus deserve
-proper abstractions, especially on top of reused components. In other words,
+Like all programmers, DSL @emph{users} deserve
+proper abstractions, that is, constructs that do not expose the reused
+components. This is especially true for DSL users who are not members of
+the programming-language research community. In other words,
 host language details should not leak into uses of the DSL, including in error
 messages. Racket's syntactic abstraction capabilities builds on the innovations
 of its Scheme and Lisp roots, but these predecessors never cared about writing
@@ -24,10 +26,11 @@ validation code that clutters the implementation; more commonly, validation is
 omitted, leaving Lisp and Scheme macros that resemble naive rewrite rules that
 do not distinguish the DSL from the host language. Racket helps the creation of
 robust linguistic abstractions with a declarative DSL for writing syntax
-transformers@cite[fortifying-jfp]. Instead of low-level validation code,
+transformers. Instead of low-level validation code,
 programmers write high-level specifications, which is compiled to produce error
 messages in terms of the surface language.
 
+Now contrast this with DSL construction in regular functional programming languages.
 Some researchers@cite[deep-shallow-icfp] have tried to present an alternative
 ``deep'' vs ``shallow'' characterization of DSLs. This view seems to ignore
 reuse and abstraction and thus seems removed from the original purpose of DSLs,

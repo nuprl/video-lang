@@ -16,14 +16,12 @@ that is, the source videos do not degrade in quality due to
 editing.@note{Digital editors achieve this result by
  operating on references to videos, rather than operating on
  the videos themselves.} A NLVE is a graphical tool with a
-@emph{time line} of @emph{tracks}, each lade on top of the
-other. Each track is a composition of video clips, audio
+@emph{time line} of @emph{tracks}. Each track describes a composition of video clips, audio
 clips, and effects playing in sequence. The NLVE @emph{
  renders} these tracks by playing them all simultaneously,
 placing one track on top of the other. Obviously a screen
-displaying the result can only play a single track for
-video;@note{Audio tracks can actually be played together;
- audio editors do this.} by convention this is the last
+displaying the result can play only a single track for
+video;@note{Audio tracks can actually be played together.} by convention this is the last
 or top track. Video editors use effects to @emph{composite}
 tracks together. That is, effects splice two or more tracks
 together so that they appear on the screen at the same time.
@@ -45,8 +43,8 @@ Macros are extremely brittle and frequently break, even
 within a single application, because macro languages do not understand
 the underlying tools. Using a tool's official plug-in
 interface produces reasonably robust scripts but yields a
-plug-in that is tightly coupled with its tool. It can only
-be used in settings where the entire toolchain is present.
+plug-in that is tightly coupled with its tool. It can be
+used only in settings where the entire toolchain is present.
 Blender@cite[essential-blender] for example, is only
 scriptable with a Blender-specific Python interpreter that runs when
 Blender is launched.
@@ -68,7 +66,8 @@ Shotcut@note{@shotcut-url} uses MLT. Second, professionals
 use these frameworks to batch-process videos, particularly
 when interactive development is not desired. While the
 frameworks work well for these use cases, they fall short
-when there is a need to combine interactive and programmatic work flows.
+when there is a need to combine interactive and programmatic work flows,
+as is the case for the creation of conference recordings..
 Studios tend to stick with NLVEs, and use these
 frameworks only sparingly.
 
@@ -76,7 +75,7 @@ Professionals also use domain-specific languages for video
 editing. These DSLs primarily fall into two categories:
 XML-based DSLs and scripting-based DSLs.
 XML DSLs such as MLT XML and the now-deprecated
-SMIL@cite[smil-tr] offer a declarative language for
+SMIL@cite[smil-tr] offer declarative languages for
 processing videos. These languages generally do not have
 functions or any other type of abstraction. Professionals
 tend not to deal with these XML languages directly when
