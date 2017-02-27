@@ -43,7 +43,7 @@ This pearl presents @emph{Video} (@secref["overview"]), a scripting
 language for video production.  Video turns video editing upside
 down. Instead of sitting for hours on end in front of some NLVE GUI, a
 professional can now spend a few minutes in front of an IDE to create a
-Video script and, voilà, a video clip pops out. A Video scrip tis just a
+Video script and, voilà, a video clip pops out. A Video script is just a
 sequence of expressions, which describe fragments of a video clip, and
 definitions, which introduce constants for, and functions on, video
 clips. Running such a script turns this description into suitable
@@ -56,7 +56,7 @@ environment @emph{around} the language. We therefore throw in an IDE
 only because these might be useful for producing video channels, but
 because a real functional pearl deserves this much attention. Thus an
 Agda-trained programmer may add types to Video modules. And better still,
-Video code may include a NLVE widget, which may of course come with
+Video code may include an NLVE widget, which may of course come with
 embedded Video code, which may contain another NLVE widget, ... Did we
 mention turtles yet?@note{See
 @url{en.wikipedia.org/wiki/Turtles_all_the_way_down}, last visited Feb 20,

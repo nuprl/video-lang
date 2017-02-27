@@ -115,22 +115,22 @@ part. Naturally, a Video programmer should abstract over this process, plus
 the audio processing, and create a suitable library.
 @Figure-ref["video-example"] shows what more or less the same script looks
 like after a Video programmer has encapsulated an abstraction over the
-script in @figure-ref{video-script} as a utility library. This program use
+script in @figure-ref{video-script} as a utility library. This program uses
 the imported @code{conference-talk} function to combine a recording of the
 speaker, a capture of the slides, and the audio. It even begins and ends
-the video with the conference logo.  As mentioned, the first line of the
-program specifies that this module is written in the Video language. Next,
-the second line imports the library that defines the
+the video with the conference logo. As mentioned, the first line of the
+program specifies that this module is written in the Video language. The
+second line imports the library that defines the
 @racket[conference-talk] function. The third line produces the video that this
 module describes. Finally, the
 remainder is a sequence of definitions that introduce auxiliary functions
 and constants. 
 
 @Figure-ref{video-functions} shows the essence of the utility library, also
-written as a Video module. Explaining its constructing introduces enough of
+written as a Video module. Explaining its construction introduces enough of
 the Videos primitives and combinators to get a sense of what the rest of
-the language looks like. But first we explain Video's primary linguistic
-mechanisms, modules and functions (@secref["overview-functions"]).  Next,
+the language looks like. First we explain Video's primary linguistic
+mechanisms, modules and functions (@secref["overview-functions"]). Next,
 we describe basic producers (@secref["overview-simple"]): images, clips,
 colors and so on. Then, we discuss the basics of how to combine these
 producers into playlists and multitracks (sections 4.3, 4.5). To make

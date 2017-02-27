@@ -67,7 +67,7 @@ use these frameworks to batch-process videos, particularly
 when interactive development is not desired. While the
 frameworks work well for these use cases, they fall short
 when there is a need to combine interactive and programmatic work flows,
-as is the case for the creation of conference recordings..
+as is the case for the creation of conference recordings.
 Studios tend to stick with NLVEs, and use these
 frameworks only sparingly.
 

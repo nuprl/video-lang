@@ -21,7 +21,7 @@ scripting language with which it is possible to reduce a lot of the
 repetitive work. 
 
 This pearl presents the design of a video production language as an
-illustration of the Racket doctrine, which says that languages belong into
+illustration of the Racket doctrine, which says that languages belong in
 the arsenal of software developers in the same way as type classes and
 functors. Additionally, the pearl explains how Racket's eco-system
 facilitates the addition of a type system. Finally, the pearl includes a

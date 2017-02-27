@@ -23,7 +23,7 @@ solution---at every stage in the development process.
 Philosophically, Racket achieves this ideal with a radical emphasis on
 linguistic reuse@cite[SK-PhD]. Technically, this reuse is enabled via
 Racket's distinctive feature: a modular syntax system@cite[macros-icfp].
-In this system, it is s easy to import a linguistic construct as a
+In this system, it is easy to import a linguistic construct as a
 function; indeed the system blurs the distinction between languages and
 libraries@cite[lal-pldi]. While a library module exports functions with a
 related purpose, a language module provides the constructs of a programming
@@ -73,6 +73,6 @@ problems and solutions efficiently.
 The domain of video editing is a particularly well-suited domain for
 illustrating the above points. While the evolution of the language follows
 the standard path from a veneer for a C library to a full-fledged
-language@cite[fowler], Racke smoothens this path significantly and this
+language@cite[fowler], Racket smooths this path significantly and this
 pearl demonstrates how.  Before we can describe Video and its
 implementation, however, we need to survey the world of editing videos.
