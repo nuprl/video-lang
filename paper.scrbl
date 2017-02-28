@@ -20,7 +20,7 @@
  creation of a relatively simple domain-specific language for
  editing videos. To produce the video proceedings of a
  conference, for example, video professionals traditionally
- use "non-linear" GUI editors to manually edit each talk,
+ use ``non-linear'' GUI editors to manually edit each talk,
  despite the repetitive nature of the process. As it turns
  out, video editing naturally splits the work into a
  declarative phase and an imperative rendering phase at the end. Hence
@@ -38,7 +38,8 @@
  languages.}
 
 @keywords{Domain-Specific Language, Declarative Languages,
- Video Editing, Syntax Elaboration, Language Oriented Design, Movies}
+ Video Editing, Syntax Elaboration, Language Oriented Design,
+ Movies, Integrated Development Environment, Embedded Type Systems}
 
 @include-section{introduction.scrbl}
 
