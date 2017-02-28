@@ -45,7 +45,7 @@ task at hand. For example, the program in
 @secref{overview}, now implemented using NLVE widgets with embedded code
 snippets. 
 
-The Racket eco-system makes it possible to add NLVE support with only a
+The Racket ecosystem makes it possible to add NLVE support with only a
 small amount of code. The editor itself plugs into the DrRacket programming
 environment@cite[drscheme-jfp]. The editor itself is built on top of
 Racket's graphical framework@cite[plt-tr3], which greatly facilitates such

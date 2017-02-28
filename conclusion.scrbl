@@ -28,7 +28,7 @@ Clearly, this alternative world exists because developers can then build
  contains several dozen such languages.
 
 Two critical factors enable this brave new world of language-oriented
- programming in the Racket eco-system. The first one is that developing
+ programming in the Racket ecosystem. The first one is that developing
  languages---@emph{real} languages---is a process without friction. A
  language developer can edit a language implementation in one Emacs buffer,
  save the file, and immediately run a second Emacs buffer with code written
@@ -82,7 +82,7 @@ Finally, all of these languages make extensive use of yet another DSL,
  definition. Furthermore, they know what the error messages must come from
  the form itself, not the result of elaborating an occurrence of the
  form. The language of @racket[syntax-parse] provides all this and more,
- once again allowing the developers to use the language they have in mind
+ once again allowing developers to use the language they have in mind
  instead of just the underlying, raw core language. 
 
 No, Racket by no means solves all problems that come with language-oriented
