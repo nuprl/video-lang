@@ -27,44 +27,6 @@
    (define line-no (format (if (< *line-no 10) "0~a" "~a") *line-no))
    @exact{\tt @line-no})
 
-@figure["video-script" @list{A first Video script}]{
-@;%
-@(begin
-#reader scribble/comment-reader
-@(racketblock
-@#,line-no[] @#,hash-lang[] video
-@#,line-no[]
-@#,line-no[] (image "splash.png" #:length 100)
-@#,line-no[]
-@#,line-no[] (fade-transition #:length 50)
-@#,line-no[]
-@#,line-no[] (multitrack (blank #f)
-@#,line-no[]             (composite-transition 0 0 1/4 1/4)
-@#,line-no[]             slides
-@#,line-no[]             (composite-transition 1/4 0 3/4 1)
-@#,line-no[]             presentation
-@#,line-no[]             (composite-transition 0 1/4 1/4 3/4)
-@#,line-no[]             (image "logo.png" #:length (producer-length talk)))
-@#,line-no[]
-@#,line-no[] (code:comment "where")
-@#,line-no[] (define slides
-@#,line-no[]   (clip "slides05.MTS" #:start 2900 #:end 80000))
-@#,line-no[]
-@#,line-no[] (define presentation
-@#,line-no[]   (playlist (clip "vid01.mp4")
-@#,line-no[]             (clip "vid02.mp4")
-@#,line-no[]             #:start 3900 #:end 36850))
-@#,line-no[]
-@#,line-no[] (fade-transition #:length 50)
-@#,line-no[]
-@#,line-no[] (image "splash.png" #:length 100)
-))
-@;%
- @exact{\vspace{0.3cm}} 
-  @(centered
-   rcon-timeline)
-}
-
 The literature survey suggests that non-linear
 video editing distinctly separates the description of a
 video clip from the rendering action on it. Specifically, an
@@ -80,22 +42,6 @@ presentation in order to make up a complete ICFP channel in a modular fashion.
 And of course, the language must allow the definition and
 use of functions because it is the most common form of
 abstraction.
-
-The Video language gets to the heart of the domain. Each Video program
-is a complete module that intermingles descriptions of video clips and
-auxiliary definitions. It denotes a Racket module that exports a single item: a playlist
-description of the complete video. One way to use a Video module is to
-create a video with a renderer. A different way is to import it into a second
-Video module and to incorporate it into another video. 
-
-@Figure-ref{video-script} displays a simple Video script. It consists of five
-expressions, each describing a piece of a video clip. Right below the third
-part of the video description, it also contains two definitions, which
-introduce one name each so that the preceding @code{multitrack} description
-does not become too deeply nested. When the renderer turns this script into
-an actual video, it turns the five pieces into sequence of images, taking
-into account the transitions between the first and second fragment and the
-fourth and the fifth. 
 
 @(set! *line-no 0)
 @figure["video-example" @list{A Video description of a conference talk}]{
@@ -114,6 +60,22 @@ fourth and the fifth.
  @(centered
    rcon-timeline)
 }
+
+The Video language gets to the heart of the domain. Each Video program
+is a complete module that intermingles descriptions of video clips and
+auxiliary definitions. It denotes a Racket module that exports a single item: a playlist
+description of the complete video. One way to use a Video module is to
+create a video with a renderer. A different way is to import it into a second
+Video module and to incorporate it into another video. 
+
+@Figure-ref{video-script} displays a simple Video script. It consists of five
+expressions, each describing a piece of a video clip. Right below the third
+part of the video description, it also contains two definitions, which
+introduce one name each so that the preceding @code{multitrack} description
+does not become too deeply nested. When the renderer turns this script into
+an actual video, it turns the five pieces into sequence of images, taking
+into account the transitions between the first and second fragment and the
+fourth and the fifth. 
 
 In essence, the script in @figure-ref{video-script} assembles the visual
 part of a simple conference video. What is missing, is the audio

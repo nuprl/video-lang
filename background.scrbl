@@ -2,6 +2,7 @@
 
 @require[scriblib/footnote
          scriblib/figure
+         (except-in scribble/manual cite)
          "pictures.rkt"
          "bib.rkt"
          "utils.rkt"]
@@ -92,3 +93,46 @@ grammars and use a small script for a parser. Finally, they lack many code
 reuse features. AVISynth, for example, allows programmers to
 create simple functions, but lacks control flow constructs
 such as conditional branching.
+
+@(define *line-no 0)
+@(define (line-no)
+   (set! *line-no  (+ *line-no 1))
+   (define line-no (format (if (< *line-no 10) "0~a" "~a") *line-no))
+   @exact{\tt @line-no})
+@figure-here["video-script" @list{A first Video script}]{
+@;%
+@(begin
+#reader scribble/comment-reader
+@(racketblock
+@#,line-no[] @#,hash-lang[] video
+@#,line-no[]
+@#,line-no[] (image "splash.png" #:length 100)
+@#,line-no[]
+@#,line-no[] (fade-transition #:length 50)
+@#,line-no[]
+@#,line-no[] (multitrack (blank #f)
+@#,line-no[]             (composite-transition 0 0 1/4 1/4)
+@#,line-no[]             slides
+@#,line-no[]             (composite-transition 1/4 0 3/4 1)
+@#,line-no[]             presentation
+@#,line-no[]             (composite-transition 0 1/4 1/4 3/4)
+@#,line-no[]             (image "logo.png" #:length (producer-length talk)))
+@#,line-no[]
+@#,line-no[] (code:comment "where")
+@#,line-no[] (define slides
+@#,line-no[]   (clip "slides05.MTS" #:start 2900 #:end 80000))
+@#,line-no[]
+@#,line-no[] (define presentation
+@#,line-no[]   (playlist (clip "vid01.mp4")
+@#,line-no[]             (clip "vid02.mp4")
+@#,line-no[]             #:start 3900 #:end 36850))
+@#,line-no[]
+@#,line-no[] (fade-transition #:length 50)
+@#,line-no[]
+@#,line-no[] (image "splash.png" #:length 100)
+))
+@;%
+ @exact{\vspace{0.3cm}} 
+  @(centered
+   rcon-timeline)
+}
