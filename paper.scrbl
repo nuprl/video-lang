@@ -39,7 +39,7 @@
 
 @keywords{Domain-Specific Language, Declarative Languages,
  Video Editing, Syntax Elaboration, Language Oriented Design,
- Movies, Integrated Development Environment, Embedded Type Systems}
+ Movies, Integrated Development Environment}
 
 @include-section{introduction.scrbl}
 
