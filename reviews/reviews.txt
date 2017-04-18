@@ -1,0 +1,586 @@
+===========================================================================
+                           ICFP 2017 Review #93A
+---------------------------------------------------------------------------
+    Paper #93: Super 8, the Story of Making Movies—A Functional Pearl
+---------------------------------------------------------------------------
+
+                      Overall merit: B. OK paper, but I will not champion
+                                        it
+                         Confidence: Y. I am knowledgeable in this area,
+                                        but not an expert
+
+                         ===== Paper summary =====
+
+This pearl paper illustrates the Racket tower-of-languages philosophy by way of a running example, the Video DSL.
+
+                      ===== Comments to authors =====
+
+I found this to be a fun, instructive, and charmingly written pearl paper that illustrates the Racket tower-of-languages philosophy with a compelling case study, a DSL for creating videos.  The paper begins with the smart observation that video editing can be divided into a descriptive phase and a rendering phase; this observation guides the design of the Video DSL.  The language itself has some cool features and has proven useful for real-world problems.  An especially compelling part of the story is that Video is built on top of a whole hierarchy of DSLs, and that in more than one case, implementing the intermediate DSL and writing just one program in it was faster than using a lower-level language -- a great illustration of the power of the Racket approach.  The paper also contrasts the Racket approach with the "deep"/"shallow" DSL dichotomy in a way that I found enlightening, and it concludes with an inspiring vision for the future of "language-oriented programming", done Racket-style.
+
+Overall, I had two main irritations with the paper:
+
+1. The paper mentions that video creators have "a need to combine interactive and programmatic work flows" (p.4), but it is not clear whether/how Video actually makes this possible.  Firstly, is there any way to get quick, REPL-style feedback about what some part of a video described in Video will look like when rendered, in the way that one could with an NLVE?  (How long do `preview` and `preview-video` take to run?  What if I want to preview just the middle five seconds of my video?)  Secondly, section 7 purports to be about this integration of interactive and programmatic workflows (I guess).  But I'm lost as to how Video actually solves the problem.  The figure 11 example of avoiding "magic numbers" motivates the problem well, but if we want to avoid a list of magic numbers in the code, then at some point some human would have to decide and communicate to the NLVE where each of the slide transitions should go -- perhaps by clicking periodically as the audio plays.  So, how would one do that using Video and Racket?  It seems like one would need to separately fire up an NLVE, create the video there using the usual manual approach, export that video, and finally embed it in a Video program.  It isn't clear what kind of manual NLVE editing it is possible to do from directly within an embedded NLVE widget in Video.  My suggestion is that the authors should either make more clear how Video allows integrated interactive and programmatic workflows, or they should tone down the claim that it does allow such integrated workflows.
+2. The discussion of the type system in section 6 seems a bit half-baked.  It seems as though there is no relationship between the typing rules in figure 8 and the code in figure 9.  Figure 9 seems like a nice illustration of the Chang et al. type-systems-as-macros technique, but it is hard to say how it connects up with what was discussed in the rest of section 6 (e.g., having the type checker reject as ill-typed a program that uses producers that are too short).  The bottom of p.17 says "A type error is signaled if the computed length of a producer is negative", but we do not get to see where this actually gets enforced.  My suggestion is that the authors flesh out section 6 to address these points.
+
+What follows are some questions and a few suggestions for improving the presentation (which is, in general, already quite good, but because this is a pearl paper for which presentation is of great importance, I'm being especially picky):
+
+  * p.2: "boring functional languages...the one true-blue kid on the block, Racket" -- I happen to be a big Racket fan, but even I am not wild about the level of language partisanship here.  Why put readers on the defensive?
+
+  * p.2: "Did we mention turtles yet?" -- I think this is a bit too cutesy.
+
+  * p.3: "plus of course, the ability to supply additional run-time primitives with a new language" -- how is this distinct from "new linguistic constructs" listed above?
+
+  * p.3: "Using a tool's official plug-in...yields a plug-in that is tightly coupled with its tool" -- sure, but isn't Video tightly coupled with Racket?  I suppose Video will still work outside of the DrRacket IDE, though.
+
+  * p.4, figure 1: When a playlist has `#:start` and `#:end` keyword arguments, does that mean start of first clip/end of last clip?  Wouldn't it be clearer to put those on the individual clips?
+
+  * p.5: "The literature survey suggests that..." Whose literature survey?
+
+  * p.5: "What is missing, is the audio part" -- why not include the audio part?  Then figure 2 could be a higher-level version of figure 1.
+
+  * p.6: "The expressions describe a video playlist" -- for clarity, I'd say "top-level expressions" here.
+
+  * p.8: "(possibly implicit) playlists" -- Aha!  Now I understand what was discussed at the start of 4.1.  The paper could use a sentence like: "Every Video module that has top-level expressions implicitly describes a playlist, but one can also explicitly create a playlist with the `playlist` form."
+
+  * p.8: "...shortens the length of the `playlist`" -- Be clear about whether you mean shorter in time, or just shorter in number of clips.
+
+  * p.8: "This example uses `composite-transition`..." -- Isn't "transition" a non-intuitive word for describing putting one producer on top of another and having them run in parallel?
+
+  * p.9: Since multitracks play producers in parallel, what if they're different lengths?  I would imagine they'd start at the same time, but the image on this page makes it look otherwise.
+
+  * p.11: "another DSL, one designed specifically for implementing Video" -- is this referring to the "Video FFI" DSL introduced later?  I think it would be helpful to mention the name of it here.
+
+  * p.13: The first explanation of `syntax-parse` is here, but it first occurs on p.11 (figure 4).  It would be good to explain this when it first occurs for non-Racketeers.
+
+  * p.13: The description beginning with "This auxiliary syntax transformer..." does not seem to quite match up with either of the two patterns in the `syntax-parse` in `video-begin` in Figure 6.  Please clarify.
+
+  * p.13: "The last piece of the `begin` block is `code`."  Huh?
+
+  * p.14: Figure 7 is helpful for understanding what the code in Figure 6 is doing.  It would be great if they could appear on the same page.
+
+  * p.14: "The syntax transformer for function bodies..." -- To what code is this paragraph referring?
+
+  * p.15: "It errors if a bad input or output type passes through this interface." -- I didn't quite follow this.  What would a bad output type be?  Is NULL bad, or do you mean it errors if the result is *neither* a profile object nor NULL?
+
+  * p.16: `cut-producer` appears here for the first time.  Should it have been introduced earlier?
+
+  * p.16: "combining the video of a speaker with slides" -- for clarity, you might want to say "...with a video of slides", to be clear that we are not talking about a handful of PNGs.
+
+  * p.19: "Turnstile reuses Racket's lexical scoping to implement the type environment." I am not sure I understand.  Does this mean that lexical scoping somehow frees us from needing to write down a context in the conclusion of the typing rules?
+
+  * p.19: "elaborating the lambda body `e` may generate additional side conditions, `new-Cs`..." So, `get-captured-Cs` is something provided by Turnstile?  What else from figure 9 is provided by Turnstile?  Looks like `solve` and `inst`, at least?  A sentence clarifying this would be good.
+
+  * p.21, figure 11: It would be easier to understand this figure if the numbers in the NLVE widget on the right were in the same units as 10, 15, 16, 16... on the left.
+  
+Typos and grammar/usage issues:
+
+  - p.4: "Scripting-based DSLs, such as AVISynth" -- remove comma
+  - p.5: "What is missing, is the audio part" -- remove comma
+  - p.5: "enough of the Videos primitives" -> "...Video primitives"
+  - p.6: "Lines 5-7 show" -> "...shows"
+  - p.6: "lines 7-25" and "line 7 is the producer" -> change 7 to 8
+  - p.6: "explain the video language" -> "...Video language"
+  - p.7: "incorporate traditional video files" -> "incorporates..."
+  - p.7: "the length other producers" -> "the length of..."
+  - p.11: "Removing feature" -> "...features"
+  - p.11: "all of features" -> "all of the features"
+  - p.11: "a matter of defines" -> "...defining"
+  - p.11: "They do so in the same manner" -- who is "they"?
+  - p.12, figure 5: why "rater", not "rator"?
+  - p.13: "over Scheme macro system" -> "over the Scheme..."
+  - p.13: "every piece of syntax (line 11)" -- should this be line 13?
+  - p.14: "lines 22" -> "line 22"
+  - p.15: "to import of bindings" -> "to import bindings"
+  - p.18, caption of figure 9: "vis" -> "via"
+  - p.18: "RacketCon 2016" -- is the name of the conference that was supposedly omitted on page 11? :)
+  - p.20: "in tern" -> "in turn"
+  - p.21: "relavent" -> "relevant"
+  - p.23: "what the error messages must come from" -> "that the..."
+
+===========================================================================
+                           ICFP 2017 Review #93B
+---------------------------------------------------------------------------
+    Paper #93: Super 8, the Story of Making Movies—A Functional Pearl
+---------------------------------------------------------------------------
+
+                      Overall merit: A. Good paper, I will champion it
+                         Confidence: Y. I am knowledgeable in this area,
+                                        but not an expert
+
+                         ===== Paper summary =====
+
+This paper demonstrates how Racket supports language-oriented software
+design by way of developing a scripting language for editing videos.
+The resulting language, called Video, is itself built on top of
+several other embedded languages, some of which are built-to-order for
+the very purpose.
+
+I found this pearl to be a nice read.  The domain is interesting, the
+exposition was clear (minus a few quibbles below that seem easy to
+fix).  The tone is whimsical, which I found entertaining for the most
+part, though maybe a bit too sarcastic at times, but perhaps that will
+inspire other researchers to further raise the bar for
+language-oriented programming in their respective contexts.
+
+I was impressed with how readily individual suites of abstractions
+(functional and syntactic) could be put together, and how programmable
+the environment is.  In addition to ruthless reuse of existing
+language and library facilities, which is repeatedly demonstrated, the
+conclusion emphasizes the importance of building water-tight
+abstractions, and I agree that it should.  But this is not really
+demonstrated in the paper.  Even a single concrete example of what you
+get for free with the presented macros, especially after critiquing
+Scheme macros for often being leaky abstractions, would be a good use
+of space.
+
+
+
+Detailed comments:
+
+p. 1: "To wit, professionals speak of ... NLVE ... to highlight the
+idea that the process is non-destructive."  This sentence did not make
+sense to me until Section 3,  which was distracting. Could you make
+that connection more clearly here?
+
+
+p. 2:  "but /also/ because a real functional pearl deserves..."
+"it is /as/ easy to import a linguistic construct as a function.
+
+"adding new linguistic constructs" at this point I wondered: what
+really counts as a linguistic construct?  It might be helpful to
+explicitly reference module import constructs, set!, and function
+application, which are not programmable in many languages.
+
+p. 3: There's a lot of video terminology introduced here, and it was
+not easy to parse them here and even a bit later.  I had questions
+like:
+
+- does "video clip" include both video and audio? is an "audio clip"
+  just a special instance of a "video clip"?  Later I see that the
+  "clip" macro also takes audio files, so I'm guessing the answer is
+  yes?  
+  
+- what is the relationship between a "time line" and a "track"?  
+  I eventually realized that the units of discussion are a time line
+  of *parallel* tracks, where each track is a "sequential" composition
+  of clips (the distance between "composition" and "playing in
+  sequence" was enough to confuse me).  In fact, the notion of "track"
+  seems to disappear as the paper goes on.
+
+"*Obviously* a screen displaying the result can play only a single
+track for video" this wasn't obvious to me, especially when it was
+said that audio tracks can be played together.  Both seem to me like
+just summing information, especially if video has alpha channels or
+something.  Especially when the next sentence talks about "two or more
+tracks ... appear on the screen at the same time."
+Are you referring to stereo sound, where different tracks
+play to different speakers?  Help a domain non-expert out here please.
+
+
+Fig. 1: This is pedantic, but making line breaks for the
+definition of "presentation" the same as in Fig. 2 would make it a bit
+easier to see that the code is indeed the same.
+
+p. 5: "Each program ... intermingles descriptions of video clips..."
+and audio clips?  hence my earlier question.
+
+"turns the five pieces into /a/ sequence of images"
+
+"introduces enough of the Video/s/ primitives" no s
+
+Figure 2: on the "(require" line, a comment like
+"; imports conference-talk function (Figure 3)"
+would be helpful since conference-lib appears only on a later page.
+
+
+p. 6
+
+Figure 3: Maybe add a "(conference-lib.vid)" parenthetical to connect
+more directly to Figure 2?
+
+"Following up with a discussion..."  this is not a complete sentence.
+
+
+"The semantic difference is that modules provide a video, while
+functions return one"  This was confusing because it sounds like it is
+comparing Video functions to Video modules, rather than Racket
+functions and modules to Video functions and modules, which I think is
+the intent.
+
+"The rest of the code describes the function body (line/8/-25)"
+
+"line /8/ is the producer returned by this function."
+
+p. 7
+
+"clip, incorporate/s/ traditional video /and audio/ files."
+
+"combining them: playlists and multitracks."  It sounded like you were
+about to explain both (despite the section header).  A little more
+telegraphing that you are postponing multitracks would help.
+
+"it is in /the/ same scope as the expressions."
+
+"Jumping from one producer in a playlist to /the next/ can be ..."
+
+p. 8
+
+An apt analogy for sequential transitions is that they act like infix
+associative binary operators on producers, like addition and
+multiplication, except always in the context of a playlist.
+
+Similarly, parallel transitions are like left-associative binary
+operators, analogous to how binary division and subtraction are
+treated, except always in the context of a multitrack.  
+
+"specify the coordinates of the top-left corner of the producer" which
+producer?  the first one?  the second one?  the resulting one?
+
+p. 9
+"Blank producers are empty /clips/ that act as..."
+
+
+"same length as the /captured/ conference ..."
+
+p. 11
+
+Section 5.1:
+Mention Figure 4 somewhere before talking about "Line 4"
+
+"Removing /features/ is simply a matter..."
+
+"simply a matter of /defining/ the new features..."
+
+p. 13
+
+Figure 6:  On lines 15-17, does it matter that the export appears at
+the end?
+
+Is "this-syntax" a special keyword from syntax-parse?
+
+on line 24  why not "(exprs ... this-syntax)" so that you wouldn't
+need to reverse on line 14?
+
+"vast improvement over /Scheme's/ macro" or "/the/ Scheme macro..."
+
+"every piece of syntax (line 13)"
+
+"The last piece of the begin block is /code/" not "(provide vid)"?
+
+p. 14
+
+"The syntax transformer for function bodies /(not shown)/ also ..."  I spent
+some fruitless time looking for it.
+
+p. 15
+
+"we therefore whipped together a dependent type system in a single
+work day"  did you prove anything about it?  Should probably say so.
+
+p. 20
+
+"and the Dr. Racket version /of/ Video"
+
+"which in /turn/ can"
+
+p. 21
+
+"in the style that is /relevant/ for the task"
+
+
+"with a declarative DSL for writing syntax transformers"  do remind us
+that you are talking about syntax-parse here, and even a citation to
+the relevant work would be helpful.  The presentation of the pearl
+doesn't make clear the clarity of the error messages that Video would
+produce.
+
+"seems to /ignore/"  "overlook" would seem a reasonable more generous
+phrasing.
+
+
+p. 24
+
+Simon Peyton Jones' last name begins with a "P", not a "J", so should
+his paper should probably appear below Erik Meijer's.
+
+===========================================================================
+                           ICFP 2017 Review #93C
+---------------------------------------------------------------------------
+    Paper #93: Super 8, the Story of Making Movies—A Functional Pearl
+---------------------------------------------------------------------------
+
+                      Overall merit: B. OK paper, but I will not champion
+                                        it
+                         Confidence: Y. I am knowledgeable in this area,
+                                        but not an expert
+
+                         ===== Paper summary =====
+
+This pearl aims to serve 2 main purposes:
+
+1. To introduce the reader to `Video` a DSL for video production
+2. To show that Racket, via the Racket Doctrine, is a powerful
+   tool/platform for developing DSLs
+
+These two aims are sometimes intertwined, but that makes sense, part of the
+beauty of a DSL in Racket is how easy it is to make one!
+
+The paper argues for the above by describing the motivation and implementation
+of `Video` in enough detail to illustrate where Racket's tools made the process
+comparatively seamless.
+
+During the process `Video` is not the only DSL that is used. DSLs are used for
+generating FFI bindings and type checkers, which only further illustrates the
+authors' point: Racket and its ecosystem allow for the easy creation and use of
+DSLs, so much so that (like in the case for the FFI generation) it is not seen
+as a waste of effort/time to create a DSL that is only used once.
+
+                      ===== Comments to authors =====
+
+Overall Review
+==============
+
+I think the paper is successful in its aim. As pointed out in the conclusion, the
+'language gap' appears several times during the implementation of this language.
+In each instance designing and implementing a DSL within Racket was seen
+as the most effective way forward (and in cases like in the MLT bindings,
+it is likely to be _safer_ as using the DSL avoids the chance of forgetting
+to include checks on the input and return values of FFI functions).
+
+As a Functional Pearl there is little is relatively little empirical evidence
+for the claims, but I do not hold this against the paper, not only would it
+be extremely difficult to test this in any empirical way, that's not the point!
+However, I wish that certain claims would either be softened (i.e. by adding a
+"we believe that ...") or avoided.
+
+There were a few instances where the exposition was a bit confusing, or (it
+_seemed_) like details were omitted (see section by section thoughts below). In
+contrast, the line-by-line explanation of the type system implementation in
+Section 6.4 was very appreciated.
+
+Overall I thought the paper was engaging and convincing. The tone sometimes
+bordered on presenting opinions as facts, but as the paper can be thought of
+as a Functional Position Pearl, this was acceptable. Personally, I look
+forward to trying out not only `Video`, but the DSL implementation tools
+described in the paper.
+
+
+Section by Section
+==================
+
+Because this is a Functional Pearl I will write down questions/concerns that
+came to mind as I read the paper, even if they turn out to be addressed later
+in the paper. This is because a Pearl, more so than other papers should be able
+to be read from start to finish.
+
+
+Section 1
+---------
+
+The paper sets the stage well. The motivation for `Video` and why it might have
+advantages over traditional video editing techniques is well explained.
+
+There is one line that gave my pause: "... boring functional languages, such as
+OCaml and Haskell, ..."
+
+I was reminded of the quote: "Bold strategy Cotton, let's see if it pays off"
+
+Section 2
+---------
+
+This section argues convincingly for both DSLs in general (via their adaptation
+of the Sapir-Whorf hypothesis) and for building DSLs in Racket. Their argument
+for the latter is that Racket 'smooths' the path between writing C-library
+bindings and a full-fledged DSL.
+
+One concern that came to mind during the explanation of the `#lang racket/base`
+syntax is: How does a programmer know _which_ language to base their DSL off
+of? Is this something that requires intuition gained from experience or is
+there guidance on this somewhere?
+
+Section 3
+---------
+
+This section is a good (and quick) overview of the video editing space. Both
+fully-featured editing suites (i.e. Adobe Premier) and DSLs are described.
+
+Having experience with some of these tools I found the descriptions to be fair.
+
+Do the authors feel that `Video` should supersede _all_ of these tools? I would
+be interested to know where the authors feel that their DSL falls short (if
+anywhere).
+
+Section 4
+---------
+
+Here we're presented with `Video` itself.
+
+In section 4.2: "..., `clip`, incorporate traditional video files." And then
+contrasts `clip` with `image`. What incorporates audio? In section 4.0 there
+was a distinction between video and audio, and now there does not seem to be
+one.
+
+In section 4.5: What happens if composites of a `multitrack` are different
+lengths?  There seems to be two obvious solutions: truncate to the shortest or
+'blank out' shorter `clip`s to the length of the longest `clip`
+
+In section 4.7: Here the use of `get-property` is so that the watermark is the
+same length as the video, is this necessary (see last point)? If it is, why
+doesn't `blank` require it?
+
+Section 5
+---------
+
+In section 5.2: "`#%module-begin` lifts definitions to the beginning of the module ..."
+Ah, this explains why ordering matters for producers but not for `defines`, very cool!
+
+"The last piece of the `begin` block is `code`." Do you mean that last piece is
+`export`?  I'm confused, I don't see `code` anywhere in Figure 6.
+
+"The astute reader may wonder ...". Am I correct that this is not shown in
+Figure 7, though there would be nested `begin`s during an actual elaboration?
+If not, I seem to be misunderstanding when Racket's `#%module-begin` does its
+thing.
+
+Section 6
+---------
+
+In section 6.3, As with the earlier comment, the nature of `multitrack`
+intrigues me, I'm very curious to see the typing rule for that.
+
+Section 7
+---------
+
+It might be worth stating whether any custom graphics were required. When a
+Racket programmer decides to make their own GUI, is that with the understanding
+that Racket's GUI framework has a large enough selection of graphics that it is
+unlikely to be necessary to manually draw widgets?
+
+This only comes to mind because the graphics that are shown in Figures 10 and 11
+seem to be fairly specific to time-based viewing/editing.
+
+Section 8
+---------
+
+Is there no area where other DSL implementation techniques fare better than Racket's?
+
+For a related work section, this takes a rather dismissive tone.
+
+Section 9
+---------
+
+The paper ends with a very strong and convincing conclusion.
+
+===========================================================================
+                           ICFP 2017 Review #93D
+---------------------------------------------------------------------------
+    Paper #93: Super 8, the Story of Making Movies—A Functional Pearl
+---------------------------------------------------------------------------
+
+                      Overall merit: A. Good paper, I will champion it
+                         Confidence: Z. I am not an expert; my evaluation
+                                        is that of an informed outsider
+
+                         ===== Paper summary =====
+
+This paper presents a case study illustrating
+the Racket philosophy of building DSLs. The
+authors look at the domain of video editing,
+which is of course, much more than just cutting,
+and involves the detailed composition and layering
+of diverse data streams. The paper
+
+* presents a nice overview of the state of the art
+  ('non-linear video editing') motivating why
+  FP is a great fit for the domain,
+
+* presents an overview of the video-editing DSL
+  by describing the key types and combinators,
+
+* shows how Racket's macro facilities allow for a
+  nice implementation, and as the cherry on top,
+
+* shows a cute indexed-type system for tracking
+  the "lengths" of sequences, and how it can be
+  used to refine the DSL combinators' API and
+  statically check programs, all by just writing
+  Racket macros.
+
+                      ===== Comments to authors =====
+
+This was a fun paper to read, and it will doubtless
+make for an even more entertaining talk.
+
+Pros
+
+* Interesting new application domain for applying FP,
+* Compelling illustration of the racket manifesto,
+* The built artifact seems quite real and makes me want to edit videos!
+
+Cons
+
+* This approach favors the 'programmatic' approach over the 'direct'
+  one of manipulating the objects, seeing what the result looks like
+  immediately and iterating.
+
+  That said, the paper actually shows how such NLVE widgets
+  can be embedded in the scripts (and gives a nice use case --
+  manually splicing in PDF slides when the video is unavailable)
+  and in future work it would be interesting to investigate a
+  tighter coupling.
+
+* (Those parentheses ...)
+
+I particularly appreciated that the authors present a nice
+overview of the state of the art. I also like the fact that
+one can use macros to tweak the scoping rules, e.g. to allow
+for 'global' variables as in the examples on p7.
+
+I suggest, when introducing the 'multitrack' combinators,
+that the authors foreshadow the fact that you may want
+the tracks to have the same size, and that they have a
+nice solution to that problem a few pages down.
+
+While there is no systematic user study, the authors have
+used this in practice for preparing the videos for two
+conferences of a similar nature. They report that the
+time taken to implement the language AND use it was
+smaller than that for directly using existing editors.
+
+In short, lots of nice ideas here and a compelling application
+of FP that would make for a wonderful addition to ICFP.
+
+I include below, the review of one of my students who has
+some experience with video editing:
+
+---
+Their language (Video script) covers most of the basics used for video editing:
+putting together clips, splicing in audio, fades, picture-in-picture, etc. The
+components recreate most of what I have used in Adobe Premiere. Their
+implementation mimics the timeline in a typical video editor: there you can add
+clips, fade between them, crop them, and add effects. I would not be surprised
+if those programs used a simple declarative format that closely resembles their
+Video script.
+
+I'm not really sold on the benefit of using this kind of a language. Video
+editing I have done is very interactive: laying out clips, making small changes,
+and playing back the result to see how it worked. Automating too much of the
+process with macros can lead to problems: maybe the source clip plays too long
+because someone forgot to hit stop, or the volume levels aren't equal between
+the Q&A and presenter, etc. The graphical component in section 7 does not really
+cover interactive use: you usually have to watch or listen to the clip to know
+when to cut. And you don't want to render the result before viewing since it
+takes so long; most video editors use a low-resolution mode to quickly preview
+changes.
+
+I'm being a bit whiny because it doesn't fit the style of video editing I've
+seen. Cutting video for conferences will be a bit more repetitive and may
+benefit from things like a powerful language. I think a interesting use case is
+for live applications like gaming livestreams: they will record video from their
+computer but add elaborate overlays with subscriber information, space for
+advertisements, and maybe a face camera. Even then, most livestreamers just
+arrange it manually every time.
+
+All that said, the implementation seem technically fine. I probably wouldn't mind building a fleshed out interactive video editor on top of it.
+
+

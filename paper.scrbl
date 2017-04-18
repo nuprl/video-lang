@@ -4,9 +4,9 @@
          "utils.rkt"]
 
 @title{Super 8, the Story of Making Movies---A Functional Pearl}
-@authorinfo["J.J. Abrams"       "Bad Robot Productions"]
-@authorinfo["Bryan Burk"        "Amblin Entertainment"]
-@authorinfo["Steven Spielberg"  ""]
+@author["J.J. Abrams"       #:affiliation "Bad Robot Productions"]
+@author["Bryan Burk"        #:affiliation "Amblin Entertainment"]
+@author["Steven Spielberg"]
 
 @;authorinfo["Leif Andersen" "PLT @ Northeastern University" "leif@ccs.neu.edu"]
 @;authorinfo["Asumu Takikawa" "Igalia" "asumu@igalia.com"]
