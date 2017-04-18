@@ -1,0 +1,58 @@
+Outline:
+
+1. This paper is not about video, but the racket doctrin.
+2. Answer points 1 and 2 in the same paragraph
+3. This paper failed to bring accross interactiviety, we will improve that.
+4. Explain difference between run-time primitive and linguistic construct
+5. Explain how we are not tied to DrRacket.
+6. We will rewrite the prose in section 7 to describe how embedded widgets can be edited to integrate with code.
+7.
+8. We are greatful to the reviewers for the expansive and detailed suggestions on how to improve our pearl.
+
+Figure 8 will include the rules shown in figure 9.
+
+Questions:
+
+1. Interactivity
+1a. REPL
+1b. Real time preview
+1c. Graphical NLVEs
+2. Limitations
+3. Run-time primitives vs. linguistic-constructs
+4. Isn't Video just tied to DrRacket?
+5. Type-system, properties, what does it do?
+6. Related Work
+
+Video is available for the ICFP video editors. And we will let them comment on its usefulness.
+
+> Firstly, is there any way to get quick, REPL-style feedback..., in the way that one could with an NLVE?
+
+Yes. Video inherits Racket's REPL, allowing for some degree of feedback using functions like `preview`. Additionally, DrRacket provides a preview button for interactive development. Previews run in real time with a lower resolution and playback controls. The `#:start` and `#:end` keywords enables authors to view a slice of their video.
+
+>  "...yields a plug-in that is tightly coupled with its tool" -- ...isn't Video tightly coupled with Racket?
+
+Video differs in two ways: (1) as you mentioned, videos
+made in DrRacket can still run outside of DrRacket,
+and (2) Video programs are, in a sense,
+parametric in Video's implementation. While the implementation 
+presented in this paper uses an external library to render,
+Video provides the tools to change the implementation to an purely
+functional renderer, or to a renderer provided by an existing NLVE.
+
+> Do the authors feel that Video should supersede...these tools? I would be interested to know where...their DSL falls short.
+
+We only tested Video in one context, conference videos
+
+> "boring functional languages...the one true-blue kid on the block, Racket" -- ...I am not wild about the level of language partisanship here.
+
+We will temper our language.
+
+> ...the authors should either make more clear how Video allows integrated interactive and programmatic workflows, or they should tone down the claim that it does allow such integrated workflows.
+> The discussion of the type system in section 6 seems a bit half-baked
+
+We will extend the prose with additional details.
+
+
+> ...Whose literature survey?
+
+The one in the previous section. We will improve the prose.
