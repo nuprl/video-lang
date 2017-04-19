@@ -1,17 +1,53 @@
-This paper uses `Video` as a running example to illustrate the Racket tower of languages.
 
-We failed to address the interactive nature of Video, as well as its limitations. The revised paper will contain an expanded Section 7 that covers Video's REPL-like interface, real-time previews, and gives more details on the graphical NLVEs.
+We would like to thank the reviewers for the extremely detailed suggestions
+on turning this submission into a proper pearl and a well-written
+article. In return, this response first addresses the major shared concern
+in the 500-word part and then replies to any additional questions and
+remark that even remotely indicates a chance for a misunderstanding.
 
-The paper also conflated `run-time primitives` and `linguistic constructs`. We will disambiguate them in the prose. Run-time primitives are data without any specific syntax, such as producers. Linguistic constructs have their own syntax, such as new binding forms.
+1. As the reviewers clearly realized, the pearl uses Video as a running
+example to illustrate the idea of language-oriented programming (LOP) in
+Racket. It is not a research result on creating a video-editing DSL.  In
+particular, we have used Video to produce the RacketCon '16 channel on
+YouTube, but the language definitely suffers from short-comings. In its
+current shape, we would never use it for purely interactive video editing;
+but we would always use it for any repetitive task. 
 
-Next, we gave the impression that Video is tied to DrRacket in a similar fashion to how other NLVE extensions are tied specifically to their tool. Video is different in 2 ways that we will address. First, while Video programmers benefit from using DrRacket, they can write Video files in any editor. Second, Video programs are parametric over the implementation of Video. The implementation presented in this paper used an external library for rendering, but the renderer can be replaced with a functional one and Video programs would still work. In fact, early prototypes of Video used two independent renderers. We will discuss this in the prose.
+That said, the paper fails to explain Video's interactive capabilities:
+real-time previews like those found in NLVEs, the editing capabilities pf
+NLVE widgets, and the full REPL interactivity. We will use the available
+space (we failed to understand that our submission is 1.5p below the limit)
+to describe those details.
 
-Additionally, there are concern about the type system missing judgments. To address this, we will add the missing rules to figure 8 to match the code in figure 9.
+2. The paper distinguishes between two parts of a programming language:
+_linguistic constructs_ and _run-time primitives_. An example of the former
+includes new syntax (e.., list comprehension for creating playlists) while
+the latter refers to explicit functions from the prelude (e.g. green) or
+implicit capabilities (not for Video, but think GC). 
 
-Finally, some reviewers were concerned about the presentation in our related work section. We will refine the prose to make it more inline with the requirements of a pearl.
+3. The revision of the paper will clarify that Video is *not* tied to
+DrRacket or a specific video-rendering framework. First, while Video
+programmers benefit from using DrRacket and its embedded NLVE widgets, they
+can use any old editor to create Video programs if they don't need NLVE
+widgets.  Second, the Video language is also parametric over the rendering
+library. Thus far we have used two libraries---?? NAME1 ??  and ??  NAME 2
+??---and we have even considered writing a functional renderer within
+Racket.
 
-We are grateful to the reviewers for the expansive and detailed suggestions on how to improve our pearl.
+4. The reviewers pointed out a glaring mismatch between the typing rules
+presented in figure 8 and the implementations of typing rules in figure 9.
+The revision will include the implemented rules of figure 9 in figure 8 so
+that readers understand how close the DSL for type-checking is to the
+mathematical language for expressing them. Additionally we will include
+some more sample bugs caught by the type system.         DID IT CATCH ONE IN LEIF'S RACKETCON CODE? 
 
---------------------------------------
+5. The JFP guidelines for functional pearls suggest that pearls do not need
+a section on related work, but we wish to contrast Racket's LOP approach
+from the DSL approach of other languages, especially those found in
+Haskell. What the current version fails to bring across is that an embedded
+DSL with a type system like Haskell's definitely benefits from the Haskell
+approach and should not be created in Racket. Similarly, developers might
+be better of creating stand-alone DSLs in one of the maturing language
+workbenches. The revised paper will clarify this point. 
 
-Addendum: All of the reviewers gave comments on prose improvements. We thank the reviewers for their effort and will incorporate their suggestions.
+-----------------------------------------------------------------------------
