@@ -9,7 +9,7 @@ example to illustrate the idea of language-oriented programming (LOP) in
 Racket. It is not a research result on creating a video-editing DSL.  In
 particular, though we have used Video to produce the RacketCon '16 channel on
 YouTube, the language definitely has its short-comings. For example, 
-we would not currently recommend it for the direct-manipulation of videos.
+we would not currently recommend it for movie creation.
 
 That said, the paper should explain interactive capabilities that *are*
 available in Video: real-time previews like those found in NLVEs, the
@@ -20,7 +20,7 @@ will extend Section 7 to discuss these features.
 _linguistic constructs_ and _run-time primitives_. An example of the former
 includes new syntax (e.g., list comprehension for creating playlists or
 other binding forms) while the latter refers to explicit functions from the
-prelude (e.g., `green`) or implicit capabilities (not for Video, but think
+prelude (e.g., `blank`) or implicit capabilities (not Video-specific, think
 GC).
 
 3. The revision of the paper will clarify that Video is *not* tied to
@@ -32,8 +32,8 @@ widget-based functionality.
 Second, the Video language is also independent of the rendering library. In
 the early stages of Video's development, we switched between two renderers:
 libmlt and gstreamer. We even considered writing a functional renderer
-within Racket. In this sense, Video programs are more agnostic to specific
-rendering libraries than any NLVEs. We will discuss this flexibility in the
+within Racket. In this sense, Video programs are more implementation agnostic
+than existing NLVE APIs. We will discuss this flexibility in the
 revised paper. 
 
 4. The reviewers point out a mismatch between the typing rules presented in
@@ -62,7 +62,7 @@ Review #93A
 
 > is there any way to get quick, REPL-style feedback?
 
-Video inherits Racket's REPL and thus supports an this kind of workflow
+Video inherits Racket's REPL and thus supports this kind of workflow
 with functions like `preview`. Even better, DrRacket directly supports
 Video programming via a "Preview" button. A low-res preview starts quickly
 and the current video is played in real-time, with standard playback
@@ -77,8 +77,8 @@ Use the provided playback controls, or supply `preview with `#:start` and
 
 A human manually appends the slides together in the same fashion one
 would do with an NLVE. Section 7 shows that using Video does not
-prevent authors from editing videos with an NLVE when appropriate. And
-not only can the result of the NLVE be put into the program, but a
+prevent authors from editing videos with an NLVE when appropriate.
+Not only can the result of the NLVE be put into the program, but a
 programmer can embed NLVE itself into the program.
 
 We will revise Section 7 to present details about the implementation of NLVE widgets.
