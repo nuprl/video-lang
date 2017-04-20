@@ -9,7 +9,7 @@ example to illustrate the idea of language-oriented programming (LOP) in
 Racket. It is not a research result on creating a video-editing DSL.  In
 particular, though we have used Video to produce the RacketCon '16 channel on
 YouTube, the language definitely has its short-comings. For example, 
-we would not currently recommend it for movie creation.
+we would not currently recommend it for the direct-manipulation of videos.
 
 That said, the paper should explain interactive capabilities that *are*
 available in Video: real-time previews like those found in NLVEs, the
