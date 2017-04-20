@@ -6,14 +6,14 @@ other questions.
 
 1. As the reviewers clearly realized, the pearl uses Video as a running
 example to illustrate the idea of language-oriented programming (LOP) in
-Racket. It is not a research result on creating a video-editing DSL.  In
+Racket. It is not a research result on creating a video-editing DSL. In
 particular, though we have used Video to produce the RacketCon '16 channel on
 YouTube, the language definitely has its short-comings. For example, 
 we would not currently recommend it for the direct-manipulation of videos.
 
 That said, the paper should explain interactive capabilities that *are*
 available in Video: real-time previews like those found in NLVEs, the
-editing capabilities pf NLVE widgets, and the full REPL interactivity. We
+editing capabilities of NLVE widgets, and REPL interactivity. We
 will extend Section 7 to discuss these features.
 
 2. The paper distinguishes between two parts of a programming language:
@@ -44,11 +44,11 @@ system.
 
 5. Though a discussion of related work is not crucial in a functional
 pearl, we wish to contrast Racket's LOP approach from the DSL approach of
-other languages, e.g., Haskell. We will explain the differences in more
+other languages, e.g., Haskell. We will explain both pros and cons in more
 detail in the final version.  For example, an embedded DSL with a type
 system like Haskell's definitely benefits from the Haskell approach and
 should not be created in Racket. Similarly, developers interested in
-creating a graphically-edited DSL might be better using one of the mature
+creating a graphically-edited DSL might be better off using one of the mature
 language workbenches such as Spoofax. 
 
 -----------------------------------------------------------------------------
@@ -79,7 +79,7 @@ A human manually appends the slides together in the same fashion one
 would do with an NLVE. Section 7 shows that using Video does not
 prevent authors from editing videos with an NLVE when appropriate.
 Not only can the result of the NLVE be put into the program, but a
-programmer can embed NLVE itself into the program.
+programmer can embed the NLVE itself into the program.
 
 We will revise Section 7 to present details about the implementation of NLVE widgets.
 
@@ -135,7 +135,7 @@ This is a typo.
 
 > p.14: "The syntax transformer for function bodies..." -- To what code is this paragraph referring?
 
-We will add a "elided" to that sentence.
+We will add an "elided" to that sentence.
 
 > p.15: "It errors if a bad input or output type passes through this
   interface." -- I didn't quite follow this.  What would a bad output type
@@ -147,8 +147,8 @@ In this case NULL is bad output `mlt-profile-init` throws an error.
 > p.16: `cut-producer` appears here for the first time.  Should it have been introduced earlier?
 
 Previously `#:start` and `#:end` were sufficient (and cleaner) ways to
-cut producers. Its needed here to abstract over the specific producer
-being cut.
+cut producers. `cut-producer` is introduced here to abstract over the specific
+producer being cut.
 
 > p.19: "Turnstile reuses Racket's lexical scoping to implement the type
   environment." I am not sure I understand.  Does this mean that lexical
@@ -156,7 +156,7 @@ being cut.
   conclusion of the typing rules? 
 
 As explained in the prose (on page 19), a type rule only specifies new
-bindings to add to the type envirnoment, analogous to `let`. Existing
+bindings to add to the type environment, analogous to `let`. Existing
 bindings are propagated according to standard lexical scope behavior.
 
 > p.19: "elaborating the lambda body `e` may generate additional side
@@ -180,7 +180,7 @@ Review #93B
   is not really demonstrated in the paper. 
 
 Any abstraction created with syntax-parse, e.g., #%module-begin in figure
-6, or the type rules in figure 9 (implicitly) enjoys these benefits. For
+6, or the type rules in figure 9 (implicitly), enjoys these benefits. For
 example, syntax errors are automatically reported at the level of source
 syntax instead of the generated syntax. 
 
@@ -260,14 +260,14 @@ The choice of host language depends on the desired capabilities of the
 DSL. It does require some exploration of the Racket ecosystem to know what
 others have already created. For example a logic-programming DSL may want
 to use `datalog` (like Datalog, including syntax) or `racklog` (like Prolog
-but with parenthesize syntax) as the host. `#lang racket/base` includes the
+but with parenthesized syntax) as the host. `#lang racket/base` includes the
 "core" of Racket and makes sense as host for (mostly) functional DSLs.
 
 > Do the authors feel that `Video` should supersede _all_ of these tools? I
   would be interested to know where the authors feel that their DSL falls
   short (if anywhere).
 
-See above. In addition, Video currently does not do well with full-featured
+See above. In addition, Video currently does not do well with feature-length
 films, say the Star Wars saga. 
 
 > In section 4.2: "..., `clip`, incorporate traditional video files." And then
@@ -280,7 +280,7 @@ We will clarify that `clip` produces both video and audio producers.
 
 Each *track* starts playing at the same time. Authors insert `blank`s
 to delay the start time of a track's producer. The length of a
-multitrack is the length of its longest track, with implicit blanks
+multitrack is the length of its longest track, with implicit `blank`s
 added at the end of every other track.
 
 > In section 4.7: Here the use of `get-property` is so that the watermark
@@ -288,8 +288,8 @@ added at the end of every other track.
   it is, why doesn't `blank` require it?
 
 Both `image` and `blank` do not require a length. In both cases, if
-length is omitted, the length of the resulting producer is 'as long as
-needed'. Which is to say it will be long enough to fill the remainder
+length is omitted, the length of the resulting producer is as long as
+needed, i.e., say it will be long enough to fill the remainder
 of its current multitrack.
 
 > "The last piece of the `begin` block is `code`." Do you mean that last
@@ -306,7 +306,7 @@ This is correct.
 > In section 6.3, As with the earlier comment, the nature of `multitrack`
   intrigues me, I'm very curious to see the typing rule for that.
 
-Unsurprisingly, the definition is somewhat long due to many supported options
+Unsurprisingly, the definition is somewhat long due to the many supported options
 but we will work to fit a summary into Figure 8 in the revised paper.
 
 > It might be worth stating whether any custom graphics were required.
@@ -314,12 +314,12 @@ but we will work to fit a summary into Figure 8 in the revised paper.
 See above. 
 
 The NLVE widgets were constructed from ordinary Racket GUI widgets. The
-process of embedding these widgets into the IDE is sadly extremely
+process of embedding these widgets into the IDE is unfortunately somewhat
 complicated (but not a part of LOP proper). 
 
 > Is there no area where other DSL implementation techniques fare better than Racket's?
 
-See above. 
+See above.
 
 ===========================================================================
 Review #93D
@@ -332,7 +332,12 @@ Review #93D
   authors foreshadow the fact that you may want the tracks to have the same
   size.
 
-Yes, authors must insert blanks to make them of the same length. 
+The tracks do not need to be the same size.
+
+Each *track* starts playing at the same time. Authors insert `blank`s
+to delay the start time of a track's producer. The length of a
+multitrack is the length of its longest track, with implicit blanks
+added at the end of every other track.
 
 > I would not be surprised if those programs used a simple declarative
   format that closely resembles their Video script. 
@@ -350,7 +355,7 @@ See above.
   long; most video editors use a low-resolution mode to quickly preview
   changes.
 
-See also above. Video indeed supports such a quick preview mode. There is a
+See above. Video indeed supports such a quick preview mode. There is a
 `preview` button and function that lets you preview a clip at a low resolution
 with playback controls. That, combined with `#:start` and `#:end` was a
 mandatory requirement of Video, and without it we could not have edited the
@@ -361,8 +366,8 @@ RacketCon videos in a timely manner.
   overlays with subscriber information, space for advertisements, and maybe
   a face camera.
 
-Video would indeed be useful for such a use case, and other short content
-from websites such as Youtube and Twitch.
+Video would indeed be useful for such a use case, as well as other short content
+for websites such as Youtube and Twitch.
 
 > All that said, the implementation seem technically fine. I probably
   wouldn't mind building a fleshed out interactive video editor on top of
