@@ -1,4 +1,4 @@
-#lang scribble/sigplan
+#lang scribble/acmart
 
 @require[scriblib/footnote
          scriblib/figure

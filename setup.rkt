@@ -16,7 +16,6 @@
  (void))
 
 (define pkgs '("doodle"
-               "acmart"
                "video"))
 
 

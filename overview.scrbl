@@ -1,4 +1,4 @@
-#lang scribble/sigplan
+#lang scribble/acmart
 
 @require[scriblib/figure
          (except-in scribble/core table paragraph)
@@ -573,7 +573,3 @@ for a developer conference. They report that creating Video and compositing
 the videos for one conference took less time than manually editing the
 videos for another, comparable conference (same number of talks, same
 nature of talks, etc).
-
-@emph{The submission omits the names of the authors and the conference
-details to remain doubly blind. Since this submission is a pearl, we do not
-consider this quasi-evaluation of Video critical to the acceptance decision.}

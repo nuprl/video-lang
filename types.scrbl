@@ -1,4 +1,4 @@
-#lang scribble/sigplan
+#lang scribble/acmart
 
 @title[#:tag "types"]{The Bodyguard}
 @(require (except-in scribble/manual cite)

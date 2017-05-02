@@ -1,4 +1,4 @@
-#lang scribble/sigplan
+#lang scribble/acmart
 
 @(require (except-in scribble/manual cite)
 	  scriblib/figure "bib.rkt" "pictures.rkt" scriblib/footnote)
