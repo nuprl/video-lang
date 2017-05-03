@@ -73,4 +73,4 @@
 @;{Conclusions, not much to say here?}
 @include-section{conclusion.scrbl}
 
-@gen-bib[]
+@gen-bib[#:sec-title "References"]
