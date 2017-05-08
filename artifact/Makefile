@@ -1,9 +1,15 @@
 all:
-	git archive --prefix=icfp-2017-artifact/ --remote=../ -o icfp-2017-artifact.tar icfp-2017-artifact
+	pushd ../racket-video;\
+	git archive --prefix=icfp-2017-artifact/ -o icfp-2017-artifact.tar master;\
+	popd;\
+	mv ../racket-video/icfp-2017-artifact.tar .
 	packer build artifact.json
 
 32-bit:
-	git archive --prefix=icfp-2017-artifact/ --remote=../ -o icfp-2017-artifact.tar icfp-2017-artifact
+	pushd ../racket-video;\
+	git archive --prefix=icfp-2017-artifact/ -o icfp-2017-artifact.tar master;\
+	popd;\
+	mv ../racket-video/icfp-2017-artifact.tar .
 	packer build artifact-32.json
 
 readme:
