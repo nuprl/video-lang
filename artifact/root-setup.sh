@@ -8,7 +8,8 @@ sudo apt-get -y -q install linux-headers-$(uname -r) build-essential dkms nfs-co
 sudo apt-get -y -q install virtualbox-guest-utils virtualbox-guest-x11 virtualbox-guest-dkms
 
 # Install necessary packages
-sudo apt-get -y -q install firefox vim xvfb git wget tar xfce4 lightdm mupdf
+sudo apt-get -y -q install firefox vim xvfb git wget tar xfce4 lightdm mupdf libmlt6 libav-tools ladspa-sdk libgdk-pixbuf2.0-* frei0r-plugins* libdc1394-*
+
 # Install latex, for Scribble
 sudo apt-get -y -q --no-install-recommends install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra pgf tex-gyre
 

@@ -11,17 +11,6 @@ wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/key
 chmod 600 ~/.ssh/authorized_keys
 chown -R artifact ~/.ssh
 
-# Set up the artifact files
-cd /home/artifact
-tar -xf icfp-2017-artifact.tar
-rm icfp-2017-artifact.tar
-cd icfp-2017-artifact
-
-# Copy over the paper
-mv paper/paper.pdf /home/artifact/Desktop/super8.pdf
-mv run.sh run-all.sh benchmarks paper scribblings tools ~/Desktop
-cd ~/Desktop
-
 # Install Racket
 # first download Racket v6.9
 wget http://mirror.racket-lang.org/installers/6.9/racket-6.9-x86_64-linux-ubuntu-precise.sh
@@ -33,6 +22,15 @@ sh racket-6.9-x86_64-linux-ubuntu-precise.sh --in-place --dest ~/racket
 # Add racket to the path
 export PATH=~/racket/bin:$PATH
 echo "export PATH=~/racket/bin:$PATH" >> ~/.bashrc
+
+# Set up the artifact files
+cd /home/artifact
+tar -xf icfp-2017-artifact.tar
+tar -xf video.tar
+tar -xf typed-video.tar
+rm icfp-2017-artifact.tar
+rm video.tar
+rm typed-video.tar
 
 # Install packages that are needed for the artifact
 raco setup -D # avoid huge memory use from doc build
