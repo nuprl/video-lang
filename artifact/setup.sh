@@ -13,7 +13,7 @@ chown -R artifact ~/.ssh
 
 # Install Racket
 # first download Racket v6.9
-wget http://mirror.racket-lang.org/installers/6.9/racket-6.9-x86_64-linux-ubuntu-precise.sh
+wget http://mirror.racket-lang.org/installers/6.9/racket-6.9-x86_64-linux.sh
 
 # Do a local install. A unix-style install is preferable in some ways, but the
 # permissions are a pain when overriding packages
