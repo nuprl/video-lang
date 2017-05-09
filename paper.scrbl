@@ -3,7 +3,7 @@
 @require["bib.rkt" (only-in scribble/core element make-style)
          "utils.rkt"]
 
-@title{Super 8, the Story of Making Movies---A Functional Pearl}
+@title{Super 8, the Language for Making Movies---A Functional Pearl}
 @;{
  @author["J.J. Abrams"       #:affiliation "Bad Robot Productions"]
  @author["Bryan Burk"        #:affiliation "Amblin Entertainment"]
