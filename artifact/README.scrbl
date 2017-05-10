@@ -180,12 +180,18 @@ implementation
   go all the way to the FFI. Ideally users shouldn't need to
   use this file.}
  @item{@filepath{init.rkt}--Runs @filepath["private/init-mlt.rkt"].}
- @item{@filepath{player.rkt}--}
- @item{@filepath{render.rkt}--}
- @item{@filepath{render/}--}
- @item{@filepath{raco.rkt}--}
- @item{@filepath{info.rkt}--}
- ]
+ @item{@filepath{player.rkt}--The player that appears
+  whenever previewing a video.}
+ @item{@filepath{render.rkt}--The base class for Video
+  renderers. The default renderer opens up a preview window,
+  but different variants (found in @filepath["renderer/"])
+  change the output format.}
+ @item{@filepath{render/}--The different renderers used by
+  @filepath["render.rkt"].}
+ @item{@filepath{raco.rkt}--The implementation of the
+  command line tool @exec{raco video} that Video uses.}
+ @item{@filepath{info.rkt}--A basic config file used by the
+  Racket package manager.}]
 
 @section{Typed Video}
 
