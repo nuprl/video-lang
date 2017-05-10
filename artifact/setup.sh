@@ -26,7 +26,7 @@ export PATH=~/racket/bin:$PATH
 echo "export PATH=~/racket/bin:$PATH" >> ~/.bashrc
 
 # Set up the artifact files
-cd /home/artifact/Desktop
+cd /home/artifact
 tar -xf icfp-2017-artifact.tar
 tar -xf video.tar
 tar -xf typed-video.tar
@@ -35,20 +35,34 @@ rm icfp-2017-artifact.tar
 rm video.tar
 rm typed-video.tar
 rm paper-src.tar
+mv video ~/Desktop
+mv typed-video ~/Desktop
+mv paper-src ~/Desktop
 
 # Install Video
 cd /home/artifact/Desktop/video
 raco pkg install
 
+# Add Examples folder
+cd /home/artifact/Desktop
+cp -r /home/artifact/Desktop/video/video/examples .
+
 # Build the paper
 cd /home/artifact/Desktop/paper-src
 make
+
+# Place paper on Desktop
+cd /home/artifact/Desktop
+cp /home/artifact/Desktop/paper-src/paper.pdf super8.pdf
 
 # Create the README
 cd /home/artifact/Desktop/paper-src/artifact
 scribble +m --htmls README.scrbl
 ln -s /home/artifact/Desktop/scribblings/README/index.html ~/Desktop/README.html
+
+# Add User Manual
 cd ~/Desktop
+# ...
 
 # Configure XFCE, instead of directly configuring this put it in the
 # .bash_profile because the command won't work without X11 running.
