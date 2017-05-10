@@ -26,20 +26,27 @@ export PATH=~/racket/bin:$PATH
 echo "export PATH=~/racket/bin:$PATH" >> ~/.bashrc
 
 # Set up the artifact files
-cd /home/artifact
+cd /home/artifact/Desktop
 tar -xf icfp-2017-artifact.tar
 tar -xf video.tar
 tar -xf typed-video.tar
+tar -xf paper.tar
 rm icfp-2017-artifact.tar
 rm video.tar
 rm typed-video.tar
+rm paper-src.tar
 
-# Install packages that are needed for the artifact
-raco setup -D # avoid huge memory use from doc build
+# Install Video
+cd /home/artifact/Desktop/video
+raco pkg install
 
-# Create the scribble docs
-cd /home/artifact/Desktop/scribblings
+# Build the paper
+cd /home/artifact/Desktop/paper-src
 make
+
+# Create the README
+cd /home/artifact/Desktop/paper-src/artifact
+scribble +m --htmls README.scrbl
 ln -s /home/artifact/Desktop/scribblings/README/index.html ~/Desktop/README.html
 cd ~/Desktop
 

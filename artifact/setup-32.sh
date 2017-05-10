@@ -1,5 +1,38 @@
 #!/usr/bin/env bash
 
+#
+#
+#
+# THIS IS WAY OUT OF DATE, base this off of the setup.sh file!!!
+#
+#
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Make sure there is a Desktop
 mkdir -p ~/Desktop
 
