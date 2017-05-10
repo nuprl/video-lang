@@ -17,7 +17,7 @@ wget http://mirror.racket-lang.org/installers/6.9/racket-6.9-x86_64-linux.sh
 
 # Do a local install. A unix-style install is preferable in some ways, but the
 # permissions are a pain when overriding packages
-sh racket-6.9-x86_64-linux-ubuntu-precise.sh --in-place --dest ~/racket
+sh racket-6.9-x86_64-linux.sh --in-place --dest ~/racket
 
 # Add racket to the path
 export PATH=~/racket/bin:$PATH
@@ -71,5 +71,5 @@ echo "xfconf-query -n -t int -c xfce4-desktop -p /backdrop/screen0/monitorVBOX0/
 echo "xfconf-query -n -t uint -t uint -t uint -t uint -c xfce4-desktop -p /backdrop/screen0/monitorVBOX0/workspace0/color1 -s 65535 -s 65535 -s 65535 -s 65535" >> ~/.profile
 
 # Cleanup
-rm ~/Desktop/racket-6.9-x86_64-linux-ubuntu-precise.sh
-rm -r ~/icfp-2017-artifact
+rm ~/Desktop/racket-6.9-x86_64-linux.sh
+# rm -r ~/icfp-2017-artifact
