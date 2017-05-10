@@ -11,6 +11,8 @@ wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/key
 chmod 600 ~/.ssh/authorized_keys
 chown -R artifact ~/.ssh
 
+cd ~/Desktop
+
 # Install Racket
 # first download Racket v6.9
 wget http://mirror.racket-lang.org/installers/6.9/racket-6.9-x86_64-linux.sh
