@@ -30,7 +30,7 @@ cd /home/artifact/Desktop
 tar -xf icfp-2017-artifact.tar
 tar -xf video.tar
 tar -xf typed-video.tar
-tar -xf paper.tar
+tar -xf paper-src.tar
 rm icfp-2017-artifact.tar
 rm video.tar
 rm typed-video.tar
