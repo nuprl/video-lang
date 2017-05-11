@@ -7,3 +7,4 @@ rconframes-build/00005.MTS.ac filter=lfs diff=lfs merge=lfs -text
 rconframes-build/00005.MTS.ad filter=lfs diff=lfs merge=lfs -text
 rconframes-build/00005.MTS.ae filter=lfs diff=lfs merge=lfs -text
 rconframes-build/00005.MTS.af filter=lfs diff=lfs merge=lfs -text
+rconframes-build export-ignore
