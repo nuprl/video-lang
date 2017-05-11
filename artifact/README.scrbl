@@ -50,7 +50,9 @@ The relevant files for this artifact are in
  #:style 'compact
  @item{@filepath{README.html}--this file,}
  @item{@filepath{VIDEO-MANUAL.html}---a copy of the user manual for video,}
- @item{@filepath{paper-src/}--the source code for the paper,}
+ @item{@filepath{paper-src/}--the source code for the paper
+  (except for the source for the conference images which are
+  substantially larger),}
  @item{@filepath{super8.pdf}--the paper,}
  @item{@filepath{video/}--a copy of Video,}
  @item{@filepath{typed-video/}--a copy of Typed Video,}
