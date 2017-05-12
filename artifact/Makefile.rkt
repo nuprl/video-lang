@@ -24,9 +24,11 @@
            "-o" (build-path here "typed-video.tar")
            "master"))
 (parameterize ([current-directory (build-path here "..")])
+  (system* "make")
   (system* git "archive" "--prefix=paper-src/"
            "-o" (build-path here "paper-src.tar")
-           "master"))
+           "master")
+  (rename-file-or-directory "paper.pdf" (build-path here "super8-draft.pdf")
 (tar "icfp-2017-artifact.tar" "video.tar" "typed-video.tar" "paper-src.tar"
      #:exists-ok? #t)
 (if 64bit

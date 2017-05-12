@@ -6,7 +6,7 @@
          (author+email "Matthias Felleisen" "matthias@ccs.neu.edu"))
 
 This is the README file for the artifact that accompanies:
-``Super8, the Language for Making Movies---A Functional Pearl'' in ICFP 2017
+``Super8, Languages for Making Movies---A Functional Pearl'' in ICFP 2017
 
 Our artifact consists of a VM image that contains:
 @itemlist[
