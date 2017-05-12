@@ -195,6 +195,5 @@ implementation
  @item{@filepath{info.rkt}--A basic config file used by the
   Racket package manager.}]
 
-@section{Typed Video}
-
----Stephen write here please---
+@;{Typed Video}
+@include-section{typed-video.scrbl}
