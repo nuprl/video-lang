@@ -37,12 +37,13 @@ rm typed-video.tar
 rm paper-src.tar
 mv video ~/Desktop
 mv typed-video ~/Desktop
-mv paper-src ~/Desktop
+mv paper-src/artifact .
+rm -r paper-src/
 mv super8-draft.pdf ~/Desktop
 
 # Install Video
 cd /home/artifact/Desktop/video
-raco pkg install
+raco pkg install --deps search-auto
 
 # Add Examples folder
 cd /home/artifact/Desktop
@@ -57,9 +58,9 @@ cp -r /home/artifact/Desktop/video/video/examples .
 # cp /home/artifact/Desktop/paper-src/paper.pdf super8.pdf
 
 # Create the README
-cd /home/artifact/Desktop/paper-src/artifact
+cd /home/artifact/artifact
 scribble +m --htmls README.scrbl
-ln -s /home/artifact/Desktop/scribblings/README/index.html ~/Desktop/README.html
+ln -s /home/artifact/artifact/README/index.html ~/Desktop/README.html
 
 # Add User Manual
 cd ~/Desktop
