@@ -47,18 +47,22 @@
   (bitmap b))
 
 (define matthias-suffix (if (regexp-match #px"matthias" (current-directory)) " O" ""))
-(define code-font (string-append "Linux Libertine Mono" matthias-suffix))
-(define text-font (string-append "Linux Libertine" matthias-suffix))
+(define code-font (list "Linux Libertine Mono" "Linux Libertine Mono 0"))
+(define text-font (list "Linux Libertine" "Linux Libertine 0"))
 (define small-font-size 10)
 (define font-size 15)
 (define small-scale-factor 0.8)
 (define code-line-sep 10)
 
 ; Test to make sure fonts are installed:
-(unless (set-member? (get-face-list) code-font)
-  (raise-user-error 'paper "Please install '~a' font: http://www.linuxlibertine.org" code-font))
-(unless (set-member? (get-face-list) text-font)
-  (raise-user-error 'paper "Please install '~a' font: http://www.linuxlibertine.org" text-font))
+(let ([tmp (set-intersect (get-face-list) code-font)])
+  (if (set-empty? tmp)
+      (raise-user-error 'paper "Please install '~a' font: http://www.linuxlibertine.org" code-font)
+      (set! code-font (set-first tmp))))
+(let ([tmp (set-intersect (get-face-list) text-font)])
+  (if (set-empty? tmp)
+      (raise-user-error 'paper "Please install '~a' font: http://www.linuxlibertine.org" text-font)
+      (set! text-font (set-first tmp))))
 
 (define-syntax-rule (mod->pict modname lang content ...)
   (mod->pict* #:codeblock? #f modname lang content ...))

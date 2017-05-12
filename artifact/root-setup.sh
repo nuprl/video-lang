@@ -11,7 +11,8 @@ sudo apt-get -y -q install virtualbox-guest-utils virtualbox-guest-x11 virtualbo
 sudo apt-get -y -q install firefox vim xvfb git wget tar xfce4 lightdm mupdf libmlt6 libav-tools ladspa-sdk libgdk-pixbuf2.0-* frei0r-plugins* libdc1394-*
 
 # Install latex, for Scribble
-sudo apt-get -y -q --no-install-recommends install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra pgf tex-gyre linux-libertine
+sudo apt-get -y -q --no-install-recommends install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra pgf tex-gyre
+sudo apt-get -y -q --no-install-recommends install linux-libertine texlive-fonts-extra
 
 # Add an XSession session for lightdm
 sudo echo "[Desktop Entry]"         > /usr/share/xsessions/custom.desktop
