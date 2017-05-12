@@ -15,22 +15,21 @@ Our artifact consists of a VM image that contains:
  @item{a distribution of the Video programming language,}
  @item{the required libraries to support Video's renderer,}
  @item{example programs written in Video,}
- @item{the source code for this paper (draft),}
  @item{a copy of a draft of the paper,}
  @item{and a distribution of the Typed Video variant of Video.}]
 
-The goals of this are to:
+The goals of this artifact are to:
 @itemlist[
  #:style 'compact
  @item{provide a simple environment to create and run Video programs, and}
  @item{provide an archival copy of Video.}]
 
-Note that at the time of creation for this VM, the video language can be found at:
+At the time of this artifact's creation, the video language can also be found at:
 @url["https://github.com/LeifAndersen/racket-video"]
 
-The source files for the RacketCon videos are too large to
-include in this image. The source for the video used in this
-paper can be found at: @url["http://ccs.neu.edu/~leif/icfp-2017/rcon.tar.gz"]
+The RacketCon source files are too large to include in this
+image. The ones used for this paper can be found at:
+@url["http://ccs.neu.edu/~leif/icfp-2017/rcon.tar.gz"]
 
 Finally, the edited RacketCon 2016 videos created using
 Video can be found
@@ -60,9 +59,6 @@ The relevant files for this artifact are in
  #:style 'compact
  @item{@filepath{README.html}--this file,}
  @item{@filepath{VIDEO-MANUAL.html}---a copy of the user manual for video,}
- @item{@filepath{paper-src/}--the source code for the paper
-  (except for the source for the conference images which are
-  substantially larger),}
  @item{@filepath{super8.pdf}--the paper,}
  @item{@filepath{video/}--a copy of Video,}
  @item{@filepath{typed-video/}--a copy of Typed Video,}
@@ -72,7 +68,7 @@ The relevant files for this artifact are in
 
 @section{Video Examples}
 
-The @filepath{examples/} folder gives several examples of
+The @filepath{examples/} folder contains several examples of
 small video programs using many of Video's features. Here is
 a list of each of these programs:
 
