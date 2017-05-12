@@ -67,7 +67,7 @@ Section 6.4 of the paper (Figure 9) presents the essence of the type rule
 implementations for lambda and function application, which utilize the "Type
 Systems as Macros" framework. The full implementations for those rules and most
 others may be viewed in
-@filepath{/home/artifact/typed-video/typed/video.rkt}. Specifically, the lambda
+@filepath{/home/artifact/Desktop/typed-video/typed/video.rkt}. Specifically, the lambda
 rule begins at line 583 and function application begins at line 640. Much of
 the extra code that is elided from the paper tries to clean up and simplify the
 error messages, e.g., removing duplicate constraints and making sure not to

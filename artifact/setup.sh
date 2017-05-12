@@ -64,7 +64,7 @@ ln -s /home/artifact/artifact/README/index.html ~/Desktop/README.html
 
 # Add User Manual
 cd ~/Desktop
-# ...
+ln -s /home/artifact/video/video/doc/video/index.html manual.html
 
 # Configure XFCE, instead of directly configuring this put it in the
 # .bash_profile because the command won't work without X11 running.
