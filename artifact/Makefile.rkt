@@ -16,14 +16,17 @@
 (define-runtime-path here ".")
 (current-directory here)
 (parameterize ([current-directory (build-path here ".." "racket-video")])
-  (system* git "archive" "--prefix=video"
-           "-o" (path->directory-path (build-path here "video.tar") "master")))
+  (system* git "archive" "--prefix=video/"
+           "-o" (build-path here "video.tar")
+           "master"))
 (parameterize ([current-directory (build-path here ".." "typed-video")])
-  (system* git "archive" "--prefix=typed-video"
-           "-o" (path->directory-path (build-path here "typed-video.tar") "master")))
+  (system* git "archive" "--prefix=typed-video/"
+           "-o" (build-path here "typed-video.tar")
+           "master"))
 (parameterize ([current-directory (build-path here "..")])
-  (system* git "archive" "--prefix=paper-src"
-           "-o" (path->directory-path (build-path here "paper-src.tar") "master")))
+  (system* git "archive" "--prefix=paper-src/"
+           "-o" (build-path here "paper-src.tar")
+           "master"))
 (tar "icfp-2017-artifact.tar" "video.tar" "typed-video.tar" "paper-src.tar"
      #:exists-ok? #t)
 (if 64bit
