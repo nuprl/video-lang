@@ -15,17 +15,27 @@ Our artifact consists of a VM image that contains:
  @item{a distribution of the Video programming language,}
  @item{the required libraries to support Video's renderer,}
  @item{example programs written in Video,}
- @item{the source code for this paper,}
+ @item{the source code for this paper (draft),}
+ @item{a copy of a draft of the paper,}
  @item{and a distribution of the Typed Video variant of Video.}]
 
 The goals of this are to:
 @itemlist[
  #:style 'compact
- @item{provide a simple environment to create and run Video programs and}
+ @item{provide a simple environment to create and run Video programs, and}
  @item{provide an archival copy of Video.}]
 
 Note that at the time of creation for this VM, the video language can be found at:
 @url["https://github.com/LeifAndersen/racket-video"]
+
+The source files for the RacketCon videos are too large to
+include in this image. The source for the video used in this
+paper can be found at: @url["http://ccs.neu.edu/~leif/icfp-2017/rcon.tar.gz"]
+
+Finally, the edited RacketCon 2016 videos created using
+Video can be found
+@hyperlink["https://www.youtube.com/watch?v=nOyIKCszNeI&list=PLXr4KViVC0qKSiKGO6Vz9EtxUfKPb1Ma0"]{
+ on Youtube}.
 
 @section{Setting up and installing the artifact}
 

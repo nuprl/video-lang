@@ -3,18 +3,18 @@
 @require["bib.rkt" (only-in scribble/core element make-style)
          "utils.rkt"]
 
-@title{Super 8, the Language for Making Movies---A Functional Pearl}
-@;{
+@title{Super 8, Languages for Making Movies---A Functional Pearl}
  @author["J.J. Abrams"       #:affiliation "Bad Robot Productions"]
  @author["Bryan Burk"        #:affiliation "Amblin Entertainment"]
  @author["Steven Spielberg"]
-}
 
+@;{
 @author["Leif Andersen" #:affiliation "PLT @ Northeastern University"]@;#:email "leif@ccs.neu.edu"]
 @author["Stephen Chang" #:affiliation "PLT @ Northeastern University" #:email "stchang@ccs.neu.edu"]
 @author["Matthias Felleisen"
         #:affiliation "PLT @ Northeastern University"
         #:email "matthias@ccs.neu.edu"]
+}
 
 @abstract{The Racket doctrine tells developers to narrow the
  gap between the terminology of a problem domain and general

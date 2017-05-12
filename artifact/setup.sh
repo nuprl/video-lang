@@ -38,6 +38,7 @@ rm paper-src.tar
 mv video ~/Desktop
 mv typed-video ~/Desktop
 mv paper-src ~/Desktop
+mv super8-draft.pdf ~/Desktop
 
 # Install Video
 cd /home/artifact/Desktop/video
@@ -47,13 +48,13 @@ raco pkg install
 cd /home/artifact/Desktop
 cp -r /home/artifact/Desktop/video/video/examples .
 
-# Build the paper
-cd /home/artifact/Desktop/paper-src
-make
+# Build the paper (never mind)
+# cd /home/artifact/Desktop/paper-src
+# make
 
 # Place paper on Desktop
-cd /home/artifact/Desktop
-cp /home/artifact/Desktop/paper-src/paper.pdf super8.pdf
+# cd /home/artifact/Desktop
+# cp /home/artifact/Desktop/paper-src/paper.pdf super8.pdf
 
 # Create the README
 cd /home/artifact/Desktop/paper-src/artifact

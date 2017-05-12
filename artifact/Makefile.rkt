@@ -28,8 +28,8 @@
   (system* git "archive" "--prefix=paper-src/"
            "-o" (build-path here "paper-src.tar")
            "master")
-  (rename-file-or-directory "paper.pdf" (build-path here "super8-draft.pdf")
-(tar "icfp-2017-artifact.tar" "video.tar" "typed-video.tar" "paper-src.tar"
+  (rename-file-or-directory "paper.pdf" (build-path here "super8-draft.pdf") #t))
+(tar "icfp-2017-artifact.tar" "video.tar" "typed-video.tar" "paper-src.tar" "super8-draft.pdf"
      #:exists-ok? #t)
 (if 64bit
     (system* packer "build" "artifact.json")
