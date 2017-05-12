@@ -58,7 +58,7 @@ The relevant files for this artifact are in
  @item{@filepath{typed-video/}--a copy of Typed Video,}
  @item{@filepath{examples/}--example Video programs,}
  @item{@filepath{DrRacket}--an IDE for editing Video programs,}
- @item{and @filepath{run.rkt}--a script to run the examples in this repo.}]
+ @item{and @filepath{run-examples}--a script to run the examples in this repo.}]
 
 @section{Video Examples}
 
