@@ -38,6 +38,8 @@ rm paper-src.tar
 mv video ~/Desktop
 mv typed-video ~/Desktop
 mv paper-src/artifact .
+cp artifact/run-examples ~/Desktop
+chmod +x ~/Desktop/run-examples
 rm -r paper-src/
 mv super8-draft.pdf ~/Desktop
 
