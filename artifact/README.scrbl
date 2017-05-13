@@ -5,6 +5,8 @@
          (author+email "Stephen Chang" "stchang@ccs.neu.edu")
          (author+email "Matthias Felleisen" "matthias@ccs.neu.edu"))
 
+@(require scribble/core)
+
 This is the README file for the artifact that accompanies:
 ``Super8, Languages for Making Movies---A Functional Pearl'' in ICFP 2017
 
@@ -35,6 +37,12 @@ Finally, the edited RacketCon 2016 videos created using
 Video can be found
 @hyperlink["https://www.youtube.com/watch?v=nOyIKCszNeI&list=PLXr4KViVC0qKSiKGO6Vz9EtxUfKPb1Ma0"]{
  on Youtube}.
+
+@elem[#:style (style #f (list (color-property "red")))]{
+ The Video scripts in this VM will occasionally segfault
+ during execution. This is caused by the version of libmlt
+ included in the VM. If this happens, simply re-run the
+ script.}
 
 @section{Setting up and installing the artifact}
 
