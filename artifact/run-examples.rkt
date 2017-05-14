@@ -5,7 +5,7 @@
          compiler/find-exe)
 
 (define-runtime-path here ".")
-(define rv (curry system* "racket" "-l" "raco" "video"))
+(define rv (curry system* (find-exe) "-l" "raco" "video"))
 
 (parameterize ([current-directory (build-path here "examples")])
   (rv "1-hellocolor.rkt")
