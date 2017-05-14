@@ -76,6 +76,21 @@ The relevant files for this artifact are in
 
 @section{Video Examples}
 
+Video programs can be run within DrRacket or from the
+terminal. For this artifact, we recommend using the
+terminal. To play a video, simply run @exec{raco video} from
+the command line. For example, to run
+@filepath["1-hellocolor.rkt"], simple execute:
+
+@nested[@exec{raco video 1-hellocolor.rkt}]
+
+If you instead run the videos from DrRacket, click on the
+green camera icon that says: @onscreen["Preview Video"].
+
+The provided @filepath{run-examples.rkt} script plays each
+video in succession. Close one video to play the next
+example.
+
 The @filepath{examples/} folder contains several examples of
 small video programs using many of Video's features. Here is
 a list of each of these programs:
