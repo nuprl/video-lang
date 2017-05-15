@@ -1,6 +1,6 @@
 #lang scribble/manual
 
-@title{Artifact: Super8, the Language for Making Movies---A Functional Pearl}
+@title{Artifact: Super8, Languages for Making Movies---A Functional Pearl}
 @(author (author+email "Leif Andersen" "leif@ccs.neu.edu")
          (author+email "Stephen Chang" "stchang@ccs.neu.edu")
          (author+email "Matthias Felleisen" "matthias@ccs.neu.edu"))
