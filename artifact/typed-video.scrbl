@@ -12,14 +12,19 @@ as follows:
 
 @itemlist[
  #:style 'compact
- @item{@filepath{examples/}--all of the @seclink["Video_Examples"]{examples from the untyped Video language}, ported to Typed Video.}
- @item{@filepath{tests/}--additional tests for Typed Video, including all examples from the paper}
+ @item{@filepath{examples/}--all of the @seclink["Video_Examples"]{examples from the untyped Video language}, ported to Typed Video.
+
+As with untyped Video, the typed examples may be rendered and previewed from either within DrRacket or via the @tt{raco video} command.}
+ @item{@filepath{tests/}--additional tests for Typed Video, including all examples from the paper.
+
+Each test file may be run (from the @tt{tests/} directory) either with the plain @tt{racket} command or the @tt{raco test} command. Run all Typed Video tests with the command: @verbatim|{raco test --package typed-video}|
+}
  @item{@filepath{typed/}--the source code for Typed Video, which adds a type checking layer on top of the untyped Video implementation. In particular @filepath{typed/video.rkt} contains the type rule implementations.}]
 
 @section{Unit-testing library for type checking}
 
-Examples and tests in the Typed Video repository may utilize a special
- unit-testing library for type checking that consists of the following forms.
+Examples and tests in the Typed Video repository utilize a type-checking unit-testing library that provides forms described below.
+
  @itemlist[
   @; check-type
   @item{@code{check-type}: given an expression and type, the test passes if the expression has a type that is a subtype of the given type.
@@ -61,14 +66,16 @@ The main Typed Video examples from section 6.2 of the paper may be found in
 @filepath{tests/paper-tests.rkt}, namely the @code{add-slides},
 @code{add-bookend}, and @code{conference-talk} functions.
 
+Run each test file via the @tt{raco test} command, e.g., @verbatim|{raco test paper-tests.rkt}|
+
 @section{Implementation}
 
 Section 6.4 of the paper (Figure 9) presents the essence of the type rule
 implementations for lambda and function application, which utilize the "Type
 Systems as Macros" framework. The full implementations for those rules and most
 others may be viewed in
-@filepath{/home/artifact/Desktop/typed-video/typed/video.rkt}. Specifically, the lambda
-rule begins at line 583 and function application begins at line 640. Much of
-the extra code that is elided from the paper tries to clean up and simplify the
-error messages, e.g., removing duplicate constraints and making sure not to
-leak implementation details.
+@filepath{/home/artifact/Desktop/typed-video/typed/video.rkt}. Specifically,
+the lambda rule begins at line 583 and function application begins at line
+640. Much of the extra code that is present in the implementation but not shown
+in the paper tries to clean up and simplify the error messages, e.g., removing
+duplicate constraints and making sure not to leak implementation details.
