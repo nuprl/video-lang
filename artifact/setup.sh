@@ -47,6 +47,10 @@ mv super8-draft.pdf ~/Desktop
 cd /home/artifact/Desktop/video
 raco pkg install --deps search-auto
 
+# Install Typed Video
+cd /home/artifact/Desktop/typed-video
+raco pkg install --deps search-auto
+
 # Add Examples folder
 cd /home/artifact/Desktop
 cp -r /home/artifact/Desktop/video/video/examples .
