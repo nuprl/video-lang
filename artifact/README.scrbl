@@ -39,11 +39,10 @@ Video can be found
  on Youtube}.
 
 @elem[#:style (style #f (list (color-property "red")))]{
- The Video scripts in this VM will occasionally segfault
- during execution. This is caused by the version of libmlt
- included in the VM. If this happens, simply re-run the
- script.}
-
+ The Video scripts in this artifact may occasionally
+ segfault, due to a bug in the version of libmlt included
+ with the artifact. If this happens, simply re-run the script}
+                                                        
 @section{Setting up and installing the artifact}
 
 The artifact is available as a virtual machine appliance for VirtualBox. If
@@ -66,8 +65,8 @@ The relevant files for this artifact are in
 @itemlist[
  #:style 'compact
  @item{@filepath{README.html}--this file,}
- @item{@filepath{VIDEO-MANUAL.html}---a copy of the user manual for video,}
- @item{@filepath{super8.pdf}--the paper,}
+ @item{@filepath{manual.html}---a copy of the user manual for video,}
+ @item{@filepath{super8-draft.pdf}--the paper,}
  @item{@filepath{video/}--a copy of Video,}
  @item{@filepath{typed-video/}--a copy of Typed Video,}
  @item{@filepath{examples/}--example Video programs,}
@@ -87,9 +86,15 @@ the command line. For example, to run
 If you instead run the videos from DrRacket, click on the
 green camera icon that says: @onscreen["Preview Video"].
 
+When running you may get a warning involving @tt{libdc1394},
+this is caused by a camera driver and can be ignored.
+
 The provided @filepath{run-examples.rkt} script plays each
 video in succession. Close one video to play the next
-example.
+example. This file can be run directly and does not need to
+be run through the @exec{raco video} interface:
+
+@nested[@exec{racket run-examples.rkt}]
 
 The @filepath{examples/} folder contains several examples of
 small video programs using many of Video's features. Here is
@@ -159,7 +164,7 @@ implementation
  @item{@filepath{private/init-mlt.rkt}--The libmlt library requires some
   initialization, this file takes care of that. It is split
   into a seperate file from @filepath["private/mlt.rkt"] so it
-  can manged Video specific state independent of the FFI bindings.}
+  can managed Video specific state independent of the FFI bindings.}
  @item{@filepath{private/semaphore.rkt}--An atomic
   semaphore used exclusively in
   @filepath["private/init-mlt.rkt"]}
@@ -187,7 +192,7 @@ implementation
  @item{@filepath{tests/}--Tests for the Video language.}
  @item{@filepath{scribblings/}--Source for Video's documentation.}
  @item{@filepath{lang/reader.rkt}--Installs Video as a
-  proper @racket[#,hash-lang] in Racket.}
+  proper @racket[#,(hash-lang)] in Racket.}
  @item{@filepath{main.rkt}--Works with
   @filepath["lang/reader.rkt"] to define the file level syntax
   used in Video. Also defines the syntax for users to create
