@@ -5,7 +5,9 @@
 
 (provide (all-defined-out))
 
-(define-cite cite citet gen-bib)
+(define-cite cite citet gen-bib
+  #:cite-author cite-author
+  #:cite-year cite-year)
 
 (define short? #f)
 (define-syntax define/short
