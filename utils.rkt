@@ -28,7 +28,7 @@
   (make-element (make-style "identity" '(exact-chars))
                 `("\\begin{tikzpicture}"
                   "\\node (0) {};"
-                  "\\node [left of=0, xshift=4cm] (1) {};"
+                  "\\node [left of=0, xshift=3.2cm] (1) {};"
                   "\\draw[->,transform canvas={yshift=-1mm}] (0) -- node[yshift=1mm]"
                   ,(format "{\\tiny ~a} (1);" (apply string-append text))
                   "\\end{tikzpicture}")))
@@ -101,7 +101,7 @@
    (blank space)
    b))
 
-(define (make-playlist-timeline #:distance [distance 5]
+(define (make-playlist-timeline #:distance [distance 4]
                                 #:end [end #f]
                                 #:font-size [font-size small-font-size]
                                 . trace)

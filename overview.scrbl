@@ -127,7 +127,7 @@ Take a second look at the implementation for
 @racket[conference-talk], shown in
 @figure-ref["video-functions"]. Lines 5--7 show the
 function header. The rest of the code describes the function
-body (lines 7--25). Functions in Video are declarative; in
+body (lines 7--27). Functions in Video are declarative; in
 particular, line 8 is the producer returned by this
 function. The remaining subsections explain the Video
 language in sufficient detail to understand the rest of the
@@ -146,22 +146,24 @@ language and how they improve the video editing process.
 @#,line-no[] (define (conference-talk video slides audio offset)
 @#,line-no[]   (multitrack clean-video clean-audio)
 @#,line-no[]   (code:comment "where")
-@#,line-no[]   (define clean-audio (playlist (blank offset)
-@#,line-no[]                                 (attach-filter audio
-@#,line-no[]                                                (envelope-filter 50 #:direction 'in)
-@#,line-no[]                                                (envelope-filter 50 #:direction 'out))))
-@#,line-no[] (define spliced-video (multitrack (blank #f)
-@#,line-no[]                                   (composite-transition 0 0 1/4 1/4)
-@#,line-no[]                                   slides
-@#,line-no[]                                   (composite-transition 1/4 0 3/4 1)
-@#,line-no[]                                   video
-@#,line-no[]                                   (composite-transition 0 1/4 1/4 3/4)
-@#,line-no[]                                   (image "logo.png" #:length (producer-length talk))))
-@#,line-no[] (define clean-video (playlist (image "splash.png" #:length 100)
-@#,line-no[]                               (fade-transition #:length 50)
-@#,line-no[]                               spliced-video
-@#,line-no[]                               (fade-transition #:length 50)
-@#,line-no[]                               (image "splash.png" #:length 100))))]}
+@#,line-no[]   (define clean-audio
+@#,line-no[]     (playlist (blank offset)
+@#,line-no[]               (attach-filter audio
+@#,line-no[]               (envelope-filter 50 #:direction 'in)
+@#,line-no[]               (envelope-filter 50 #:direction 'out))))
+@#,line-no[]   (define spliced-video
+@#,line-no[]     (multitrack (blank #f)
+@#,line-no[]                 (composite-transition 0 0 1/4 1/4)
+@#,line-no[]                 slides
+@#,line-no[]                 (composite-transition 1/4 0 3/4 1)
+@#,line-no[]                 video
+@#,line-no[]                 (composite-transition 0 1/4 1/4 3/4)
+@#,line-no[]                 (image "logo.png" #:length (producer-length talk))))
+@#,line-no[]   (define clean-video (playlist (image "splash.png" #:length 100)
+@#,line-no[]                                 (fade-transition #:length 50)
+@#,line-no[]                                 spliced-video
+@#,line-no[]                                 (fade-transition #:length 50)
+@#,line-no[]                                 (image "splash.png" #:length 100))))]}
 
 @; -----------------------------------------------------------------------------
 @section[#:tag "overview-simple"]{Producers}
@@ -234,8 +236,6 @@ video
              (t# "clip" 4)
              (t# "clip" 5)
              @;(ellipses)
-             (t# "clip" 18)
-             (t# "clip" 19)
              (t# "clip" 20)
              (t# "clip" 21)
              (ellipses)
@@ -423,7 +423,7 @@ audio track that is itself composited with
 the video of the talk above, @racket[composited-talk]:
 
 @(split-minipage
-  #:split-location 0.58
+  #:split-location 0.56
   @racketmod[
 video
 
@@ -439,10 +439,12 @@ video
 @;
   (vc-append
    25
-   (hc-append 20
-              (scale-to-fit (bitmap "res/sound-start.png") 90 30 #:mode 'distort)
-              (ellipses)
-              (scale-to-fit (bitmap "res/sound-end.png") 90 30 #:mode 'distort))
+   (vc-append 20
+              (blank 1)
+              (hc-append 10
+                         (scale-to-fit (bitmap "res/sound-start.png") 90 30 #:mode 'distort)
+                         (ellipses)
+                         (scale-to-fit (bitmap "res/sound-end.png") 90 30 #:mode 'distort)))
    (make-playlist-timeline
     #:end #t
     (clip-scale (bitmap "res/rcon.png"))

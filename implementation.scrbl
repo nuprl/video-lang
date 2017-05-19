@@ -268,9 +268,9 @@ provided by @racketmodname[racket].
 
 @figure["mod-begin" @list{Compilation for a Video module}]{
 @(3split-minipage
-  #:size-a 0.38
-  #:size-b 0.22
-  #:size-c 0.40
+  #:size-a 0.35
+  #:size-b 0.16
+  #:size-c 0.49
   @racketmod0[
  video
  (image "splash.png" #,elided)
@@ -287,9 +287,9 @@ provided by @racketmodname[racket].
  @exact{\vspace{0.4cm}}
 
 @(3split-minipage
-  #:size-a 0.38
-  #:size-b 0.22
-  #:size-c 0.40
+  #:size-a 0.35
+  #:size-b 0.16
+  #:size-c 0.49
   (blank)
   (->text "elaborates to")
   @racketmod0[
@@ -302,9 +302,9 @@ provided by @racketmodname[racket].
  @exact{\vspace{0.4cm}}
  
 @(3split-minipage
-  #:size-a 0.38
-  #:size-b 0.22
-  #:size-c 0.40
+  #:size-a 0.35
+  #:size-b 0.16
+  #:size-c 0.49
   (blank)
   (->text "elaborates to")
   @racketmod0[
@@ -318,9 +318,9 @@ provided by @racketmodname[racket].
  @exact{\vspace{0.4cm}}
  
 @(3split-minipage
-  #:size-a 0.38
-  #:size-b 0.22
-  #:size-c 0.40
+  #:size-a 0.35
+  #:size-b 0.16
+  #:size-c 0.49
   (blank)
   (->text "elaborates to")
   @racketmod0[
