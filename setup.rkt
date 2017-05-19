@@ -3,7 +3,8 @@
 
 (require pkg
          pkg/lib
-         racket/cmdline)
+         racket/cmdline
+         compiler/find-exe)
 
 (define update-deps #f)
 
@@ -22,6 +23,8 @@
 (for ([i (in-list pkgs)])
   (cond [(and (hash-has-key? (installed-pkg-table) i))
          (when update-deps
-           (pkg-update-command #:deps 'search-auto i))]
+           (pkg-update-command #:deps 'search-auto i #:no-setup #t)
+           (system* (find-exe) "-l" "raco" "setup" "--no-docs" "video"))]
         [else
-         (pkg-install-command #:deps 'search-auto i)]))
+         (pkg-install-command #:deps 'search-auto i #:no-setup #t)
+         (system* (find-exe) "-l" "raco" "setup" "--no-docs" "video")]))
