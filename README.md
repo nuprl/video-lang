@@ -1,6 +1,11 @@
 Video Lang Paper
 ================
 
+Source Code
+===========
+<span style="color:red">NOTE: This repo is NOT the one for the video language. That can be found at: https://github.com/leifandersen/racket-video</span>
+
+
 Dependencies
 ============
 
