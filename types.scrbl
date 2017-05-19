@@ -32,18 +32,20 @@ transitions. A typical Video program slices these values and then combines
 them.  Not surprisingly, programmer errors often involve manipulating producers
 and transitions of improper lengths. Such errors are particularly dangerous
 because they often manifest themselves at the C level during rendering. For
-example, the following piece of code mistakenly tries to extract 16 frames from
+example, the following piece of code mistakenly tries to extract 15 frames from
 a producer that is only 10 frames long:
 @;
 @racketblock[
-(cut-producer (color "green" #:length 10) #:start 5 #:end 20)
-@code:comment{CRASH (given producer must have length >= 16)}]
+@code:comment{untyped Video}
+(cut-producer (color "green" #:length 10) #:start 0 #:end 15)
+@code:comment{CRASH (given producer must have length >= 15)}]
 @;
 The following second example attempts to use producers that are too short for
 the specified transition:
 @;
 @racketblock[
-(playlist (blank #:length 10) (fade-transition #:length 15) (color #:length 10))
+@code:comment{untyped Video}
+(playlist (blank 10) (fade-transition #:length 15) (color "green" #:length 10))
 @code:comment{CRASH (given producers must have length >= 15)}]
 @;
 While old fashioned scripting languages generally rely on dynamic checks to
@@ -56,13 +58,21 @@ Video.
 Typed Video adds a lightweight dependent type system to Video, where the types
 of producers and transitions are indexed by natural-number terms
 corresponding to their lengths. The rest of the type system resembles a
-simplified version of Xi and Pfenning's ATS@cite[ats-pldi].
+simplified version of Dependent ML@cite[ats-pldi].
 
 Such a type system does not impose too much of a burden in our domain.
 Indeed, it works well in practice because Video programmers are
 already accustomed to specifying explicit length information in their
 programs. For example, the snippets from @secref{video-data} produce static
-type error messages in Typed Video. In general, the type system ensures that
+type error messages in Typed Video:
+@;
+@racketblock[
+(cut-producer (color "green" #:length 10) #:start 0 #:end 15)
+@code:comment{TYPE ERR: cut-producer: expected (Producer 15), given (Producer 10)}
+(playlist (blank 10) (fade-transition #:length 15) (color "green" #:length 10))
+@code:comment{TYPE ERR: playlist: (fade-transition #:length 15) too long for producer (blank 10)}]
+@;
+In general, the type system ensures that
 producer values do not flow into positions where their length is less than
 expected.
 
@@ -72,8 +82,8 @@ a function @racket[add-slides] for combining the video of a speaker with
 slides from their presentation might have the following signature:
 
 @racketblock[
-(define (add-slides {n} [video : (Producer n)] [slides : (Producer n)] -> (Producer n))
-  (multitrack video slides background #:length (producer-length video)))]
+(define (add-slides {n} [vid : (Producer n)][slides : (Producer n)] -> (Producer n))
+  (multitrack vid slides background #:length (producer-length vid)))]
 @;
 This function binds a universally-quantified type variable @racket[n] that
 ranges over natural numbers and uses it to specify that the lengths of the
@@ -86,14 +96,17 @@ opening and ending sequence to a speaker's video:
 @(nested (minipage
 @racketblock[
 (code:comment "Add conference logos to the front and end of a video.")
-(define (add-bookend {n} [main-talk : (Producer n)] #:when (>= n 400) -> (Producer (+ n 600)))
-  (playlist begin-clip @fade-transition[#:length 200]
+(define (add-bookend {n} [main-talk : (Producer n)] #:when (>= n 400)
+                         -> (Producer (+ n 600)))
+  (playlist begin-clip
+            @fade-transition[#:length 200]
 	    main-talk
-	    @fade-transition[#:length 200] end-clip)
+	    @fade-transition[#:length 200]
+            end-clip)
   (define begin-clip @image["logo.png" #:length 500])
   (define end-clip @image["logo.png" #:length 500]))]))
 @;
-The @racket[add-bookend] function specifies with a @racket[#:when] keyword that
+The @racket[add-bookend]. function specifies with a @racket[#:when] keyword that
 its input must be a producer of at least 400 frames because it uses two
 200-frame transitions. The result type says that the output adds 600
 frames to the input. Here the additional frames come from the added beginning
@@ -177,16 +190,29 @@ signaled if the computed length of a producer is negative.
 @figure["type-rules" @list{A few type rules for Typed Video}]{
 @centered[
 @inferrule[#:name "color-n" "$\\Gamma\\vdash$ e : String"]{$\Gamma\vdash$ (color e \#:length n) : (Producer n)}
-@hspace{64}
+@hspace{24}
+@inferrule[#:name "color" "$\\Gamma\\vdash$ e : String"]{$\Gamma\vdash$ (color e) : Producer}
+]
+@vspace{10}
+@centered[
 @inferrule[#:name "clip" "$\\Gamma\\vdash$ f : File" "|f| = n"]{$\Gamma\vdash$ (clip f) : (Producer n)}
 ]
 @vspace{10}
 @centered[
-@inferrule[#:name "color" "$\\Gamma\\vdash$ e : String"]{$\Gamma\vdash$ (color e) : Producer}
-@hspace{16}
-@inferrule[#:name "playlist" "$\\Gamma\\vdash$ p/t : $\\tau$"
-                             "$\\tau$ <: (Producer n) \\textrm{or} $\\tau$ <: (Transition m)" "..."]{
+@inferrule[#:name "playlist" "$\\forall$p/t: $\\Gamma\\vdash$ p/t : $\\tau$, $\\tau$ <: (Producer n) \\textrm{or} $\\tau$ <: (Transition m)"
+                             "where each transition is interleaved between two producers"]{
                               $\Gamma\vdash$ (playlist p/t ...) : (Producer (- (+ n ...) (+ m ...)))}]
+@vspace{10}
+@centered[
+@inferrule[#:name "lam" "$\\Gamma$,n:Int,x:$\\tau\\vdash$ e : $\\tau'$; $\\phi'$"]{$\Gamma\vdash\lambda$n,x:$\tau$,$\phi$.e : $\forall$n.$\{\tau\mid\phi\vee\phi'\}\rightarrow\tau'$}
+]
+@vspace{10}
+@centered[
+@inferrule[#:name "app" "$\\Gamma\\vdash$ f : $\\forall$n.$\\{\\tau\\mid\\phi\\}\\rightarrow\\tau'$"
+                        "$\\Gamma\\vdash$ e : $\\tau''$"
+                        "$\\exists$m.$\\tau'' <: \\tau[n/m]$"
+                        "and $\\phi[n/m]$ satisfiable"]{$\Gamma\vdash$ f e : $\tau'$; $\phi[n/m]$}
+]
 }
 
 The Playlist rule uses Typed Video's subtyping relation. Here is the subtyping
