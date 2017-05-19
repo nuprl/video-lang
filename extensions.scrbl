@@ -16,7 +16,7 @@ Some videos are best expressed with a graphical NLVE, and the DrRacket
 version for Video therefore comes with embedded NLVE widgets.  Unlike other
 NLVEs with scriptable APIs, the NLVE widget is actually part of the
 language. A developer may place an NLVE directly into a script. Best of
-all, the embedded NLVE may include code snippets, which in tern can contain
+all, the embedded NLVE may include code snippets, which in turn can contain
 yet another NLVE widget etc.  See @figure-ref["video-gui"] for a screenshot
 of the editor.
 
@@ -38,7 +38,7 @@ Graphical NLVEs are producers and are thus first-class
 objects in Video. They can be bound to a variable, put in a
 playlist, supplied to a multitrack, and so on. Integrating
 the graphical and textual program in this manner allows
-users to edit videos in the style that is relavent for the
+users to edit videos in the style that is relevant for the
 task at hand. For example, the program in
 @figure-ref["video-gui"] shows an implementation of the
 @racket[conference-talk] function from

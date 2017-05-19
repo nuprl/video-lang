@@ -78,7 +78,7 @@ into account the transitions between the first and second fragment and the
 fourth and the fifth. 
 
 In essence, the script in @figure-ref{video-script} assembles the visual
-part of a simple conference video. What is missing, is the audio
+part of a simple conference video. What is missing is the audio
 part. Naturally, a Video programmer should abstract over this process, plus
 the audio processing, and create a suitable library.
 @Figure-ref["video-example"] shows what more or less the same script looks
@@ -96,7 +96,7 @@ and constants.
 
 @Figure-ref{video-functions} shows the essence of the utility library, also
 written as a Video module. Explaining its construction introduces enough of
-the Videos primitives and combinators to get a sense of what the rest of
+Video's primitives and combinators to get a sense of what the rest of
 the language looks like. First we explain Video's primary linguistic
 mechanisms, modules and functions (@secref["overview-functions"]). Then,
 we describe basic producers (@secref["overview-simple"]): images, clips,
@@ -125,11 +125,11 @@ first-class values.
 
 Take a second look at the implementation for
 @racket[conference-talk], shown in
-@figure-ref["video-functions"]. Lines 5--7 shows the
+@figure-ref["video-functions"]. Lines 5--7 show the
 function header. The rest of the code describes the function
 body (lines 7--25). Functions in Video are declarative; in
-particular, line 7 is the producer returned by this
-function. The remaining subsections explain the video
+particular, line 8 is the producer returned by this
+function. The remaining subsections explain the Video
 language in sufficient detail to understand the rest of the
 code. Specifically, we explain individual features of the
 language and how they improve the video editing process.
@@ -173,7 +173,7 @@ Combinations of
 producers are themselves producers, and they can be further
 combined into yet more complex producers still.
 
-The simplest type of producer, @racket[clip], incorporate traditional
+The simplest type of producer, @racket[clip], incorporates traditional
 video files. The @racket[clip] producer converts the file into a sequence
 of frames. Developers use @racket[clip] to import recordings, such as
 a conference talk, into their scripts:
@@ -195,7 +195,7 @@ video
 
 Unlike @racket[clip], @racket[image] creates a of an infinite stream of
 frames. Video's combination forms truncate these streams to
-fit the length other producers. Additionally,
+fit the length of other producers. Additionally,
 developers can use the @racket[#:length] keyword when they
 want a specific number of frames, such as creating an intro
 sequence to a conference:

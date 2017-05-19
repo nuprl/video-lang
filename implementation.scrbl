@@ -36,16 +36,16 @@ features to match the semantics of the new domain.
 
 Adding and removing features is simple, because a language
 implementation is a module like any other module in Racket.
-Removing feature is simply a matter of not re-providing them
+Removing features is simply a matter of not re-providing them
 from the host language. Line 4 uses the @racket[except-out]
 keyword to remove the definition of @racket[set!] from
 @racketmodname[racket/base]. Also on line 4,
-@racket[all-from-out] re-exports all of features in
+@racket[all-from-out] re-exports all of the features in
 @racketmodname[racket/base].
 
 In addition to these operations, adding new features is simply a matter of
-defines the new features and exporting them.
-They do so in the same manner as a programmer who augments the
+defining the new features and exporting them.
+Developers do so in the same manner as a programmer who augments the
 functionality of a library via a wrapper module.
 
 In contrast, modifying existing features requires a little more
@@ -100,8 +100,8 @@ solution.
 @#,line-no[]
 @#,line-no[] (define-syntax (#%lazy-app stx)
 @#,line-no[]   (syntax-parse stx
-@#,line-no[]     [(_ rater rand ...)
-@#,line-no[]      #'(#%app (force rater) (lazy rand)  ...)]))])
+@#,line-no[]     [(_ rator rand ...)
+@#,line-no[]      #'(#%app (force rator) (lazy rand)  ...)]))])
 }
 
 Now recall that Racket's syntax system supports several interposition
@@ -202,7 +202,7 @@ playlist.
 
 @Figure-ref["video-begin"] shows the essence of Video's
 @racket[#%module-begin] syntax transformer. It is written in Racket's
-@racket[syntax-parse] language@cite[fortifying-jfp], a vast improvement over
+@racket[syntax-parse] language@cite[fortifying-jfp], a vast improvement over the
 Scheme macro system@cite[kffd:hygiene kw:mbe hygenic-lisp closures-lfp syntax-lfp]. As
 before, the transformer is defined with a different name,
 @racket[#%video-module-begin] (line 6), and is renamed on
@@ -226,7 +226,7 @@ expressions:
 @;
 @itemlist[
 
-@item{Once @racket[video-begin] has traversed every piece of syntax (line 11), 
+@item{Once @racket[video-begin] has traversed every piece of syntax (line 13), 
 @racket[exprs] contains all of the original module body's expressions in
 reverse order. The generated output (lines 15--17) defines the
 given @racket[vid] to stand for the list of expressions
@@ -237,7 +237,7 @@ bundled as a playlist.  The last piece of the @racket[begin] block is
 up to the point where it can decide whether it is a definition (line 19).  
 Next, the transformer uses @racket[syntax-parse] to check whether the
 elaborated code is a syntax list (lines 20 and 23) with a recognized
-identifier in the first position (lines 22), e.g., @racket[define] and
+identifier in the first position (line 22), e.g., @racket[define] and
 @racket[provide].  
 
 @itemlist[
@@ -356,7 +356,7 @@ is used @emph{only once}.
 
 The auxiliary DSL relies on two forms: @racket[define-mlt] and
 @racket[define-constructor]. The first form uses the Racket FFI to import
-of bindings from MLT.  The second form, @racket[define-constructor],
+bindings from MLT.  The second form, @racket[define-constructor],
 defines the core data types for Video and sets up a mapping to data that
 MLT understands.
 

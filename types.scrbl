@@ -230,7 +230,7 @@ to construct the output of the type-checking pass.
    (define line-no (format (if (< *line-no 10) "0~a " "~a ") *line-no))
    @exact{\tt @line-no})
 
-@figure["type-checking-macros" @list{Type-checking vis syntax transformers}]{
+@figure["type-checking-macros" @list{Type-checking via syntax transformers}]{
 @racketmod[
 turnstile
 

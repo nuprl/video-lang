@@ -79,7 +79,7 @@ Finally, all of these languages make extensive use of yet another DSL,
  constructs for defining syntax transformers and the language developers
  have in mind. For example, developers know that one particular element of
  syntactic form must be an identifier while another must be a
- definition. Furthermore, they know what the error messages must come from
+ definition. Furthermore, they know that the error messages must come from
  the form itself, not the result of elaborating an occurrence of the
  form. The language of @racket[syntax-parse] provides all this and more,
  once again allowing developers to use the language they have in mind

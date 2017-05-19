@@ -83,7 +83,7 @@ tend not to deal with these XML languages directly when
 video editing. Rather, NLVEs use these languages as a file
 format to save video projects.
 
-Scripting-based DSLs, such as AVISynth@note{@avisynth-url}
+Scripting-based DSLs, such as AVISynth@note{@avisynth-url},
 are declarative but have their own limitations. Unlike
 XML-based languages, these DSLs support functions and other
 abstractions. However, they support only the simplest of
