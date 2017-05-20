@@ -113,7 +113,7 @@ features without changing the surface syntax.
 
 For example, a language developer can use a strict @racket[#%app] to
 construct a lazy form of function application. Indeed, the Racket family of
-languages comes with the @racketmodname[lazy/racket] language@cite[bc:lazy], which uses
+languages comes with the @racketmodname[lazy] language@cite[bc:lazy], which uses
 exactly this interposition point to convert @racketmodname[racket] into an
 otherwise equivalent language with lazy semantics. The @racket[#%app]
 protocol works because the Racket compiler places the marker in front of

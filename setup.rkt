@@ -17,6 +17,7 @@
  (void))
 
 (define pkgs '("doodle"
+               "turnstile"
                "video"))
 
 

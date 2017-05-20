@@ -12,7 +12,8 @@
          racket/list
          "pictures.rkt"
          "utils.rkt"
-         "bib.rkt"]
+         "bib.rkt"
+         #;(for-label video)]
 
 @(current-code-font code-font)
 @(get-current-code-font-size (λ () font-size))
