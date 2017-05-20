@@ -6,17 +6,9 @@
 @title{Super 8 Languages for Making Movies}
 @subtitle{(A Functional Pearl)}
 
-@;{
- @author["J.J. Abrams"       #:affiliation "Bad Robot Productions"]
- @author["Bryan Burk"        #:affiliation "Amblin Entertainment"]
- @author["Steven Spielberg"]
-}
-
-@author["Leif Andersen" #:affiliation "PLT @ Northeastern University"]@;#:email "leif@ccs.neu.edu"]
-@author["Stephen Chang" #:affiliation "PLT @ Northeastern University" #:email "stchang@ccs.neu.edu"]
-@author["Matthias Felleisen"
-        #:affiliation "PLT @ Northeastern University"
-        #:email "matthias@ccs.neu.edu"]
+@author[@list{Leif Andersen, Stephen Chang, Matthias Felleisen}
+        #:affiliation "PLT @ Northeastern University, Boston, Mass."
+	#:email "leif@ccs.neu.edu"]
 
 @acmJournal{PACMPL}
 
