@@ -60,7 +60,7 @@ For the last one, Racket developers heavily rely on linguistic
 interposition points, that is, anchors in the syntax elaboration process
 where a program may inject additional syntax transformations. Video
 exploits all of the above, plus of course, the ability to
-supply additional run-time primitives with a new language
+supply additional run-time primitives, , with a new language.
 
 Due to the ease of developing and installing languages in the Racket
 ecosystem, language creation has become a critical ``warhead''

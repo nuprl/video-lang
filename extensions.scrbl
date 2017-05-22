@@ -57,14 +57,16 @@ is plain Racket code and therefore we omit details of the implementation.
 
 @figure["playlist-sample" @list{Slide reconstruction using magic numbers (left) and a NLVE widget (right)}]{
 @(split-minipage
+  #:split-location 0.55
   @racketmod[video
              (apply playlist
-                    (for/list ([slide (directory-list slides)]
-                               [time (in-list slide-times)])
-                      (image slide #:length (* 48 time))))
+              (for/list ([slide (directory-list slides)]
+                         [time (in-list slide-times)])
+                (image slide #:length (* 48 time))))
              (define slide-times
-               (list 10 15 16 16 21 30 30 19 3
-                     10  50 15 33 250 42 20 65
+               (list 75 100 105 120 50 30 30 19 3
+                     10 50 15 33 250 42 20 65
                      13 9 25 37 25 13 30 39 45))]
-  (centered (vc-append (hc-append 5 (scale (bitmap "res/playlist-timeline.png") 0.40) (ellipses))
-    (blank 10 90))))}
+  (vc-append
+   (blank 1 10)
+   (hc-append 5 (scale (bitmap "res/playlist-timeline.png") 0.40) (ellipses))))}

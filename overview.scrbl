@@ -556,9 +556,10 @@ apply this function directly:
   (centered @racketinput[(preview (external-video "talk.vid"))])
   (scale (bitmap "res/talk-preview.png") 0.08))
 @;
-While @racket[render] just displays the video, @racket[preview] adds
-playback controls. 
-
+While @racket[render] just displays the video,
+@racket[preview] adds playback controls. And even gives
+developers the ability to preview an video excerpt.
+@;
 Another renderer, called @racket[preview-video] is a function that consumes
 a path to a Video script and plays it in a newly opened window:
 @;
