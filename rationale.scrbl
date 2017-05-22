@@ -56,11 +56,15 @@ creates a new language with some or all of the following actions:
 
 @item{re-interpreting linguistic constructs.}
 ]
-For the last one, Racket developers heavily rely on linguistic
-interposition points, that is, anchors in the syntax elaboration process
-where a program may inject additional syntax transformations. Video
-exploits all of the above, plus of course, the ability to
-supply additional run-time primitives, , with a new language.
+Here, linguistic constructs are any syntactic extensions
+added to a language, such as list comprehensions or new
+binding forms. For the last one, Racket developers heavily
+rely on linguistic interposition points, that is, anchors in
+the syntax elaboration process where a program may inject
+additional syntax transformations. Video exploits all of the
+above, plus of course, the ability to supply additional
+run-time primitives, operations with no new syntax, with a
+new language.
 
 Due to the ease of developing and installing languages in the Racket
 ecosystem, language creation has become a critical ``warhead''

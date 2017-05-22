@@ -39,16 +39,17 @@ Some professional tools,
 such as Adobe Premiere, @note{@premiere-api-url} even
 include an API to create script-style plug-ins directly.
 
-Extending tools in this fashion has limits.
-Macros are extremely brittle and frequently break, even
-within a single application, because macro languages do not understand
-the underlying tools. Using a tool's official plug-in
-interface produces reasonably robust scripts but yields a
-plug-in that is tightly coupled with its tool. It can be
-used only in settings where the entire toolchain is present.
+Extending tools in this fashion has limits. Macros are
+extremely brittle and frequently break, even within a single
+application, because macro languages do not understand the
+underlying tools. Using a tool's official plug-in interface
+produces reasonably robust scripts but yields a plug-in that
+is tightly coupled with its tool. It can be used only in
+settings where the entire toolchain is present.
 Blender@cite[essential-blender] for example, is only
-scriptable with a Blender-specific Python interpreter that runs when
-Blender is launched.
+scriptable with a Blender-specific Python interpreter that
+runs when Blender is launched. This differs from a language
+where programs can run on different language implementations.
 
 Alternative approaches to reducing boilerplate actions use
 general purpose multimedia frameworks such as
