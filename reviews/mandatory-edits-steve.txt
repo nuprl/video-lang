@@ -1,0 +1,40 @@
+### Mandatory revisions for section 6 (types)
+
+Flesh out the discussion of the type system in section 6 to resolve the mismatch between the typing rules presented in figure 8 and the implementations of typing rules in figure 9. Give more detail about bugs caught by the type system.
+
+### Review 1
+
+The discussion of the type system in section 6 seems a bit half-baked. It seems as though there is no relationship between the typing rules in figure 8 and the code in figure 9. Figure 9 seems like a nice illustration of the Chang et al. type-systems-as-macros technique, but it is hard to say how it connects up with what was discussed in the rest of section 6 (e.g., having the type checker reject as ill-typed a program that uses producers that are too short). The bottom of p.17 says "A type error is signaled if the computed length of a producer is negative", but we do not get to see where this actually gets enforced. My suggestion is that the authors flesh out section 6 to address these points.
+
+***Action: show implementation code where type error is enforced and reported
+
+p.16: cut-producer appears here for the first time. Should it have been introduced earlier?
+
+p.16: "combining the video of a speaker with slides" -- for clarity, you might want to say "...with a video of slides", to be clear that we are not talking about a handful of PNGs.
+
+p.19: "Turnstile reuses Racket's lexical scoping to implement the type environment." I am not sure I understand. Does this mean that lexical scoping somehow frees us from needing to write down a context in the conclusion of the typing rules?
+
+p.19: "elaborating the lambda body e may generate additional side conditions, new-Cs..." So, get-captured-Cs is something provided by Turnstile? What else from figure 9 is provided by Turnstile? Looks like solve and inst, at least? A sentence clarifying this would be good.
+
+p.18, caption of figure 9: "vis" -> "via"
+p.18: "RacketCon 2016" -- is the name of the conference that was supposedly omitted on page 11? :)
+
+### Review 2
+
+p. 15
+
+"we therefore whipped together a dependent type system in a single work day" did you prove anything about it? Should probably say so.
+
+### Review 3
+
+Section 6
+
+In section 6.3, As with the earlier comment, the nature of multitrack intrigues me, I'm very curious to see the typing rule for that.
+
+Section 8
+
+Is there no area where other DSL implementation techniques fare better than Racket's?
+
+For a related work section, this takes a rather dismissive tone.
+
+### Review 4
