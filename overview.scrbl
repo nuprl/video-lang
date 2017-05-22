@@ -552,8 +552,9 @@ and display it in a separate window. At DrRacket's REPL, developers can
 apply this function directly: 
 @;
 @(split-minipage
+  #:split-location 0.7
   (centered @racketinput[(preview (external-video "talk.vid"))])
-  (centered (scale (bitmap "res/talk-preview.png") 0.08)))
+  (scale (bitmap "res/talk-preview.png") 0.08))
 @;
 While @racket[render] just displays the video, @racket[preview] adds
 playback controls. 
@@ -562,8 +563,9 @@ Another renderer, called @racket[preview-video] is a function that consumes
 a path to a Video script and plays it in a newly opened window:
 @;
 @(split-minipage
+  #:split-location 0.7
   (centered @racketinput[(preview-video "talk.vid")])
-  (centered (scale (bitmap "res/talk-preview.png") 0.08)))
+  (scale (bitmap "res/talk-preview.png") 0.08))
 @;
 This functionality is also available outside of the IDE so that
 non-programmers may view the videos, too. 
