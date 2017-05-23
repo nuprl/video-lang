@@ -185,7 +185,7 @@ the soundness of our type system is now contingent on the correctness of this
 system call.} then an expression @code{(clip f)} has type @tt{(Producer
 n)}.
 
-@figure["type-rules" @list{A few type rules for Typed Video}]{
+@figure["type-rules" @list{A few Producer type rules for Typed Video}]{
 @centered[
 @inferrule[#:name "Color-n" "$\\Gamma\\vdash$ e : String"]{$\Gamma\vdash$ (color e \#:length n) : (Producer n)}
 @hspace{24}
@@ -230,28 +230,26 @@ example programs, including those for the RacketCon 2016 video proceedings.
 
 @figure["lam-app-rules" @list{λ and function application type rules for Typed Video}]{
 @centered[
-@inferrule[#:name "Lam" "$\\Gamma$,n:Int,x:$\\tau\\vdash$ e : $\\tau'$; $\\phi'$"]{$\Gamma\vdash\lambda$n,x:$\tau$,$\phi$.e : $\Pi\{$n$\mid\phi\vee\phi'\}.\tau\rightarrow\tau'$}
+@inferrule[#:name "Lam" "$\\Gamma$,n:Int,x:$\\tau\\vdash$ e : $\\tau'$; $\\phi'$"]{$\Gamma\vdash\lambda$n,x:$\tau$,$\phi$.e : $\Pi\{$n$\mid\phi\wedge\phi'\}.\tau\rightarrow\tau'$; true}
 ]
 @vspace{10}
 @centered[
-@inferrule[#:name "App" "$\\Gamma\\vdash$ f : $\\Pi\\{$n$\\mid\\phi\\}.\\tau\\rightarrow\\tau'$"
-                        "$\\exists$i.$\\Gamma\\vdash e : \\tau[n/i]$"
-                        "\\overrightharp{$\\mathcal{E}$}$(\\phi[n/i]) = \\phi'$"
-                        "$\\phi'\\neq$ false"]{$\Gamma\vdash$ f e : $\tau'$; $\phi'$}
+@inferrule[#:name "App" "$\\Gamma\\vdash$ f : $\\Pi\\{$n$\\mid\\phi\\}.\\tau\\rightarrow\\tau';\\phi_1$"
+                        "$\\exists$i.$\\Gamma\\vdash e : \\tau[n/i];\\phi_2$"
+                        "\\overrightharp{$\\mathcal{E}$}$(\\phi[n/i]) = \\phi_3$, $\\phi_3$ satisfiable"]{$\Gamma\vdash$ f e : $\tau'[n/i];\phi_1\wedge\phi_2\wedge\phi_3$}
 ]
 }
 
 The @sc{Lam} and @sc{App} rules in @figure-ref{lam-app-rules} roughly
 illustrate how Typed Video collects and solve constraints. Rather than deploy
 multiple type checking passes, Typed Video collects constraints during type
-checking---these may be user-supplied constraints, or constraints from the
-@code{Producer} subtyping or kinding rules earlier in the section---and solves
-them in a "local" manner.
+checking---these may be user-supplied constraints, or constraints required by
+the @code{Producer} subtyping or kinding rules earlier in the section---and
+solves them in a "local" manner.
 
-Specifically, type checking judgements additionally include a set of
+Specifically, type checking judgements additionally specify a set of
 constraints φ on the right-hand side corresponding to the constraints produced
-while type checking that expression (we omit writing an explicit φ when a rule
-simply collects and propagates constraints). Constraints in Typed Video are
+while type checking that expression. Constraints in Typed Video are
 restricted to linear arithmetic inequalities.
 
 The @sc{Lam} rule in @figure-ref{lam-app-rules} specifies that functions, which
@@ -260,13 +258,14 @@ satisfy input constraints φ, are assigned a universally quantified type that
 additionally includes constraints φ' collected while type checking the body of
 the function. When applying such a function, @sc{App} rule first infers a
 concrete number @code{i} at which to instantiate the @code{n} index
-variable. It then uses @code{i} to attempt to locally solve constraints φ via a
+variable. It then uses @code{i} to simplify constraints φ via a
 partial-evaluation function @(make-element (make-style "overrightharp"
 '(exact-chars)) @(make-element (make-style "ensuremath"
-'(exact-chars)) (make-element (make-style "mathcal" '(exact-chars)) "E"))),
-which returns false if any concrete constraints evaluate to false. Otherwise,
-the function application type checks and any remaining unsolved constraints are
-lazily propagated.
+'(exact-chars)) (make-element (make-style "mathcal" '(exact-chars)) "E"))).
+Type checking fails if the resulting constraints are not
+satisfiable. Otherwise, the unsolved constraints are propagated. Modularly
+checking constraints at function applications in this manner enables more
+localized error reports.
 
 
 @; -----------------------------------------------------------------------------
@@ -322,11 +321,12 @@ We implement our type checker with Turnstile, a Racket DSL introduced by Chang
 et al. for creating Typed DSLs. This DSL-generating-DSL uses a concise,
 bidirectional type-judgement-like syntax. In other words,
 @figure-ref{type-checking-macros}'s @racket[define-syntax/typecheck]
-implementations resemble their rule counterparts in @figure-ref{lam-app-rules}. The
-implementation rules define syntax transformers that incorporate type checking
-as part of syntax elaboration. Interleaving type checking and elaboration in
-this manner not only simplifies implementation of the type system, but also
-enables creating true abstractions on top of the host language.
+implementations resemble their specification counterparts in
+@figure-ref{lam-app-rules}. The implementation rules define syntax transformers
+that incorporate type checking as part of syntax elaboration. Interleaving type
+checking and elaboration in this manner not only simplifies implementation of
+the type system, but also enables creating true abstractions on top of the host
+language.
 
 Next we briefly explain each line of the @racket[λ] definition:
 
@@ -365,19 +365,20 @@ Thus the lambda body @racket[e] elaborates to to @racket[e-], simultaneously
 computing its type @racket[τ_out]. This elaboration and type checking occurs in
 the context of the free variables. Instead of propagating a type environment,
 Turnstile reuses Racket's lexical scoping to implement the type
-environment. This re-use greatly enhances the compositionality of languages
-and reduces effort so that a programmer gets away with specifying only new
-environment bindings. Specifically, the first premise uses two type environments, one
-each for the type index variables and lambda parameters, respectively, where the
-latter may contain references to the former.}
+environment. This re-use greatly enhances the compositionality of languages and
+reduces effort so that a programmer gets away with specifying only new
+environment bindings. Specifically, the first premise uses two type
+environments, one each for the type index variables and lambda parameters,
+respectively, where the latter may contain references to the former.}
 
 @with-linelabel{A @racket[#:with] premise binds additional pattern
 variables. Here, elaborating the lambda body @racket[e] may generate additional
 side-conditions, @racket[new-φs], that must be satisfied by the function's
-inputs. Rather than thread the side-conditions through every subexpression, our
-implementation utilizes a separate communication channel. Specifically, rules
-use the @racket[get-captured-φs] and @racket[add-φ] functions to propadate
-side-conditions, though we do not show the implementation of these functions.}
+inputs. Rather than thread the side-conditions through every subexpression, as
+in @figure-ref{lam-app-rules}, Typed Video's implementation utilizes a separate
+imperative interface for collecting constraints. Specifically, we use the
+@racket[get-captured-φs] and @racket[add-φ] functions to propagate
+side-conditions (the definition of these functions are not shown).}
 
 @with-linelabel{These dashes separate the premises from the conslusion.}
 
