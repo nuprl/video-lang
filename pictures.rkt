@@ -103,10 +103,10 @@
 (define (language-tower s)
   (let ()
     (define (t str) (text str text-font font-size))
-    (define racket (cc-superimpose (rectangle 200 30) (t "Racket")))
-    (define syntax-parse (cc-superimpose (rectangle 200 30) (t "Syntax Parse")))
+    (define racket (cc-superimpose (rectangle 370 30) (t "Racket")))
+    (define syntax-parse (cc-superimpose (rectangle 170 30) (t "Syntax Parse")))
+    (define scribble (cc-superimpose (rectangle 120 30) (t "Scribble")))
     (define video-ffi (cc-superimpose (rectangle 90 30) (t "Video FFI")))
-    (define video-core (cc-superimpose (rectangle 90 30) (t "Core Video")))
     (define video (cc-superimpose (rectangle 90 30) (t "Video")))
     (define turnstyle (cc-superimpose (rectangle 90 30) (t "Turnstile")))
     (define typed-video (cc-superimpose (rectangle 90 30) (t "Typed Video")))
@@ -117,37 +117,43 @@
           (let-values ([(w h) (rt-find a b)])
             (values (- w delta-w) h)))))
     (define builds-on (t "builds on"))
-    (let* ([acc (vc-append 40
-                           (hc-append 100 video-doc (blank 90 30))
-                           (hc-append 100 video typed-video)
-                           (hc-append 100 video-core (blank 90 30))
-                           (hc-append 100 video-ffi turnstyle)
-                           syntax-parse
-                           racket)]
-           [acc (pin-arrow-line 8 acc syntax-parse cb-find racket ct-find
+    (let* ([acc (vc-append 50
+                           (hc-append 70 video typed-video)
+                           (hc-append 70 video-ffi turnstyle))]
+           [acc (vc-append 50
+                           acc
+                           syntax-parse)]
+           [acc* (vc-append 130
+                            video-doc
+                            scribble)]
+           [acc (hc-append 60 acc* acc)]
+           [acc (vc-append 50 acc racket)]
+           [acc (pin-arrow-line 8 acc syntax-parse cb-find racket (offset ct-find -90)
+                                #:x-adjust-label -40 #:label builds-on)]
+           [acc (pin-arrow-line 8 acc scribble cb-find racket (offset ct-find 155)
                                 #:x-adjust-label 25 #:label builds-on)]
            [acc (pin-arrow-line 8 acc video-ffi cb-find syntax-parse (offset lt-find -5)
                                 #:x-adjust-label 25 #:label builds-on)]
            [acc (pin-arrow-line 8 acc turnstyle cb-find syntax-parse (offset rt-find 5)
                                 #:x-adjust-label -40 #:label builds-on)]
-           [acc (pin-arrow-line 8 acc video-ffi lc-find racket lc-find
-                                #:x-adjust-label -35 #:label builds-on
-                                #:start-angle pi #:end-angle 0 #:start-pull 1/3 #:end-pull 4/5)]
-           [acc (pin-arrow-line 8 acc turnstyle rc-find racket rc-find
-                                #:x-adjust-label 100 #:label builds-on
-                                #:start-angle 0 #:end-angle pi #:start-pull 1/3 #:end-pull 2/3)]
-           [acc (pin-arrow-line 8 acc video cb-find video-core ct-find
-                                #:x-adjust-label 25 #:label builds-on)]
-           [acc (pin-arrow-line 8 acc video-core cb-find video-ffi ct-find
+           [acc (pin-arrow-line 8 acc video-ffi lc-find racket (offset ct-find 50)
+                                #:x-adjust-label 15 #:label builds-on
+                                #:start-angle pi #:end-angle (* pi -1/2) #:start-pull 3/5 #:end-pull 1/5)]
+           [acc (pin-arrow-line 8 acc turnstyle (offset rb-find 20) racket (offset rt-find 50)
+                                #:x-adjust-label -25 #:label builds-on
+                                #:y-adjust-label 40
+                                #:start-angle (* pi -1/4) #:end-angle (* pi 21/18) #:start-pull 1/3 #:end-pull 2/3)]
+           [acc (pin-arrow-line 8 acc video cb-find video-ffi ct-find
                                 #:x-adjust-label 25 #:label builds-on)]
            [acc (pin-arrow-line 8 acc typed-video cb-find turnstyle ct-find
                                 #:x-adjust-label -40 #:label builds-on)]
+           [acc (pin-arrow-line 8 acc video-doc cb-find scribble ct-find
+                                #:x-adjust-label 25 #:label builds-on)]
            [acc (pin-arrow-line 8 acc typed-video lc-find video rc-find
                                 #:label (t "extends"))]
-           [acc (pin-arrow-line 8 acc video-doc cb-find video ct-find
-                                #:x-adjust-label 25 #:label builds-on)]
-           [acc (pin-arrow-line 8 acc video-doc lc-find racket lc-find
-                                #:x-adjust-label -80 #:label builds-on
-                                #:start-angle pi #:end-angle 0 #:start-pull 1/3 #:end-pull 1/2)]
-           [acc (inset acc 100 0)])
+           [acc (pin-arrow-line 8 acc video lc-find video-doc rc-find
+                                #:label (t "extends"))]
+           #;[acc (inset acc 100 0)])
       (scale acc s))))
+
+(language-tower 2)

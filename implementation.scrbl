@@ -334,7 +334,6 @@ provided by @racketmodname[racket].
      (conference-video video #,elided))))])
  @exact{\vspace{0.2cm}}}
 
-
 @; -----------------------------------------------------------------------------
 @section[#:tag "impl-ffi"]{Video, Behind the Scenes}
 

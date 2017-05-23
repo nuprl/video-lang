@@ -7,7 +7,14 @@
 @subtitle{(A Functional Pearl)}
 
 @author[@list{Leif Andersen, Stephen Chang, Matthias Felleisen}
-        #:affiliation "PLT @ Northeastern University, Boston, Mass."
+        #:affiliation (affiliation
+                       #:institution
+                       (institution
+                        #:departments '("PLT")
+                        "Northeastern University")
+                       #:city "Boston"
+                       #:state "Mass."
+                       #:country "USA")
 	#:email "leif@ccs.neu.edu"]
 
 @acmJournal{PACMPL}
