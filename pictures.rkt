@@ -151,9 +151,9 @@
                                 #:x-adjust-label 25 #:label builds-on)]
            [acc (pin-arrow-line 8 acc typed-video lc-find video rc-find
                                 #:label (t "extends"))]
-           [acc (pin-arrow-line 8 acc video lc-find video-doc rc-find
+           [acc (pin-arrow-line 8 acc video-doc rc-find video lc-find
                                 #:label (t "extends"))]
            #;[acc (inset acc 100 0)])
       (scale acc s))))
 
-(language-tower 2)
+;(language-tower 2)
