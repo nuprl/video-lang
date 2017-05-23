@@ -3,7 +3,7 @@ Video Lang Paper
 
 Source Code
 ===========
-NOTE: This repo is NOT the one for the video language. That can be found at: https://github.com/leifandersen/racket-video
+NOTE: This repo is NOT the one for the video language. That can be found at: http://video-lang.org
 
 
 Dependencies

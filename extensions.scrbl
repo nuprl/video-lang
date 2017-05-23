@@ -6,7 +6,7 @@
          "bib.rkt"
          "utils.rkt"]
 
-@title[#:tag "extensions"]{Teenage Mutant Ninja Turtles -ω} @margin-note*{We
+@title[#:tag "extensions"]{Teenage Mutant Ninja Turtles -ω}@margin-note*{We
 failed to find the Roman numeral rendering of ω on Google.}
 
 @figure["video-gui" @list{Mingling graphical NLVE widgets inside of Video scripts}]{
@@ -17,7 +17,7 @@ version for Video therefore comes with embedded NLVE widgets.  Unlike other
 NLVEs with scriptable APIs, the NLVE widget is actually part of the
 language. A developer may place an NLVE directly into a script. Best of
 all, the embedded NLVE may include code snippets, which in turn can contain
-yet another NLVE widget etc.  See @figure-ref["video-gui"] for a screenshot
+yet another NLVE widget etc. See @figure-ref["video-gui"] for a screenshot
 of the editor.
 
 A reader may wonder why one would want such a ``turtles all the way down''
@@ -43,7 +43,28 @@ task at hand. For example, the program in
 @figure-ref["video-gui"] shows an implementation of the
 @racket[conference-talk] function from
 @secref{overview}, now implemented using NLVE widgets with embedded code
-snippets. 
+snippets.
+
+Traditional NLVEs have several advantages over these
+widgets.@note{We conjecture that these limitations are not
+ fundamental to the concept of these widgets. However,
+ testing that claim requires a significant amount of
+ engineering compared to the rest of Video's implementation.}
+NLVEs such as Premier have a cursor that tracks a notion of
+``current time'', with a preview window that shows a low
+resolution but real-time sample of the video at that
+position. This feature enables high precision editing with
+quick feedback.
+
+Video relies on the Racket ecosystem and the DrRacket
+environment to get the quick REPL like feedback needed for
+video editing. As described in @secref{overview-rendering}
+the @racket[preview] function shows a low-resolution (but
+real time) preview video being edited. This function starts
+the preview moments after it is called; it can additionally
+be called from both the Racket REPL and any shell
+environment. Developers using DrRacket can even use its
+cursor as an indicator for where to preview.
 
 The Racket ecosystem makes it possible to add NLVE support with only a
 small amount of code. The editor itself plugs into the DrRacket programming
