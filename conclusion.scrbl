@@ -7,9 +7,15 @@
 
 Imagine being Spock on the USS Enterprise. The ship's hyper-light-nano-pulsar
  sensors have discovered this paper. A first glance reveals a whole new,
+<<<<<<< HEAD
  alternative future---language-oriented programming---only a few light-years
  away. Now use extremely rational thinking to reason through the
  consequences of this insight.
+=======
+ alternative future---Racket's approach to language-oriented programming
+ @cite[lop-ward lop-dmitriev]---only a few light-years away. Now use extremely
+ rational thinking to reason through the consequences of this insight.
+>>>>>>> c1a269c34d2bb35030af8c9b4542bd634e736bab
 
 Clearly, this alternative world exists because developers can then build
  languages with ease to close the gap between problem domains and what

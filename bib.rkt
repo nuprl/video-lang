@@ -28,6 +28,7 @@
 
 (define/short lfp "LFP" "LISP and Functional Programming")
 (define/short popl "POPL" (string-append ACM Symposium "Principles of Programming Languages"))
+(define/short oopsla "OOPSLA" (string-append ACM International Conference "Object Oriented Programming Systems, Languages, and Applications"))
 
 (define kffd:hygiene
   (make-bib #:title "Hygienic macro expansion"
@@ -349,6 +350,8 @@
                                     #:number 4
                                     #:pages '(295 326))))
 
+;; Language Workbenches
+
 (define racket-workbench-challenge
   (make-bib
    #:title "Languages the Racket Way"
@@ -373,6 +376,100 @@
                      "Kost Stefan")
    #:date "2013"
    #:url "https://gstreamer.freedesktop.org/data/doc/gstreamer/head/manual/manual.pdf"))
+
+(define flatt-acm
+  (make-bib
+   #:title "Creating Languages in Racket"
+   #:author (authors "Matthew Flatt")
+   #:date "2012"
+   #:location (journal-location (string-append "Commun." ACM)
+                                #:volume 55
+                                #:number 1
+                                #:pages '(48 56))))
+
+(define language-workbenches-survey
+  (make-bib
+   #:title "Evaluating and Comparing Language Workbenches: Existing Results and Benchmarks for the Future"
+   #:author (authors
+             "Sebastian Erdweg"
+             "Tijs van der Storm"
+             "Markus Völter"
+             "Laurence Tratt"
+             "Remi Bosman"
+             "William R. Cook"
+             "Albert Gerritsen"
+             "Angelo Hulshout"
+             "Steven Kelly"
+             "Alex Loh"
+             "Gabriël Konat"
+             "Pedro J. Molina"
+             "Martin Palatnik"
+             "Risto Pohjonen"
+             "Eugen Schindler"
+             "Klemens Schindler"
+             "Riccardo Solmi"
+             "Vlad Vergu"
+             "Eelco Visser"
+             "Kevin van der Vlist"
+             "Guido Wachsmuth"
+             "Jimi van der Woning")
+   #:date "2015"
+   #:location (journal-location "Computer Languages, Systems and Structures"
+                                #:volume 44
+                                #:number "Part A"
+                                #:pages '(24 47))))
+
+(define spoofax
+  (make-bib
+   #:title "The spoofax language workbench: rules for declarative specification of languages and IDEs"
+   #:author (authors "Lennart C.L. Kats" "Eelco Visser")
+   #:date "2010"
+   #:location (proceedings-location oopsla #:pages '(444 463))))
+
+(define sugarj
+  (make-bib
+   #:title "SugarJ: library-based syntactic language extensibility"
+   #:author (authors 
+             "Sebastian Erdweg"
+             "Tillmann Rendel"
+             "Christian Kästner"
+             "Klaus Ostermann")
+   #:date "2011"
+   #:location (proceedings-location oopsla #:pages '(391 406))))
+
+(define metaedit
+  (make-bib
+   #:title "MetaEdit+: A Fully Configurable Multi-User and Multi-Tool CASE and CAME Environment"
+   #:author (authors "Steven Kelly" "Kalle Lyytinen" "Matti Rossi")
+   #:date "1996"
+   #:location (proceedings-location "8th International Conference on Advances Information System Engineering" #:pages '(1 21))))
+
+(define lop-ward
+  (make-bib
+   #:title "Language Oriented Programming"
+   #:author (authors "Martin P. Ward")
+   #:date "1994"
+   #:location (journal-location "Software - Concepts and Tools"
+                                #:volume 15
+                                #:pages '(147 161))))
+(define lop-dmitriev
+  (make-bib
+   #:title "Language Oriented Programming: The Next Programming Paradigm"
+   #:author (authors "Sergey Dmitriev")
+   #:date "2004"
+   #:location (journal-location "JetBrains onBoard Electronic Magazine"
+                                #:volume 1
+                                #:number 1)))
+   
+(define unix
+  (make-bib
+   #:title "The Art of UNIX Programming"
+   #:author (authors "Eric S. Raymond")
+   #:date "2003"
+   #:is-book? #t
+   #:location (book-location #:edition "1st"
+                             #:publisher "Addison-Wesley")))
+
 
 (define mlt-url (url "mltframework.org/"))
 (define shotcut-url (url "shotcutapp.com/"))
