@@ -28,7 +28,7 @@
    (define line-no (format (if (< *line-no 10) "0~a" "~a") *line-no))
    @exact{\tt @line-no})
 
-The literature survey suggests that non-linear
+The literature survey in the previous section suggests that non-linear
 video editing distinctly separates the description of a
 video clip from the rendering action on it. Specifically, an
 editor (as in the tool) needs a description of what the final video
@@ -82,7 +82,7 @@ In essence, the script in @figure-ref{video-script} assembles the visual
 part of a simple conference video. What is missing is the audio
 part. Naturally, a Video programmer should abstract over this process, plus
 the audio processing, and create a suitable library.
-@Figure-ref["video-example"] shows what more or less the same script looks
+@Figure-ref["video-example"] shows what roughly the same script looks
 like after a Video programmer has encapsulated an abstraction over the
 script in @figure-ref{video-script} as a utility library. This program uses
 the imported @code{conference-talk} function to combine a recording of the
@@ -92,8 +92,7 @@ program specifies that this module is written in the Video language. Line 3
 imports the library that defines the
 @racket[conference-talk] function. Line 5 produces the video that this
 module describes. Finally, the
-remainder is a sequence of definitions that introduce auxiliary functions
-and constants. 
+remainder is a sequence of definitions that introduce auxiliary constants. 
 
 @Figure-ref{video-functions} shows the essence of the utility library, also
 written as a Video module. Explaining its construction introduces enough of
@@ -110,28 +109,27 @@ programs as traditional video files (@secref["overview-rendering"]).
 @; -----------------------------------------------------------------------------
 @section[#:tag "overview-functions"]{Essential Video}
 
-Functions and modules in Video consist
-of a series of interleaved expressions, definitions, and import/export forms.
-Video inherits Racket's module and function syntax, but
+Video modules consist of a series of interleaved
+expressions, definitions, and import/export forms; functions
+have the same shape without the import/export forms. Video
 enforces different scoping rules and assigns slightly
-different meaning.
-In both cases, the definitions are
-valid in the entire scope---that is, the entire module or
-the entire function body. The expressions describe
-a video playlist. The semantic difference is that modules
-@code{provide} a video, while functions return one.
-Furthermore, Video modules are first-order entities that can
-be compiled separately, while functions are actually
-first-class values.
+different meaning to these constructs than Racket. In both
+cases, definitions are valid in the entire scope---that
+is, the entire module or the entire function body. The
+expressions must describe a video playlist. These two forms
+differ in that modules @code{provide} a video, while
+functions return one. Furthermore, Video modules are
+first-order entities that can be compiled separately, while
+functions are actually first-class values.
 
-Take a second look at the implementation for
+Now, take a second look at the implementation for
 @racket[conference-talk], shown in
 @figure-ref["video-functions"]. Lines 5--7 show the
 function header. The rest of the code describes the function
 body (lines 7--27). Functions in Video are declarative; in
 particular, line 8 is the producer returned by this
 function. The remaining subsections explain the Video
-language in sufficient detail to understand the rest of the
+language in sufficient detail to understand the rest of this
 code. Specifically, we explain individual features of the
 language and how they improve the video editing process.
 
@@ -170,8 +168,8 @@ language and how they improve the video editing process.
 @section[#:tag "overview-simple"]{Producers}
 
 The @emph{producer} is the most basic building block for a
-Video program. A producer evaluates to a data structure that can be coerced
-into some sort of multimedia object: audio clips, video clips, pictures, and so on.
+Video program. A producer evaluates to a data structure that denotes
+some sort of multimedia object: audio clips, video clips, pictures, and so on.
 Combinations of
 producers are themselves producers, and they can be further
 combined into yet more complex producers still.
@@ -196,12 +194,11 @@ video
     (t# "clip" 18)
     (t# "clip" 19))))
 
-Unlike @racket[clip], @racket[image] creates a of an infinite stream of
+Unlike @racket[clip], @racket[image] creates an infinite stream of
 frames. Video's combination forms truncate these streams to
 fit the length of other producers. Additionally,
 developers can use the @racket[#:length] keyword when they
-want a specific number of frames, such as creating an intro
-sequence to a conference:
+want a specific number of frames:
 
 @(split-minipage
   @racketmod[
@@ -252,6 +249,7 @@ frequently start before a talk begins and end after the
 talk finishes:
 @;
 @(split-minipage
+  #:split-location 0.43
   @racketmod[
 video 
 
@@ -262,23 +260,23 @@ talk
 (define talk
  (playlist (clip "talk00.MTS")
            (clip "talk01.MTS")
-	   #:start 100
-	   #:end 8000))
+           #:start 100
+           #:end 8000))
 ]
-  (centered (make-playlist-timeline
-             #:end #t
-             splash
-             (ellipses)
-             (t# "clip" 5)
-             (t# "clip" 6)
-             (ellipses)
-             (t# "clip" 45)
-             (t# "clip" 46)
-             splash
-             (ellipses))))
+  (make-playlist-timeline
+   #:end #t
+   splash
+   (ellipses)
+   (t# "clip" 5)
+   (t# "clip" 6)
+   (ellipses)
+   (t# "clip" 45)
+   (t# "clip" 46)
+   splash
+   (ellipses)))
 @;
-Recall that while @racket[define] is located below the description of the
-video, it is in same scope as the expressions. 
+Recall that while @racket[define] is located below the video description,
+its scope includes the expressions. 
 
 @section{Transitions}
 
@@ -329,7 +327,6 @@ surprises.
 
 Multitracks play producers in parallel. Like playlists, they employ
 transitions to composite their producers.
-
 Syntactically, @racket[multitracks] is similar to @racket[playlist]. The
  @racket[multitrack] form consists of a sequence of producers and
  creates a new @racket[multitrack] producer. Again, transitions are
@@ -484,6 +481,7 @@ Explicit properties provide a protocol for
  operation:
 @;
 @(split-minipage
+  #:split-location 0.6
 @racketmod[
 video
 
@@ -498,14 +496,14 @@ video
 
 (define talk #,elided)
 ]
-    (centered (make-playlist-timeline
-               #:end #t
-               (ellipses)
-               (t# "nlpip" 2)
-               (t# "nlpip" 3)
-               (t# "nlpip" 4)
-               (t# "nlpip" 5)
-               (ellipses))))
+(make-playlist-timeline
+ #:end #t
+ (ellipses)
+ (t# "nlpip" 2)
+ (t# "nlpip" 3)
+ (t# "nlpip" 4)
+ (t# "nlpip" 5)
+ (ellipses)))
 
 @; -----------------------------------------------------------------------------
 @section[#:tag "overview-rendering"]{From Programs to Videos}
@@ -553,7 +551,7 @@ apply this function directly:
 @;
 @(split-minipage
   #:split-location 0.7
-  (centered @racketinput[(preview (external-video "talk.vid"))])
+  (nested #:style 'code-inset @racketinput[(preview (external-video "talk.vid"))])
   (scale (bitmap "res/talk-preview.png") 0.08))
 @;
 While @racket[render] just displays the video,
@@ -565,7 +563,7 @@ a path to a Video script and plays it in a newly opened window:
 @;
 @(split-minipage
   #:split-location 0.7
-  (centered @racketinput[(preview-video "talk.vid")])
+  (nested #:style 'code-inset @racketinput[(preview-video "talk.vid")])
   (scale (bitmap "res/talk-preview.png") 0.08))
 @;
 This functionality is also available outside of the IDE so that
@@ -574,8 +572,9 @@ non-programmers may view the videos, too.
 @; -----------------------------------------------------------------------------
 @section[#:tag "effectiveness"]{Effectiveness}
 
-Two of the authors have been involved in the production of a video channel
-for a developer conference. They report that creating Video and compositing
+Andersen has
+been involved in the production of a video channel
+for a developer conference. In Andersen's experience, creating Video and compositing
 the videos for one conference took less time than manually editing the
 videos for another, comparable conference (same number of talks, same
 nature of talks, etc).

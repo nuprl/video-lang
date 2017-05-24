@@ -8,7 +8,7 @@
 Imagine being Spock on the USS Enterprise. The ship's hyper-light-nano-pulsar
  sensors have discovered this paper. A first glance reveals a whole new,
  alternative future---language-oriented programming---only a few light-years
- away . Now use extremely rational thinking to reason through the
+ away. Now use extremely rational thinking to reason through the
  consequences of this insight.
 
 Clearly, this alternative world exists because developers can then build
@@ -66,7 +66,7 @@ Similarly, a linguistic gap shows up for the implementation of Typed Video, an
  type system---as attachments to just those linguistic features for which we
  want types--- as much as possible in the language of type-system designers.
 
-As a matter of fact, the language gap shows up a third time with the
+As a matter of fact, the language gap shows up with the
  implementation of Video. The language's run-time system demands extensive
  checking of values that flow into the C-level primitives. One way to
  translate the language of the C documentation into Racket, is to add

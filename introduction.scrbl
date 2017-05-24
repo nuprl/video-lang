@@ -44,7 +44,7 @@ down. Instead of sitting for hours on end in front of some NLVE GUI, a
 professional can now spend a few minutes in front of an IDE to create a
 Video script and, voilà, a video clip pops out. A Video script is just a
 sequence of expressions, which describe fragments of a video clip, and
-definitions, which introduce constants for, and functions on, video
+definitions, which introduce constants for and functions on video
 clips. Running such a script turns this description into suitable
 ``assembly code'' for a video renderer.
 
@@ -65,10 +65,8 @@ Abstractly speaking, Video once again demonstrates the power of the Racket
 doctrine (@secref{rationale}).  Racket hosts Video as an embedded
 domain-specific language.  Implementing (@secref["implementation"]) this
 language in Racket takes only a small effort because of Racket's powerful
-language production tools.  Indeed, adding an IDE and a type system is
+language-production language.  Indeed, adding an IDE and a type system is
 also a matter of a few hours of thinking time and coding. In this spirit, the
-pearl really uses Video to illustrate the ease with which Racket developers
-create @emph{real} languages as real-world problem-solving tools. It thus
-points out a key difference between the construction of embedded DSLs in
-boring functional languages, such as OCaml and Haskell, and the one
+pearl points out a key difference between the construction of embedded DSLs in
+conventional@note{i.e. non-parenthesized} functional languages and the one
 true-blue kid on the block, Racket.

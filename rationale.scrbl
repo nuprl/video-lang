@@ -12,14 +12,16 @@
 
 @(current-code-font code-font)
 
-@title[#:tag "rationale"]{Dr Strangelove: How I Learned to Stop Worrying and Love the Racket}
+@title[#:tag "rationale"]{Dr Strangelove: How I Learned to Stop Worrying and Love Racket}
 @; ----------------------------------------------------------------------------------------
 
-The Racket doctrine@cite[manifesto] says that developers must at any point
-feel empowered to easily create and deploy a new language. The emphasis on
-language reflects the Racket team's deep embrace of the Sapir-Whorf
-hypothesis. In the world of software, this hypothesis means that language
-frames the developer's ability to understand a problem and articulate a
+The Racket doctrine@cite[manifesto] says that developers
+must feel empowered to easily create and deploy a new
+language when a software development situation demands it.
+The emphasis on language reflects the Racket team's deep
+embrace of the Sapir-Whorf hypothesis. In the world of
+software, this hypothesis means that language frames the
+developer's ability to understand a problem and articulate a
 solution---at every stage in the development process.
 
 Philosophically, Racket achieves this ideal with a radical emphasis on
@@ -32,7 +34,7 @@ related purpose, a language module provides the constructs of a programming
 language.
 
 In Racket, every module starts with a one-line language specification. For
-example, @code{#lang racket/base}---pronounced ``hash lang
+example, the line @code{#lang racket/base}---pronounced ``hash lang
 racket base''---tells Racket and a future reader that the module is
 written in the @racketmodname[racket/base] language. Roughly speaking, the specified
 language is the first import into the module. From an implementation
@@ -44,8 +46,8 @@ first is immediately visible in the second one, just by switching
 focus. Hence language development in Racket suffers from no points of
 friction.
 
-Developing a new language typically starts from a base language, reusing as
-many features as possible. From this base language, a Racket developer
+Developing a new language typically starts from a base language, that is close to the desired language.
+From this base language, a Racket developer
 creates a new language with some or all of the following actions:
 @;
 @itemlist[ 
@@ -63,21 +65,22 @@ rely on linguistic interposition points, that is, anchors in
 the syntax elaboration process where a program may inject
 additional syntax transformations. Video exploits all of the
 above, plus of course, the ability to supply additional
-run-time primitives, operations with no new syntax, with a
-new language.
+run-time primitives, operations with no new syntax.
 
-Due to the ease of developing and installing languages in the Racket
-ecosystem, language creation has become a critical ``warhead''
-in the arsenal of software-engineering tools, of comparable status
-as Haskell's type classes and ML's functors. When developers realize that
-it is best to express themselves in the language of a domain, they do not
-hesitate to develop a matching programming language. After all, domain
-experts have developed this specialized jargon so that they can discuss
-problems and solutions efficiently. 
+Due to the ease of developing and installing languages in
+the Racket ecosystem, language creation has become a
+critical ``warhead'' in the arsenal of software-engineering
+tools, of comparable status as Haskell's type classes and
+ML's functors. When developers realize that it is best to
+express themselves in the language of a domain, they do not
+hesitate to develop a matching programming language. After
+all, domain experts have developed this specialized
+terminology (and ontology) so that they can discuss problems
+and solutions efficiently.
 
 The domain of video editing is a particularly well-suited domain for
 illustrating the above points. While the evolution of the language follows
 the standard path from a veneer for a C library to a full-fledged
-language@cite[fowler], Racket smooths this path significantly and this
+language@cite[fowler], Racket reduces this path significantly and this
 pearl demonstrates how.  Before we can describe Video and its
 implementation, however, we need to survey the world of editing videos.

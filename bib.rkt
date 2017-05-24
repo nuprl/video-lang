@@ -128,6 +128,12 @@
             #:date "2007"
             #:location (book-location #:publisher "No Starch Press")))
 
+(define adobe-premiere
+  (make-bib #:title "Adobe Premiere Pro CC Classroom in a Book"
+            #:author (authors "Maxim Jago" (org-author-name "Adobe Creative Team"))
+            #:date "2017"
+            #:location (book-location #:publisher "Adobe Press")))
+
 (define slideshow-jfp
   (make-bib #:title "Slideshow: Functional Presentations"
             #:author (authors "Matthew Flatt" "Robby Findler")
@@ -357,14 +363,21 @@
    #:date "2016"
    #:location (proceedings-location "Language Workbench Challenge")))
 
-(define gstreamer-url (url "https://gstreamer.freedesktop.org/"))
-(define mlt-url (url "https://www.mltframework.org/"))
-(define shotcut-url (url "https://www.shotcutapp.com/"))
-(define applescript-use-url (url "http://www.davidheidelberger.com/blog/?p=107"))
-(define openshot-url (url "http://www.openshot.org/"))
-(define avisynth-url (url "http://avisynth.nl"))
-(define mlt-xml-url (url "https://www.mltframework.org/docs/mltxml/"))
-(define rsound-url (url "https://docs.racket-lang.org/rsound/index.html"))
-(define premiere-api-url (url "http://www.adobe.com/devnet/premiere.html"))
-(define racketcon-url (url "http://con.racket-lang.org/"))
+(define gstreamer-man
+  (make-bib
+   #:title "GStreamer Application Development Manual"
+   #:author (authors "Wim Taymans"
+                     "Steve Baker"
+                     "Andy Wingo"
+                     "Rondald S. Bultje"
+                     "Kost Stefan")
+   #:date "2013"
+   #:url "https://gstreamer.freedesktop.org/data/doc/gstreamer/head/manual/manual.pdf"))
 
+(define mlt-url (url "mltframework.org/"))
+(define shotcut-url (url "shotcutapp.com/"))
+(define openshot-url (url "openshot.org/"))
+(define avisynth-url (url "avisynth.nl"))
+(define mlt-xml-url (url "mltframework.org/docs/mltxml/"))
+(define rsound-url (url "docs.racket-lang.org/rsound/index.html"))
+(define racketcon-url (url "con.racket-lang.org/"))

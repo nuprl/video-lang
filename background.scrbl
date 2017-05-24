@@ -9,7 +9,7 @@
 
 @title[#:tag "background"]{Primer}
 
-As mentioned in the introduction, people use so-called
+People use so-called
 non-linear video editors (NLVEs) to compose video
 clips@cite[technique-of-video-editing]. In the context of
 film production, @emph{non-linear} means non-destructive,
@@ -24,9 +24,9 @@ placing one track on top of the other. Obviously a screen
 displaying the result can play only a single track for
 video;@note{Audio tracks can actually be played together.} by convention this is the last
 or top track. Video editors use effects to @emph{composite}
-tracks together. That is, effects splice two or more tracks
+tracks. That is, effects splice two or more tracks
 together so that they appear on the screen at the same time.
-As a result, the renderer uses these effects to combine
+Technically, the renderer uses these effects to combine
 tracks as they play and either output the result to a file
 or play it on a screen.
 
@@ -36,27 +36,27 @@ video editing. They frequently develop so-called macros---a
 scripted sequence of user interface elements---in languages
 such as AppleScript@cite[applescript-hopl].
 Some professional tools,
-such as Adobe Premiere, @note{@premiere-api-url} even
+such as Adobe Premiere@cite[adobe-premiere], even
 include an API to create script-style plug-ins directly.
 
 Extending tools in this fashion has limits. Macros are
 extremely brittle and frequently break, even within a single
 application, because macro languages do not understand the
 underlying tools. Using a tool's official plug-in interface
-produces reasonably robust scripts but yields a plug-in that
-is tightly coupled with its tool. It can be used only in
+produces reasonably robust scripts but yields plug-ins that
+are tightly coupled with its tool. They can be used only in
 settings where the entire toolchain is present.
-Blender@cite[essential-blender] for example, is only
+Blender@cite[essential-blender], for example, is only
 scriptable with a Blender-specific Python interpreter that
 runs when Blender is launched. This differs from a language
 where programs can run on different language implementations.
 
 Alternative approaches to reducing boilerplate actions use
-general purpose multimedia frameworks such as
-GStreamer@note{@gstreamer-url} or the MLT
+general-purpose multimedia frameworks such as
+GStreamer@cite[gstreamer-man] or the MLT
 Framework.@note{@mlt-url} These frameworks are APIs for
 C-like languages that provide data types for building and
-rendering videos. The appeal of these frameworks is the
+rendering videos. Their appeal is the
 ability to create abstractions, such as functions, to handle
 otherwise repetitive tasks. For example, a professional
 using one of these frameworks can write a function to create
@@ -70,7 +70,7 @@ when interactive development is not desired. While the
 frameworks work well for these use cases, they fall short
 when there is a need to combine interactive and programmatic work flows,
 as is the case for the creation of conference recordings.
-Studios tend to stick with NLVEs, and use these
+Studios tend to stick with NLVEs and use these
 frameworks only sparingly.
 
 Professionals also use domain-specific languages for video
@@ -84,15 +84,15 @@ tend not to deal with these XML languages directly when
 video editing. Rather, NLVEs use these languages as a file
 format to save video projects.
 
-Scripting-based DSLs, such as AVISynth@note{@avisynth-url},
+Scripting-based DSLs, such as AVISynth,@note{@avisynth-url}
 are declarative but have their own limitations. Unlike
 XML-based languages, these DSLs support functions and other
 abstractions. However, they support only the simplest of
-tasks: playing videos in sequence with transitions and a
+tasks: playing videos in sequence with transitions and
 minor visual effects. They also tend to lack any formal
 grammars and use a small script for a parser. Finally, they lack many code
 reuse features. AVISynth, for example, allows programmers to
-create simple functions, but lacks control flow constructs
+create simple functions but lacks control flow constructs
 such as conditional branching.
 
 @(define *line-no 0)

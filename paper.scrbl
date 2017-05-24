@@ -10,8 +10,8 @@
         #:affiliation (affiliation
                        #:institution
                        (institution
-                        #:departments '("PLT")
-                        "Northeastern University")
+                        #:departments '("PLT" "CCIS")
+                        "PLT @ Northeastern University")
                        #:city "Boston"
                        #:state "Mass."
                        #:country "USA")
@@ -19,27 +19,27 @@
 
 @acmJournal{PACMPL}
 
-@abstract{The Racket doctrine tells developers to narrow the
- gap between the terminology of a problem domain and general
- programming constructs by creating languages instead of just
- plain programs. This pearl illustrates this point with the
+@abstract{The Racket doctrine tells developers to create
+ languages (as libraries) that narrow the gap between the
+ terminology of a problem domain and general programming
+ constructs. This pearl illustrates the doctrine with the
  creation of a relatively simple domain-specific language for
  editing videos. To produce the video proceedings of a
  conference, for example, video professionals traditionally
  use ``non-linear'' GUI editors to manually edit each talk,
  despite the repetitive nature of the process. As it turns
  out, video editing naturally splits the work into a
- declarative phase and an imperative rendering phase at the end. Hence
- it is natural to create a functional-declarative language
- for the first phase, which reduces a lot of manual labor.
- This user-facing DSL utilizes a second, internal DSL to
- implement the second phase, which is an interface to a
+ declarative phase and an imperative rendering phase at the
+ end. Hence it is natural to create a functional-declarative
+ language for the first phase, which reduces a lot of manual
+ labor. This user-facing DSL utilizes a second, internal DSL
+ to implement the second phase, which is an interface to a
  general, low-level C library. Finally, we inject type
  checking into our language via another DSL that supports
  programming in the language of type formalisms. In short,
  the development of the video editing language cleanly
  demonstrates how the Racket doctrine naturally leads to the
- creation of language hierarchies, analogous to the
+ creation of deep and wide language hierarchies, analogous to the
  hierarchies of modules found in conventional functional
  languages.}
 
