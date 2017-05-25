@@ -6,8 +6,8 @@
 
 @title[#:tag "related"]{The Related Suspects}
 
-Two main principles guide the Racket Way@cite[flatt-acm] of creating DSLs:
-@bold{reuse} and @bold{abstraction}.
+Two main principles guide the Racket Way@cite[racket-way flatt-acm] of creating
+DSLs: @bold{reuse} and @bold{abstraction}.
 
 Reusing existing language components greatly helps DSL @emph{creators}, who are
 unlikely to be programming language researchers. As the old adage goes, ``don't
@@ -30,7 +30,7 @@ with a declarative DSL for writing syntax transformers
 high-level specifications, which is compiled to produce error messages in terms
 of the surface language.
 
-Researchers have studied DSLs for a long time and have devised various
+Researchers have studied DSLs for a long time and have developed various
 alternative classifications for DSL construction strategies. In the functional
 programming language community, some @cite[deep-shallow-icfp] distinguish DSLs
 along ``deep'' vs ``shallow'' lines.
@@ -53,8 +53,8 @@ reuse and abstraction altogether in the process.
 
 In general, the deep vs shallow distinction seems more of an academic analysis
 and less focused on the pragmatics of DSL creation. Thus, it might not be so
-useful for programmers trying to weigh tradeoffs when trying to solve
-domain-specific problems in the most effective manner. Alternatively, some
+useful for programmers who are weighing tradeoffs and trying to solve
+domain-specific problems in the most effective manner. Some
 industrial programmers @cite[fowler] view DSLs as either ``internal'' or
 ``external''. Internal DSLs focus on reuse and typically involve extending a
 host language (thus they are also commonly called ``embedded'' DSLs). The
@@ -63,12 +63,12 @@ UNIX philosophy of ``little languages'' @cite[unix], are typically implemented
 from scratch and thus require more effort but as a result are not constrainted
 by any particular host language.
 
-Racket may also be considered a ``language workbench''
-@cite[racket-workbench-challenge], which is a general term describing any tool
-or framework for creating DSLs. While workbenches tend utilize GUI tools
-@cite[metaedit], as opposed to Racket' programmatic and textual approach, and
-commonly create external DSLS @cite[spoofax], some more closely resemble
-Racket's ``reuse and abstraction'' approach @cite[sugarj]. In general
-workbenches encompass a broad spectrum of DSL creation approaches. See
-@cite[language-workbenches-survey] for a detailed survey of various design
-tradeoffs in a large sample of workbenches.
+Racket may also be considered a ``language workbench'' @cite[language-workbench
+racket-workbench-challenge], which describes a broad spectrum of tools and
+framework for creating DSLs, as well as a large community of researchers and
+developers. While workbenches tend to utilize GUI tools @cite[metaedit], as
+opposed to Racket's programmatic and textual approach, and commonly create
+external DSLs @cite[spoofax], some more closely resemble Racket's ``reuse and
+abstraction'' approach @cite[sugarj], but with different design choices and
+thus trade-offs. See @cite[language-workbenches-survey] for a detailed survey
+of the characteristics and design choices in a large sample of workbenches.

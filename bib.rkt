@@ -352,6 +352,13 @@
 
 ;; Language Workbenches
 
+(define language-workbench
+  (make-bib
+   #:title "Language Workbenches: The Killer-App for Domain Specific Languages?"
+   #:author (authors "Martin Fowler")
+   #:date "2005"
+   #:location "martinfowler.com"))
+
 (define racket-workbench-challenge
   (make-bib
    #:title "Languages the Racket Way"
@@ -386,6 +393,13 @@
                                 #:volume 55
                                 #:number 1
                                 #:pages '(48 56))))
+
+(define racket-way
+  (make-bib
+   #:title "The Racket Way"
+   #:author (authors "Matthew Flatt")
+   #:date "2012"
+   #:location "Strange Loop Conference"))
 
 (define language-workbenches-survey
   (make-bib
