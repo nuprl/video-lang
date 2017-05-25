@@ -44,6 +44,13 @@ And of course, the language must allow the definition and
 use of functions because it is the most common form of
 abstraction.
 
+The Video language gets to the heart of the domain. Each Video program
+is a complete module that intermingles descriptions of video clips and
+auxiliary definitions. It denotes a Racket module that exports a single item: a playlist
+description of the complete video. One way to use a Video module is to
+create a video with a renderer. A different way is to import it into a second
+Video module and to incorporate it into another video. 
+
 @(set! *line-no 0)
 @figure["video-example" @list{A Video description of a conference talk}]{
  @racketblock[
@@ -62,12 +69,6 @@ abstraction.
    rcon-timeline)
 }
 
-The Video language gets to the heart of the domain. Each Video program
-is a complete module that intermingles descriptions of video clips and
-auxiliary definitions. It denotes a Racket module that exports a single item: a playlist
-description of the complete video. One way to use a Video module is to
-create a video with a renderer. A different way is to import it into a second
-Video module and to incorporate it into another video. 
 
 @Figure-ref{video-script} displays a simple Video script. It consists of five
 expressions, each describing a piece of a video clip. Right below the third
@@ -122,17 +123,6 @@ functions return one. Furthermore, Video modules are
 first-order entities that can be compiled separately, while
 functions are actually first-class values.
 
-Now, take a second look at the implementation for
-@racket[conference-talk], shown in
-@figure-ref["video-functions"]. Lines 5--7 show the
-function header. The rest of the code describes the function
-body (lines 7--27). Functions in Video are declarative; in
-particular, line 8 is the producer returned by this
-function. The remaining subsections explain the Video
-language in sufficient detail to understand the rest of this
-code. Specifically, we explain individual features of the
-language and how they improve the video editing process.
-
 @(set! *line-no 0)
 @figure["video-functions" @list{A Video function definition}]{
  @racketblock[
@@ -163,6 +153,17 @@ language and how they improve the video editing process.
 @#,line-no[]                                 spliced-video
 @#,line-no[]                                 (fade-transition #:length 50)
 @#,line-no[]                                 (image "splash.png" #:length 100))))]}
+
+Now, take a second look at the implementation for
+@racket[conference-talk], shown in
+@figure-ref["video-functions"]. Lines 5--7 show the
+function header. The rest of the code describes the function
+body (lines 7--27). Functions in Video are declarative; in
+particular, line 8 is the producer returned by this
+function. The remaining subsections explain the Video
+language in sufficient detail to understand the rest of this
+code. Specifically, we explain individual features of the
+language and how they improve the video editing process.
 
 @; -----------------------------------------------------------------------------
 @section[#:tag "overview-simple"]{Producers}
@@ -246,8 +247,11 @@ Developers cut playlists and other producers to desired lengths with the
 @racket[#:start] and @racket[#:end] keywords. This capability is
 included because video recordings
 frequently start before a talk begins and end after the
-talk finishes:
-@;
+talk finishes (see @figure-ref["playlist-cut"]).
+Recall that while @racket[define] is located below the video description,
+its scope includes the expressions. 
+
+@figure["playlist-cut" "Example of cutting a playlist"]{
 @(split-minipage
   #:split-location 0.43
   @racketmod[
@@ -257,6 +261,7 @@ video
 talk
 (image "logo.jpg" #:length 100)
 
+(code:comment "where")
 (define talk
  (playlist (clip "talk00.MTS")
            (clip "talk01.MTS")
@@ -273,10 +278,7 @@ talk
    (t# "clip" 45)
    (t# "clip" 46)
    splash
-   (ellipses)))
-@;
-Recall that while @racket[define] is located below the video description,
-its scope includes the expressions. 
+   (ellipses)))}
 
 @section{Transitions}
 
@@ -298,6 +300,7 @@ talk
 (fade-transition #:length 50)
 (image "splash.jpg" #:length 100)
 
+(code:comment "where")
 (define talk #,elided)
 
 ]
@@ -341,6 +344,7 @@ video
  (composite-transition 0 0 1/4 1/4)
  talk)
 
+(code:comment "where")
 (define talk #,elided)
 
 ]
@@ -383,6 +387,7 @@ video
  (composite-transition 1/4 0 3/4 1)
  talk)
 
+(code:comment "where")
 (define talk #,elided)
 
 ]
@@ -431,7 +436,8 @@ video
  #:filters (list
             (envelope-filter 50 #:direction 'in)
  	    (envelope-filter 50 #:direction 'out))))
-            		     
+
+(code:comment "where")
 (define composited-talk #,elided)
 ]
 @;
@@ -494,6 +500,7 @@ video
  (composite-transition 0 1/4 1/4 3/4)
  (image "logo.png" #:length (get-property talk 'length)))
 
+(code:comment "where")
 (define talk #,elided)
 ]
 (make-playlist-timeline

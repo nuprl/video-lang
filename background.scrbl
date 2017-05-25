@@ -102,7 +102,7 @@ such as conditional branching.
    (set! *line-no  (+ *line-no 1))
    (define line-no (format (if (< *line-no 10) "0~a" "~a") *line-no))
    @exact{\tt @line-no})
-@figure-here["video-script" @list{A first Video script}]{
+@figure["video-script" @list{A first Video script}]{
 @;%
 @(begin
 #reader scribble/comment-reader

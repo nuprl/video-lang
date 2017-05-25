@@ -1,0 +1,7 @@
+
+> Please ensure that you are using the correct document style, including author-year citations with correct usage as described in the call for papers. These requirements are necessary for inclusion in PACM PL.
+
+> Either make more clear how Video allows integrated interactive and programmatic workflows, or tone down the claim that it does allow such integrated workflows.
+
+> Flesh out the discussion of the type system in section 6 to resolve the mismatch between the typing rules presented in figure 8 and the implementations of typing rules in figure 9. Give more detail about bugs caught by the type system.
+

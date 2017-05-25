@@ -144,11 +144,11 @@
                         #:direction [direction "c"])
   (centered
    (list
-    @exact{\begin{minipage}[@direction]{@(number->string split-location)\textwidth}}
+    @exact{\vspace{0.5em}\begin{minipage}[@direction]{@(number->string split-location)\textwidth}}
     a
     @exact{\end{minipage}\begin{minipage}[@direction]{@(number->string (- 1 split-location))\textwidth}}
     b
-    @exact{\end{minipage}})))
+    @exact{\end{minipage}\vspace{0.5em}})))
 
 (define (3split-minipage a b c
                          #:size-a [size-a 1/3]
