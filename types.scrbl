@@ -14,8 +14,8 @@ course, as Video shows. After all, Video is a scripting language, and most
 descriptions of a conference video are no longer than a few lines. No real
 programmer needs types for such programs. For some, however, the existence of
 an untyped language might be inconceivable, and we therefore whipped together a
-dependent type system in a single work day.@note{We do not explore the metatheory of our type
-system since it is beyond the scope of this pearl.}
+dependent type system in a single work day.@note{We do not explore the
+metatheory of our type system since it is beyond the scope of this pearl.}
 
 After explaining the rationale for such a type system (@secref{video-data}), we
 present the essential idea: type checking the length of producers,
@@ -31,8 +31,8 @@ papers on fancy type systems
 @section[#:tag "video-data"]{Video Data Types}
 
 Video programs primarily manipulate two types of data: producers and
-transitions. A typical Video program slices these values and then combines
-them.  Not surprisingly, programmer errors often involve manipulating producers
+transitions. A typical program slices these values and then combines
+them. Not surprisingly, programmer errors often involve manipulating producers
 and transitions of improper lengths. Such errors are particularly dangerous
 because they often manifest themselves at the C level during rendering. For
 example, the following piece of code mistakenly tries to extract 15 frames from
@@ -51,8 +51,8 @@ the specified transition:
 (playlist (blank 10) (fade-transition #:length 15) (color "green" #:length 10))
 @code:comment{CRASH (given producers must have length >= transition length 15)}]
 @;
-While old fashioned scripting languages generally rely on dynamic checks to
-enforce such conditions, modern scripting languages use a static type system
+While old-fashioned scripting languages rely on dynamic checks to
+catch these bugs, modern scripting languages use a static type system
 instead@cite[meijer-jfp #;meijer-icfp haskell-scripting-cufp]. So does Typed
 Video.
 
@@ -80,12 +80,13 @@ producer values do not flow into positions where their length is less than
 expected.
 
 Typed Video also supports writing functions polymorphic in the lengths of
-videos. Continuing the conference video editing example from @secref{overview},
+videos. Adapting the conference video editing example from @secref{overview},
 a function @racket[add-slides] for combining the video of a speaker with
 a video of slides from their presentation might have the following signature:
 
 @racketblock[
-(define (add-slides {n} [vid : (Producer n)][slides : (Producer n)] -> (Producer n))
+(define (add-slides {n} [vid : (Producer n)] [slides : (Producer n)] -> (Producer n))
+  @code:comment{generate background ...}
   (multitrack vid slides background #:length (producer-length vid)))]
 @;
 This function binds a universally-quantified type index variable @racket[n] that
@@ -93,7 +94,7 @@ ranges over natural numbers and uses it to specify that the lengths of the
 input and output producers must match up.
 
 In addition, a programmer may specify side-conditions involving type index
-variables. Here is the @racket[add-bookend] function, which adds an
+variables. Here is an @racket[add-bookend] function, which adds an
 opening and ending sequence to a speaker's video:
 
 @(nested (minipage
@@ -109,22 +110,20 @@ opening and ending sequence to a speaker's video:
   (define begin-clip @image["logo.png" #:length 500])
   (define end-clip @image["logo.png" #:length 500]))]))
 @;
-The @racket[add-bookend]. function specifies with a @racket[#:when] keyword that
-its input must be a producer of at least 400 frames because it uses two
-200-frame transitions. The result type says that the output adds 600
-frames to the input. Here the additional frames come from the added beginning
-and end segments, minus the transition frames.
+The @racket[add-bookend] function specifies, with a @racket[#:when] keyword,
+that its input must be a producer of at least 400 frames because it uses two
+200-frame transitions. The result type says that the output adds 600 frames to
+the input. Here the additional frames come from the added beginning and end
+segments, minus the transition frames.
 
 Programmer-specified side-conditions may propagate to other functions. The
 @racket[conference-talk] function from @secref{overview} benefits from
 this propagation:
 
 @racketblock[
-(define (conference-talk {n} [video  : (Producer n)]
-	                     [slides : (Producer n)]
-			     [audio  : (Producer n)]
-			     [offset : Int]
-           -> (Producer (+ n 600)))
+(define (conference-talk {n} [video  : (Producer n)] [slides : (Producer n)]
+                             [audio  : (Producer n)] [offset : Int]
+                             -> (Producer (+ n 600)))
   @code:comment{...}
   (define p1 (add-slides video slides))
   (define p2 (add-bookend p1))
@@ -182,8 +181,7 @@ as in the @sc{Color} rule, the expression has type @code{Producer}, which is
 syntactic sugar for @code{(Producer ∞)}. The @sc{Clip} rule says that if the
 given file @tt{f} on disk points to a video of length @code{n},@note{Obviously,
 the soundness of our type system is now contingent on the correctness of this
-system call.} then an expression @code{(clip f)} has type @tt{(Producer
-n)}.
+system call.} then an expression @code{(clip f)} has type @code{(Producer n)}.
 
 @figure["type-rules" @list{A few Producer type rules for Typed Video}]{
 @centered[
@@ -198,7 +196,7 @@ n)}.
 @vspace{10}
 @centered[
 @inferrule[#:name "Playlist" "$\\forall$p/t: $\\Gamma\\vdash$ p/t : (Producer n) $\\textrm{or}$ $\\Gamma\\vdash$ p/t : (Transition m)"
-                             "where a transition is interleaved between two producers"]{
+                             "where each transition must occur between two producers"]{
                               $\Gamma\vdash$ (playlist p/t ...) : (Producer (- (+ n ...) (+ m ...)))}]
 }
 
@@ -221,7 +219,7 @@ kinding rule for @code{Producers}:
 @centered[@inferrule["$\\Gamma\\vdash$ n : Int $\\textrm{and}$ n $\\textrm{is a well-formed index expression}$" "n >= 0"]{$\Gamma\vdash$ (Producer n) : *}]
 
 @(noindent)In addition to requiring a non-negative constraint for @code{n},
-the rule also restricts which terms may serve as type indices. Well-formed type
+this rule also restricts which terms may serve as type indices. Well-formed type
 index terms include only addition, subtraction, and a few Video primitives. If
 the @code{Producer} type constructor is applied to an unsupported term, the
 type defaults to a @code{Producer} of infinite length. Despite these
@@ -241,22 +239,22 @@ example programs, including those for the RacketCon 2016 video proceedings.
 }
 
 The @sc{Lam} and @sc{App} rules in @figure-ref{lam-app-rules} roughly
-illustrate how Typed Video collects and solve constraints. Rather than deploy
-multiple type checking passes, Typed Video collects constraints during type
-checking---these may be user-supplied constraints, or constraints required by
-the @code{Producer} subtyping or kinding rules earlier in the section---and
-solves them in a "local" manner.
+illustrate how Typed Video handles constraints. Rather than
+implement multiple type checker passes, Typed Video interleaves constraint
+collection---these may be user-supplied constraints, or constraints required by
+the @code{Producer} subtyping or kinding rules from earlier in the section---and
+type checking, solving the consraints in a more "local" manner.
 
 Specifically, type checking judgements additionally specify a set of
-constraints φ on the right-hand side corresponding to the constraints produced
-while type checking that expression. Constraints in Typed Video are
-restricted to linear arithmetic inequalities.
-
+constraints φ on the right-hand side, as in @figure-ref{lam-app-rules},
+corresponding to the constraints produced while type checking that
+expression. Constraints in Typed Video are restricted to linear arithmetic
+inequalities.
 The @sc{Lam} rule in @figure-ref{lam-app-rules} specifies that functions, which
 bind a type index variable @code{n}, a procedural variable @code{x}, and must
 satisfy input constraints φ, are assigned a universally quantified type that
 additionally includes constraints φ' collected while type checking the body of
-the function. When applying such a function, @sc{App} rule first infers a
+the function. When applying such a function, the @sc{App} rule first infers a
 concrete number @code{i} at which to instantiate the @code{n} index
 variable. It then uses @code{i} to simplify constraints φ via a
 partial-evaluation function @(make-element (make-style "overrightharp"
@@ -297,7 +295,7 @@ turnstile
 @#,line-no[](require (prefix-in untyped-video: video)) ; imports untyped Video identifiers with a prefix
 @#,line-no[](provide λ #%app) ; exports Typed Video identifiers
 @#,line-no[]
-@#,line-no[](define-syntax/typecheck (λ {n ...} #:when φ ([x : τ] ...) e) ≫
+@#,line-no[](define-syntax/typecheck (λ {n ...} ([x : τ] ... #:when φ) e) ≫
 @#,line-no[]  [(n ...) ([x ≫ x- : τ] ...) ⊢ e ≫ e- ⇒ τ_out]
 @#,line-no[]  #:with new-φs (get-captured-φs e-)
 @#,line-no[]  ----------------------------------
@@ -345,7 +343,7 @@ Next we briefly explain each line of the @racket[λ] definition:
 @(current-line 4)
 
 @with-linelabel{The type-checking transformer's input must match pattern
-@racket[(λ {n ...} #:when φ ([x : τ] ...) e)], which binds pattern variables
+@racket[(λ {n ...} ([x : τ] ... #:when φ) e)], which binds pattern variables
 @racket[n] (the type index variables), @racket[x] (the λ parameters), @racket[τ] (the
 type annotations), @racket[φ] (a side-condition), and @racket[e] (the lambda
 body).}
@@ -380,7 +378,7 @@ imperative interface for collecting constraints. Specifically, we use the
 @racket[get-captured-φs] and @racket[add-φ] functions to propagate
 side-conditions (the definition of these functions are not shown).}
 
-@with-linelabel{These dashes separate the premises from the conslusion.}
+@with-linelabel{These dashes separate the premises from the conclusion.}
 
 @with-linelabel{The conclusion specifies the transformer's outputs: an untyped
 Video term @racket[(untyped-video:λ (x- ...) e-)] along with its type
@@ -409,7 +407,7 @@ Xs #:when φX (→ τ_inX ... τ_outX))], which is universally quantified over t
 index variables @racket[Xs] and has side-condition @racket[φX].}
 
 @with-linelabel{The transformer peforms local type inference, computing the
-concrete types @racket[solved-τs] at which to instantiate the polymorphic
+concrete type indices @racket[solved-τs] at which to instantiate the polymorphic
 function.}
 
 @with-linelabel{Next, the polymorphic function type is instantiated to concrete
@@ -425,7 +423,8 @@ error. Though this paper truncates the error message details, this line
 demonstrates how our DSL creates true abstractions, reporting errors in terms
 of the surface language, e.g., @racket[φ], rather than the host language.}
 
-@with-linelabel{If @racket[φ*] is still an expression, propagate it.}
+@with-linelabel{If @racket[φ*] is still an expression, propagate it using
+@racket[add-φ].}
 
 @with-linelabel{Check that the function arguments have the instantiated
 types. This premise uses the ``check'' left bidirectional arrow. If a
@@ -440,7 +439,7 @@ with its computed type.}
 @exact{\vspace{0.4cm}}
 
 The rest of the implementation is similar. For example, implementing
-polymorphism is straightforward because Turnstile reuses Racket's knowledge
+@tt{Π} is straightforward because Turnstile reuses Racket's knowledge
 of a program's binding structure to automatically handle naming. Further,
 the ``as macros'' approach facilitates implementation of rules for both
 terms and types, and thus the implementation of type-level computations also
