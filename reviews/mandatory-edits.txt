@@ -1,0 +1,24 @@
+CONDITIONALLY ACCEPTED PAPER - MANDATORY REVISIONS
+==================================================
+
+General Information
+===================
+
+Your paper has been "Conditionally Accepted" with the expectation that you will revise your paper in line with the specific changes listed below. Of course, you are also encouraged to make other changes to your paper that have been suggested by the reviews and comments for your paper on the icfp17.hotcrp.com site. You are also expected to ensure that the revised version of your paper meets the formatting requirements that were set out in the call for papers, including both the document style and the specific form and use of citations specified there. These requirements are necessary for inclusion in PACM PL.
+
+As indicated in the call for papers, the deadline for completing and submitting the revised version of your paper is June 5. A short, final round of reviewing will be used to determine whether the mandatory revisions have been adequately addressed, and this will determine the final Accept or Reject status of the paper. The intent and expectation is that the mandatory revisions can be addressed within the five week period between notification on May 1 and submission on June 5, and that conditionally accepted papers will, in general, be accepted in the second phase.
+
+Your revised submission should clearly document how the mandatory revisions have been addressed. To that end, it must be accompanied by a cover letter mapping each mandatory revision request to specific parts of the paper. The cover letter should facilitate a quick second review, allowing for confirmation of final acceptance within two weeks. Conversely, the absence of a cover letter will be grounds for the paper's rejection.
+
+Further information about the process for submitting the final version of your paper will be provided shortly. Please contact the program chair, Mark Jones mpj@pdx.edu, if you have any questions about this process.
+
+
+List of Mandatory Revisions for Paper #93
+=========================================
+
+*    Please ensure that you are using the correct document style, including author-year citations with correct usage as described in the call for papers. These requirements are necessary for inclusion in PACM PL.
+
+*    Either make more clear how Video allows integrated interactive and programmatic workflows, or tone down the claim that it does allow such integrated workflows.
+
+*    Flesh out the discussion of the type system in section 6 to resolve the mismatch between the typing rules presented in figure 8 and the implementations of typing rules in figure 9. Give more detail about bugs caught by the type system.
+
