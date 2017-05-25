@@ -463,9 +463,8 @@
    #:title "Language Oriented Programming"
    #:author (authors "Martin P. Ward")
    #:date "1994"
-   #:location (journal-location "Software - Concepts and Tools"
-                                #:volume 15
-                                #:pages '(147 161))))
+   #:location (journal-location "Software---Concepts and Tools" #:volume 15 #:pages '(147 161))))
+
 (define lop-dmitriev
   (make-bib
    #:title "Language Oriented Programming: The Next Programming Paradigm"
