@@ -51,7 +51,9 @@ scriptable with a Blender-specific Python interpreter that
 runs when Blender is launched. This differs from a language
 where programs can run on different language implementations.
 
-Alternative approaches to reducing boilerplate actions use
+@;{ to reducing boilerplate actions }
+
+Alternative approaches use
 general-purpose multimedia frameworks such as
 GStreamer@cite[gstreamer-man] or the MLT
 Framework.@note{@mlt-url} These frameworks are APIs for

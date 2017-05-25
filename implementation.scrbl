@@ -211,7 +211,7 @@ export (line 3). The implementation of
 @racket[video-begin] (line 9), the workhorse of the module. This auxiliary syntax
 transformer consumes four pieces: an identifier (@racket[vid]), a piece of code
 (@racket[export]) formulated in terms of the identifier, a list of expressions (@racket[e ...]),
-and the module's body, which is represented as a potentially empty sequence
+and the module's body, which is represented as a sequence
 of expressions (@racket[body ...]). In the case of @racket[#%video-module-begin], the four
 pieces are @racket[vid], @racket[(provide vid)], @racket[()], and the module
 body. 

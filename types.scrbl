@@ -380,8 +380,8 @@ side-conditions (the definition of these functions are not shown).}
 
 @with-linelabel{These dashes separate the premises from the conclusion.}
 
-@with-linelabel{The conclusion specifies the transformer's outputs: an untyped
-Video term @racket[(untyped-video:λ (x- ...) e-)] along with its type
+@with-linelabel{The conclusion specifies the transformer's outputs: 
+@racket[(untyped-video:λ (x- ...) e-)], an untyped term, along with its type
 @racket[(Π (n ...) #:when (and φ new-φs) (→ τ ... τ_out))]. In Turnstile, types
 are represented using the same syntax structures as terms.}
 

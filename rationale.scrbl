@@ -46,9 +46,9 @@ first is immediately visible in the second one, just by switching
 focus. Hence language development in Racket suffers from no points of
 friction.
 
-Developing a new language typically starts from a base language, that is close to the desired language.
-From this base language, a Racket developer
-creates a new language with some or all of the following actions:
+Developing a new language typically starts from a base language close to
+the desired one. From there, a Racket developer creates a new language with
+some or all of the following actions: 
 @;
 @itemlist[ 
 
