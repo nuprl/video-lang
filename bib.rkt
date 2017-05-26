@@ -15,24 +15,57 @@
     [(_ i e e*) (define i (if short? e e*))]
     [(_ i e) (define i e)]))
 
-(define IEEE "IEEE ")
-(define ACM "ACM ")
-(define International "Intl. ")
-(define Conference "Conf. ")
-(define Workshop "Wksp. ")
-(define Journal "J. ")
-(define Symposium "Sym. ")
-(define Transactions "Trans. ")
-(set! Transactions "")
-(set! Conference "")
+;; implementation copied from scriblib/autobib so we can delete "Proc"
+(define (to-string v) (format "~a" v))
+(define (proceedings-location
+         location
+         #:pages [pages #f]
+         #:series [series #f]
+         #:volume [volume #f])
+  (let* ([s @elem{In @italic{@elem{@to-string[location]}}}]
+         [s (if series
+                @elem{@|s|, @to-string[series]}
+                s)]
+         [s (if volume
+                @elem{@|s| volume @to-string[volume]}
+                s)]
+         [s (if pages
+                @elem{@|s|, pp. @(to-string (car pages))--@(to-string (cadr pages))}
+                s)])
+    s))
 
-(define comm-acm (string-append "Commun." ACM))
-(define/short lfp "LFP" "LISP and Functional Programming")
-(define/short popl "POPL" (string-append ACM Symposium "Principles of Programming Languages"))
-(define/short oopsla "OOPSLA" (string-append ACM International Conference "Object Oriented Programming Systems, Languages, and Applications"))
+(define IEEE "IEEE")
+(define ACM "ACM")
+(define SIGPLAN "SIGPLAN")
+(define International "International")
+(define Conference "Conference on")
+(define Workshop "Workshop on")
+(define Journal "Journal of")
+(define Symposium "Symposium on")
+(define Transactions "Transactions")
+(set! Transactions "")
+(set! Symposium "")
+(set! Workshop "")
+(set! ACM "")
+(set! SIGPLAN "")
+
+(define (++ . strs) (string-join strs))
+
+(define plt "PLT Design Inc.")
+(define fp "Functional Programming")
+(define pl "Programming Languages")
+(define comm-acm "Communications of the ACM")
+(define scheme-workshop (++ Workshop "Scheme and" fp))
+
+(define/short lfp "LFP" (++ "Lisp and" fp))
+(define/short jfp "JFP" (++ Journal fp))
+(define/short popl "POPL" (++ ACM Symposium "Principles of" pl))
+(define/short oopsla "OOPSLA" "Object Oriented Programming Systems, Languages, and Applications")
+(define/short icfp "ICFP" (++ International Conference fp))
+(define/short pldi "PLDI" (++ pl "Design and Implementation"))
 
 (define kffd:hygiene
-  (make-bib #:title "Hygienic macro expansion"
+  (make-bib #:title "Hygienic Macro Expansion"
             #:author (authors "Eugene Kohlbecker"
                               "Daniel P. Friedman"
                               "Matthias Felleisen"
@@ -42,7 +75,7 @@
             #:date "1986"))
 
 (define kw:mbe
-  (make-bib #:title "Macro-by-example: deriving syntactic transformations from their specifications"
+  (make-bib #:title "Macro-by-example: Deriving Syntactic Transformations From Their Specifications"
             #:author (authors "Eugene Kohlbecker" "Mitchell Wand")
             #:location (proceedings-location popl #:pages '(77 84))
             #:date "1987"))
@@ -52,11 +85,11 @@
   (make-bib
     #:author (authors "Eli Barzilay" "Dimitry Orlovsky")
     #:title "Foreign Interface for PLT Scheme"
-    #:location (proceedings-location "Workshop on Scheme and Funcational Programming")
+    #:location (proceedings-location scheme-workshop #:pages '(63 74))
     #:date 2004))
 
 (define culpepper-scp
-  (make-bib #:title "Debugging hygienic macros"
+  (make-bib #:title "Debugging Hygienic Macros"
             #:author (authors "Ryan Culpepper" "Matthias Felleisen")
             #:location (journal-location "Science of Computer Programming"
                                          #:pages '(496 515)
@@ -67,8 +100,8 @@
 (define bc:lazy
   (make-bib
     #:author (authors "Eli Barzilay" "John Clements")
-    #:title "Laziness without all the hard work"
-    #:location (proceedings-location "Workshop on Funcational and Declarative Programming in Education" 
+    #:title "Laziness Without All the Hard Work"
+    #:location (proceedings-location "Functional and Declarative Programming in Education"
 		 #:pages '(9 13))
     #:date 2005))
 
@@ -82,6 +115,7 @@
 
 (define fowler
   (make-bib #:title "Domain-specific Languages"
+            #:is-book? #t
             #:author (authors "Martin Fowler" "Rebecca Parsons")
             #:date "2010"
             #:location (book-location #:publisher "Addison-Wesley")))
@@ -104,7 +138,7 @@
   (make-bib #:title    "Reference: Racket"
             #:author   (authors "Matthew Flatt" "PLT")
             #:date     "2010"
-            #:location (techrpt-location #:institution "PLT Design Inc."
+            #:location (techrpt-location #:institution plt
                                          #:number "PLT-TR-2010-1")
             #:url      "https://racket-lang.org/tr1/"))
 
@@ -112,7 +146,7 @@
   (make-bib #:title    "DrRacket: Programming Environment"
             #:author   (authors "Robert Bruce Findler" "PLT")
             #:date     "2010"
-            #:location (techrpt-location #:institution "PLT Design Inc."
+            #:location (techrpt-location #:institution plt
                                          #:number "PLT-TR-2010-2")
             #:url      "https://racket-lang.org/tr2/"))
 
@@ -120,18 +154,20 @@
   (make-bib #:title    "GUI: Racket Graphics Toolkit"
             #:author   (authors "Matthew Flatt" "Robert Bruce Findler" "John Clements")
             #:date     "2010"
-            #:location (techrpt-location #:institution "PLT Design Inc."
+            #:location (techrpt-location #:institution plt
                                          #:number "PLT-TR-2010-3")
             #:url      "https://racket-lang.org/tr3/"))
 
 (define essential-blender
-  (make-bib #:title "The Essential Blender: Guide to 3D Creation with the Open Source Suite Blender "
+  (make-bib #:title "The Essential Blender: Guide to 3D Creation with the Open Source Suite Blender"
+            #:is-book? #t
             #:author (authors "Ton Roosendaal" "Roland Hess")
             #:date "2007"
             #:location (book-location #:publisher "No Starch Press")))
 
 (define adobe-premiere
   (make-bib #:title "Adobe Premiere Pro CC Classroom in a Book"
+            #:is-book? #t
             #:author (authors "Maxim Jago" (org-author-name "Adobe Creative Team"))
             #:date "2017"
             #:location (book-location #:publisher "Adobe Press")))
@@ -140,28 +176,27 @@
   (make-bib #:title "Slideshow: Functional Presentations"
             #:author (authors "Matthew Flatt" "Robby Findler")
             #:date "2006"
-            #:location (journal-location "Journal of Functional Programming"
-                                         #:pages '(593 619)
-                                         #:volume 16)))
+            #:location (journal-location jfp #:pages '(583 619)
+                                             #:volume 16 #:number "4-5")))
 
 (define scribble-icfp
   (make-bib #:title "Scribble: Closing the Book on Ad Hoc Documentation Tools"
-            #:author (authors "Matthew Flatt" "Eli Barzilay" "Robert Bruce Findler")
+            #:author (authors "Matthew Flatt"
+                              "Eli Barzilay"
+                              "Robert Bruce Findler")
             #:date "2009"
-            #:location (proceedings-location "International Conference on Functional Programming"
-                                             #:pages '(109 120)
-                                             #:volume 14)))
+            #:location (proceedings-location icfp #:pages '(109 120))))
 
 (define applescript-hopl
   (make-bib #:title "Applescript"
             #:author (authors "William R. Cook")
             #:date "2007"
             #:location (proceedings-location "History of Programming Languages"
-                                             #:pages '("1-1" "1-21")
-                                             #:volume 3)))
+                                             #:pages '("1-1" "1-21"))))
 
 (define technique-of-video-editing
   (make-bib #:title "The Technique of Film and Video Editing: History, Theory, and Practice"
+            #:is-book? #t
             #:author (authors "Ken Dancyger")
             #:date "2010"
             #:location (book-location #:edition "fifth"
@@ -187,12 +222,10 @@
             #:url "https://www.w3.org/TR/2008/REC-SMIL3-20081201/"))
 
 (define macros-icfp
-  (make-bib #:title "Composable and Compilable Macros, You Want It when?"
+  (make-bib #:title "Composable and Compilable Macros, You Want It When?"
             #:author (authors "Matthew Flatt")
             #:date "2002"
-            #:location (proceedings-location "International Conference on Functional Programming"
-                                             #:pages '(72 83)
-                                             #:volume 7)))
+            #:location (proceedings-location icfp #:pages '(72 83))))
 
 (define lal-pldi
   (make-bib #:title "Languages As Libraries"
@@ -202,31 +235,27 @@
                               "Matthew Flatt"
                               "Matthias Felleisen")
             #:date "2011"
-            #:location (proceedings-location "Programming Languages Design and Implementation"
-                                             #:pages '(132 141)
-                                             #:volume 32)))
+            #:location (proceedings-location pldi #:pages '(132 141))))
 
 (define contracts-icfp
   (make-bib #:title "Contracts for Higher-order Functions"
             #:author (authors "Robert Bruce Findler"
                               "Matthias Felleisen")
             #:date "2002"
-            #:location (proceedings-location "International Conference on Functional Programming"
-                                             #:pages '(48 59)
-                                             #:volume 7)))
+            #:location (proceedings-location icfp #:pages '(48 59))))
 
 (define ats-pldi
   (make-bib
    #:title "Eliminating Array Bound Checking Through Dependent Types"
    #:author (authors "Hongwei Xi" "Frank Pfenning")
-   #:location (proceedings-location "Programming Languages Design and Implementation" #:pages '(249 257))
+   #:location (proceedings-location pldi #:pages '(249 257))
    #:date 1998))
 
 (define tsam-popl
   (make-bib
    #:title "Type Systems as Macros"
    #:author (authors "Stephen Chang" "Alex Knauth" "Ben Greenman")
-   #:location (proceedings-location "Principles of Programming Languages" #:pages '(694 705))
+   #:location (proceedings-location popl #:pages '(694 705))
    #:date 2017))
 
 #;
@@ -234,39 +263,38 @@
   (make-bib
    #:title "Fortifying Macros"
    #:author (authors "Ryan Culpepper" "Matthias Felleisen")
-   #:location (proceedings-location "International Conference on Functional Programming" #:pages '(235 246))
+   #:location (proceedings-location icfp #:pages '(235 246))
    #:date 2010))
 
 ; other "DSL" stuff
 (define gadt-icfp
   (make-bib
-   #:title "Simple unification-based type inference for GADTs"
+   #:title "Simple Unification-based Type Inference for GADTs"
    #:author (authors "Simon Peyton Jones"
                      "Dimitrios Vytiniotis"
                      "Stephanie Weirich"
                      "Geoffrey Washburn")
-   #:location (proceedings-location "International Conference on Functional Programming" #:pages '(50 61))
+   #:location (proceedings-location icfp #:pages '(50 61))
    #:date 2006))
 (define deep-shallow-icfp
   (make-bib
-   #:title "Folding domain-specific languages: deep and shallow embeddings (functional Pearl)"
+   #:title "Folding Domain-specific Languages: Deep and Ahallow Embeddings (Functional Pearl)"
    #:author (authors "Jeremy Gibbons" "Nicolas Wu")
-   #:location (proceedings-location "International Conference on Functional Programming" #:pages '(339 347))
+   #:location (proceedings-location icfp #:pages '(339 347))
    #:date 2014))
 (define gadt-popl
   (make-bib
-   #:title "Guarded recursive datatype constructors"
+   #:title "Guarded Recursive Datatype Constructors"
    #:author (authors "Hongwei Xi" "Chiyan Chen" "Gang Chen")
-   #:location (proceedings-location "Principles of Programming Languages" #:pages '(224 235))
+   #:location (proceedings-location popl #:pages '(224 235))
    #:date 2003))
 (define tagless-jfp
   (make-bib
    #:title "Finally Tagless, Partially Evaluated"
    #:author (authors "Jacques Carette" "Oleg Kiselyov" "Chung-chieh Shan")
-   #:location (journal-location "Journal of Functional Programming"
-                                #:pages '(509 543)
-                                #:volume 19
-                                #:number 5)
+   #:location (journal-location jfp #:pages '(509 543)
+                                    #:volume 19
+                                    #:number 5)
    #:date 2009))
 (define hudak-dsl
   (make-bib
@@ -278,9 +306,9 @@
    #:date 1996))
 (define meijer-jfp
   (make-bib
-   #:title "Server side web scripting in Haskell"
+   #:title "Server Side Web Scripting in Haskell"
    #:author "Erik Meijer"
-   #:location (journal-location "Journal of Functional Programming"
+   #:location (journal-location jfp
                                 #:pages '(1 18)
                                 #:volume 10
                                 #:number 1)
@@ -289,23 +317,22 @@
   (make-bib
    #:title "Calling hell from heaven and heaven from hell"
    #:author (authors "Sigbjorn Finne" "Daan Leijen" "Erik Meijer" "Simon Peyton Jones")
-   #:location (proceedings-location "International Conference on Functional Programming" #:pages '(114 125))
+   #:location (proceedings-location icfp #:pages '(114 125))
    #:date 1999))
 (define haskell-scripting-cufp
   (make-bib
-   #:title "Light-weight and type-safe scripting with Haskell"
+   #:title "Light-weight and Type-safe Scripting with Haskell"
    #:author "Gabriel Gonzalez"
-   #:location (proceedings-location "Commercial Users of Functional Programming Tutorials")
+   #:location (proceedings-location (++ "Commercial Users of" fp "Tutorials"))
    #:date 2015))
 
 (define fortifying-jfp
   (make-bib
    #:title "Fortifying Macros"
    #:author (authors "Ryan Culpepper")
-   #:date "2009"
-   #:location (journal-location "Journal of Functional Programming"
-                                #:pages '(439 476)
-                                #:volume 22)))
+   #:date "2012"
+   #:location (journal-location jfp #:pages '(439 476)
+                                    #:volume 22 #:number "4-5")))
 
 (define drscheme-jfp
   (make-bib
@@ -318,26 +345,23 @@
                      "Paul Steckler"
                      "Matthias Felleisen")
    #:date "2002"
-   #:location (journal-location "Journal of Functional Programming"
-                                #:pages '(159 182)
-                                #:volume 12)))
+   #:location (journal-location jfp #:pages '(159 182) #:volume 12 #:number 2)))
 
 (define hygenic-lisp
   (make-bib
    #:title "Hygienic Macros Through Explicit Renaming"
    #:author (authors "William Clinger")
    #:date "1991"
-   #:location (proceedings-location "Lisp Pointers"
-                                    #:pages '(25 28))))
+   #:location (journal-location (++ SIGPLAN "Lisp Pointers")
+                                #:volume "IV" #:number 4
+                                #:pages '(25 28))))
 
 (define closures-lfp
   (make-bib
    #:title "Syntactic Closures"
-   #:author (authors "Alan Bawden"
-                     "Jonathan Rees")
+   #:author (authors "Alan Bawden" "Jonathan Rees")
    #:date "1988"
-   #:location (proceedings-location "Lisp and Functional Programming"
-                                    #:pages '(86 95))))
+   #:location (proceedings-location lfp #:pages '(86 95))))
 
 (define syntax-lfp
   (make-bib
@@ -347,18 +371,11 @@
                      "Carl Bruggeman")
    #:date "1993"
    #:location (journal-location "Lisp and Symbolic Computation"
-                                    #:volume 5
-                                    #:number 4
-                                    #:pages '(295 326))))
+                                #:volume 5
+                                #:number 4
+                                #:pages '(295 326))))
 
 ;; Language Workbenches
-
-(define language-workbench
-  (make-bib
-   #:title "Language Workbenches: The Killer-App for Domain Specific Languages?"
-   #:author (authors "Martin Fowler")
-   #:date "2005"
-   #:location "martinfowler.com"))
 
 (define racket-workbench-challenge
   (make-bib
@@ -374,17 +391,6 @@
    #:date "2016"
    #:location (proceedings-location "Language Workbench Challenge")))
 
-(define gstreamer-man
-  (make-bib
-   #:title "GStreamer Application Development Manual"
-   #:author (authors "Wim Taymans"
-                     "Steve Baker"
-                     "Andy Wingo"
-                     "Rondald S. Bultje"
-                     "Kost Stefan")
-   #:date "2013"
-   #:url "https://gstreamer.freedesktop.org/data/doc/gstreamer/head/manual/manual.pdf"))
-
 (define flatt-acm
   (make-bib
    #:title "Creating Languages in Racket"
@@ -394,13 +400,6 @@
                                 #:volume 55
                                 #:number 1
                                 #:pages '(48 56))))
-
-(define racket-way
-  (make-bib
-   #:title "The Racket Way"
-   #:author (authors "Matthew Flatt")
-   #:date "2012"
-   #:location "Strange Loop Conference"))
 
 (define language-workbenches-survey
   (make-bib
@@ -436,14 +435,14 @@
 
 (define spoofax
   (make-bib
-   #:title "The spoofax language workbench: rules for declarative specification of languages and IDEs"
+   #:title "The Spoofax Language Workbench: Rules for Declarative Specification of Languages and IDEs"
    #:author (authors "Lennart C.L. Kats" "Eelco Visser")
    #:date "2010"
    #:location (proceedings-location oopsla #:pages '(444 463))))
 
 (define sugarj
   (make-bib
-   #:title "SugarJ: library-based syntactic language extensibility"
+   #:title "SugarJ: Library-based Syntactic Language Extensibility"
    #:author (authors 
              "Sebastian Erdweg"
              "Tillmann Rendel"
@@ -457,14 +456,15 @@
    #:title "MetaEdit+: A Fully Configurable Multi-User and Multi-Tool CASE and CAME Environment"
    #:author (authors "Steven Kelly" "Kalle Lyytinen" "Matti Rossi")
    #:date "1996"
-   #:location (proceedings-location "8th International Conference on Advances Information System Engineering" #:pages '(1 21))))
+   #:location (proceedings-location "Conference on Advances Information System Engineering" #:pages '(1 21))))
 
 (define lop-ward
   (make-bib
    #:title "Language Oriented Programming"
    #:author (authors "Martin P. Ward")
    #:date "1994"
-   #:location (journal-location "Software---Concepts and Tools" #:volume 15 #:pages '(147 161))))
+   #:location (journal-location "Software---Concepts and Tools"
+                                #:volume 15 #:pages '(147 161))))
 
 (define lop-dmitriev
   (make-bib
@@ -481,17 +481,19 @@
    #:author (authors "Eric S. Raymond")
    #:date "2003"
    #:is-book? #t
-   #:location (book-location #:edition "1st"
+   #:location (book-location #:edition "first"
                              #:publisher "Addison-Wesley")))
 (define little-languages
   (make-bib
-   #:title "Little languages"
+   #:title "Little Languages"
    #:author (authors "Jon Bentley")
    #:date "1986"
    #:location (journal-location comm-acm #:volume 29 #:number 8
                                          #:pages '(711 21))))
 
 
+(define gstreamer-url
+  (url "gstreamer.freedesktop.org/data/doc/gstreamer/head/manual/manual.pdf"))
 (define mlt-url (url "mltframework.org/"))
 (define shotcut-url (url "shotcutapp.com/"))
 (define openshot-url (url "openshot.org/"))

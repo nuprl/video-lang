@@ -55,7 +55,7 @@ where programs can run on different language implementations.
 
 Alternative approaches use
 general-purpose multimedia frameworks such as
-GStreamer@cite[gstreamer-man] or the MLT
+GStreamer@note[gstreamer-url] or the MLT
 Framework.@note{@mlt-url} These frameworks are APIs for
 C-like languages that provide data types for building and
 rendering videos. Their appeal is the
