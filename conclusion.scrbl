@@ -44,8 +44,8 @@ The second factor is that Racket acts as a common substrate. Eventually
  systems with a single host language. 
 
 @figure["language-tower" @list{The tower of languages for Video} 
-  #:style center-figure-style]{
-  @language-tower[.8]}
+@;{#:style center-figure-style}]{
+  @language-tower[.7]}
 
 Racket is the host of this multi-lingual paradise, and Video is a poetic
  illustration of how this paradise works and what it
