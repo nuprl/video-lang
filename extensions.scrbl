@@ -15,28 +15,36 @@
  @(scale (bitmap "res/video-gui.png") 0.4)}
 
 Some videos are best expressed with a graphical NLVE, and the DrRacket
-version for Video therefore comes with embedded NLVE widgets.  Unlike other
+extension for Video therefore comes with embedded NLVE widgets.  Unlike other
 NLVEs with scriptable APIs, the NLVE widget is actually part of the
 language. A developer may place an NLVE directly into a script. Best of
 all, the embedded NLVE may include code snippets, which in turn can contain
 yet another NLVE widget etc. See @figure-ref["video-gui"] for a screenshot
-of the editor.
+of such nesting.
 
-A reader may wonder why one would want such a ``turtles all the way down''
-approach to a Video IDE. Consider the case where a hardware failure during
-a talk prevents the capture of the speaker's screen. Fortunately, the
-speaker may have a copy the slide deck as a PDF document. While the
-captured video can still be recreated by using the slide deck, a decision
-has to be made concerning the duration of each slide. If a plain-text Video
-script were to use this method, it would inevitably contain a long list of
-``magic numbers.'' Embedding NLVE widgets into the code explains these
-``magic numbers'' to any future reader of the code and is thus a cleaner
-way to solve the problem. @Figure-ref{playlist-sample} illustrates this
-point with a simplistic example. The module with magic 
-numbers is on the left; the right part of the figure shows how an embedded
-NLVE explains the numbers directly.  
+A reader may wonder why one would want such a ``turtles all
+the way down'' approach to a Video IDE. Consider the case
+where a hardware failure during a talk prevents the capture
+of the speaker's screen. Fortunately, the speaker may have a
+copy the slide deck as a PDF document. While the captured
+video can still be recreated by using the slide deck, a
+decision has to be made concerning the duration of each
+slide. If a plain-text Video script were to use this method,
+it would inevitably contain a long list of ``magic
+numbers.'' Embedding NLVE widgets into the code explains
+these ``magic numbers'' to any future reader of the code and
+is thus a cleaner way to solve the problem. @Figure-ref{
+ playlist-sample} illustrates this point with a simplistic
+example. The module with magic numbers is on the left; the
+right part of the figure shows how an embedded NLVE explains
+the numbers directly. In both cases a developer must
+manually determine the screen time allocated to each slide.
+However, using the widget gives the author has a graphical
+representation of the layout, thus speeding development
+time. Additionally, and future authors can more easily tweak
+the times by dragging and resizing clips in the widget.
 
-Graphical NLVEs are producers and are thus first-class
+Graphical NLVEs are producers and can be made as first-class
 objects in Video. They can be bound to a variable, put in a
 playlist, supplied to a multitrack, and so on. Integrating
 the graphical and textual program in this manner allows
@@ -47,19 +55,23 @@ task at hand. For example, the program in
 @secref{overview}, now implemented using NLVE widgets with embedded code
 snippets.
 
-Traditional NLVEs have several advantages over these
+Traditional NLVEs have several advantages over DrRacket
 widgets.@note{We conjecture that these limitations are not
  fundamental to the concept of these widgets. However,
  testing that claim requires a significant amount of
  engineering compared to the rest of Video's implementation.}
-NLVEs such as Premier have a cursor that tracks a notion of
-``current time'', with a preview window that shows a low
-resolution but real-time sample of the video at that
-position. This feature enables high precision editing with
-quick feedback.
+For example, NLVEs such as Premier have a cursor that tracks
+a notion of ``current time,'' with a preview window that
+shows a low resolution but real-time sample of the video at
+that position. This feature enables high-precision editing
+with quick feedback. As another example, traditional NLVEs
+don't have a notion of syntax error. While an NLVE project
+may not be correct, it still describes a Video. Even with
+widgets, Video programs can still have syntax errors as with
+other programming languages.
 
 Video relies on the Racket ecosystem and the DrRacket
-environment to get the quick REPL like feedback needed for
+environment to get REPL-style feedback needed for quick
 video editing. As described in @secref{overview-rendering}
 the @racket[preview] function shows a low-resolution (but
 real time) preview video being edited. This function starts
@@ -76,7 +88,7 @@ work.  The entire editor is implemented in less than 800 lines of code. Of
 this, approximately 700 lines are for the graphical editor itself, and 50
 are for the integration with Video. These lines are not counted in the 2,400
 lines for Video's implementation. The code implementing these NLVE widgets
-is plain Racket code and therefore we omit details of the implementation.
+is plain Racket code, and therefore we omit details of the implementation.
 
 @figure["playlist-sample" @list{Slide reconstruction using magic numbers (left) and a NLVE widget (right)}]{
 @(split-minipage
