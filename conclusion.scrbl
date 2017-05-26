@@ -5,27 +5,27 @@
 
 @title[#:tag "conclusion"]{Star Trek Beyond}
 
-Imagine being Spock on the USS Enterprise. The ship's hyper-light-nano-pulsar
- sensors have discovered this paper. A first glance reveals a whole new,
- alternative future---Racket's approach to language-oriented programming@cite[lop-ward lop-dmitriev]---only a few light-years
- away. Now use extremely rational thinking to reason through the
- consequences of this insight.
+Imagine being Spock on the USS Enterprise. The ship's
+ hyper-light-nano-pulsar sensor has discovered this paper. The discovery
+ reveals a whole new, alternative future---Racket's approach to
+ language-oriented programming@cite[lop-ward lop-dmitriev]---only a few
+ light-years away. Now use extremely rational thinking to reason through
+ the consequences of this insight.
 
-Clearly, this alternative world exists because developers can then build
- languages with ease to close the gap between problem domains and what
- languages usually provide in terms of linguistic constructs. In this
- context, ``language'' falls into the same class of concepts as language
- library or modules or structures or functor. Some of these languages may sit
- at the surface, helping domain experts formulate partial solutions to facets
- of the overall problem---in their own languages. The language
- implementations will often just use conventional programming techniques; at
- other times, developers will create more languages to implement
- languages. In the end, the source code of applications will consist of a
- deep hierarchy of languages, each layer closing the gap between the ordinary
- constructs of a conventional language (folds, maps, monads, algebraic types)
- and the concepts found in a problem domain (video clips, transitions,
- filters; FFI protection, FFI bindings).  The hierarchy underneath Racket
- contains several dozen such languages.
+Clearly, this alternative world encourages developers to build languages
+ that are as close as possible to problem domains. In this context,
+ ``language'' falls into the same class of concepts as language library or
+ module, structure, or functor. Software systems will consist of a deep
+ hierarchy of languages. Some of these languages may sit at the surface of
+ the system, helping domain experts formulate partial solutions to facets
+ of the overall problem---in their own domain languages. Others may sit
+ below the surface, in the interior of the hierarchy, because the
+ implementation of DSLs also pose domain-specific problems.  Each language
+ will narrow the gap between the ordinary constructs of the underlying
+ language (folds, maps, monads, algebraic types) and the concepts found in
+ a problem domain (videos; type systems; FFI bindings).  The hierarchy
+ underneath Racket contains several dozen such languages, each dedicated to
+ a special purpose, but all of them sitting within the core language.
 
 Two critical factors enable this brave new world of language-oriented
  programming in the Racket ecosystem. The first one is that developing
@@ -40,23 +40,23 @@ Two critical factors enable this brave new world of language-oriented
 
 The second factor is that Racket acts as a common substrate. Eventually
  programs in these ``little'' languages are elaborated into core Racket
- programs. Their values become Racket values. As a result, developers can mostly compose modules in distinct
- languages, meaning software systems are compositions of many modules, each
- representing a solution of a facet of the problem, each written in its most
- appropriate language.
+ modules.  Developers can link these modules, creating multi-lingual
+ systems with a single host language. 
 
-@figure["language-tower" @list{The tower of languages for Video} #:style center-figure-style]{
+@figure["language-tower" @list{The tower of languages for Video} 
+  #:style center-figure-style]{
   @language-tower[.8]}
 
 Racket is the host of this multi-lingual paradise, and Video is a poetic
  illustration of how this paradise works and what it
- promises. @Figure-ref{language-tower} displays an organization diagram that
- explains the small language hierarchy underneath Video. The Video language
- itself exists because the domain of video editing calls out for a
- declarative scripting language. In other words, Video closes the gap between
- the domain expert, who wishes to composite video clips programmatically, and
- the scripting language, whose core provides nothing but functions and
- variables and list comprehension and similar linguistic features.
+ promises. @Figure-ref{language-tower} displays an organization diagram
+ that summarizes the small language hierarchy underneath Video and its
+ dependencies. The Video language itself exists because the domain of video
+ editing calls out for a declarative scripting language. In other words,
+ Video closes the gap between the domain expert, who wishes to composite
+ video clips programmatically, and the scripting language, whose core
+ provides nothing but functions and variables and list comprehension and
+ similar linguistic features.
 
 Similarly, a linguistic gap shows up for the implementation of Typed Video, an
  extension of Video. Here the domain expert is a type-system designer, who
@@ -66,13 +66,21 @@ Similarly, a linguistic gap shows up for the implementation of Typed Video, an
  type system---as attachments to just those linguistic features for which we
  want types--- as much as possible in the language of type-system designers.
 
-As a matter of fact, the language gap shows up with the
- implementation of Video. The language's run-time system demands extensive
- checking of values that flow into the C-level primitives. One way to
- translate the language of the C documentation into Racket, is to add
- explicit checks inside Racket function definitions. Instead, we designed and
- implemented a DSL for dealing with just this insertion of checks for this
- specific library.
+On the left side of the diagram, we see another extension of Video, the
+ Video Docs language, which Video programmers can use to create integrated
+ documentation. Like Typed Video, it extends Video and rests on another
+ domain-specific language, Scribble, which is a general-purpose mark-up
+ language for writing API documentation@cite[scribble-icfp]. While this
+ extension is less complicated than the one on the right side, it is
+ nevertheless worth mentioning because this domain is often dealt with as
+ an after-thought. 
+
+The language gap also shows up with the implementation of Video. The
+ language's run-time system demands extensive checking of values that flow
+ into the C-level primitives. One way to translate the language of the C
+ documentation into Racket, is to add explicit checks inside Racket
+ function definitions. Instead, we designed and implemented a DSL for
+ dealing with just this insertion of checks for this specific library.
 
 Finally, all of these languages make extensive use of yet another DSL,
  @racket[syntax-parse]. This language closes the gap between Racket's
@@ -80,7 +88,7 @@ Finally, all of these languages make extensive use of yet another DSL,
  have in mind. For example, developers know that one particular element of
  syntactic form must be an identifier while another must be a
  definition. Furthermore, they know that the error messages must come from
- the form itself, not the result of elaborating an occurrence of the
+ the form itself, not the result of elaborating an instance of the
  form. The language of @racket[syntax-parse] provides all this and more,
  once again allowing developers to use the language they have in mind
  instead of just the underlying, raw core language. 
