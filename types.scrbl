@@ -12,10 +12,11 @@
 What use is a programming language without a dependent type system? Lots of
 course, as Video shows. After all, Video is a scripting language, and most
 descriptions of a conference video are no longer than a few lines. No real
-programmer needs types for such programs. For some, however, the existence of
-an untyped language might be inconceivable, and we therefore whipped together a
-dependent type system in a single work day.@note{We do not explore the
-metatheory of our type system since it is beyond the scope of this pearl.}
+programmer needs types for such programs. For some readers, however, the
+existence of an untyped language might be inconceivable, and we therefore
+whipped together a dependent type system in a single work day.@note{We do not
+explore the metatheory of our type system since it is beyond the scope of this
+pearl.}
 
 After explaining the rationale for such a type system (@secref{video-data}), we
 present the essential idea: type checking the length of producers,
@@ -41,7 +42,7 @@ a producer that is only 10 frames long:
 @racketblock[
 @code:comment{untyped Video}
 (cut-producer (color "green" #:length 10) #:start 0 #:end 15)
-@code:comment{CRASH (given producer must have length >= end - start = 15)}]
+@code:comment{EXCEPTION: given producer must have length >= end - start = 15}]
 @;
 The following second example attempts to use producers that are too short for
 the specified transition:
@@ -49,7 +50,7 @@ the specified transition:
 @racketblock[
 @code:comment{untyped Video}
 (playlist (blank 10) (fade-transition #:length 15) (color "green" #:length 10))
-@code:comment{CRASH (given producers must have length >= transition length 15)}]
+@code:comment{EXCEPTION: given producers must have length >= transition length 15}]
 @;
 While old-fashioned scripting languages rely on dynamic checks to
 catch these bugs, modern scripting languages use a static type system
@@ -66,7 +67,7 @@ simplified version of Dependent ML@cite[ats-pldi].
 Such a type system does not impose too much of a burden in our domain.
 Indeed, it works well in practice because Video programmers are
 already accustomed to specifying explicit length information in their
-programs. For example, the snippets from @secref{video-data} produce static
+programs. For example, the snippets from the preceding section produce static
 type error messages in Typed Video:
 @;
 @racketblock[
@@ -80,56 +81,67 @@ producer values do not flow into positions where their length is less than
 expected.
 
 Typed Video also supports writing functions polymorphic in the lengths of
-videos. Adapting the conference video editing example from @secref{overview},
-a function @racket[add-slides] for combining the video of a speaker with
-a video of slides from their presentation might have the following signature:
+videos. Recall the @racket[conference-talk] example from
+@figure-ref{video-functions}. A function @racket[add-slides] that just combines
+the video of a speaker with a video of slides from their presentation might
+look like:
+
+@require{pictures.rkt}
+
+@vspace{2}
 
 @racketblock[
 (define (add-slides {n} [vid : (Producer n)] [slides : (Producer n)] -> (Producer n))
-  @code:comment{generate background ...}
-  (multitrack vid slides background #:length (producer-length vid)))]
-@;
-This function binds a universally-quantified type index variable @racket[n] that
-ranges over natural numbers and uses it to specify that the lengths of the
-input and output producers must match up.
+  (multitrack vid #,elided slides #,elided))]
+
+@vspace{1}
+
+@(noindent)The function's type binds a universally-quantified type index
+variable @racket[n] that ranges over natural numbers, and uses it to specify
+that the lengths of the input and output producers must match up.
 
 In addition, a programmer may specify side-conditions involving type index
 variables. Here is an @racket[add-bookend] function, which adds an
 opening and ending sequence to a speaker's video:
 
-@(nested (minipage
+@;vspace{4}
 @racketblock[
 (code:comment "Add conference logos to the front and end of a video.")
-(define (add-bookend {n} [main-talk : (Producer n)] #:when (>= n 400)
-                         -> (Producer (+ n 600)))
+(define (add-bookend {n} [main-talk : (Producer n)] #:when (>= n 400) -> (Producer (+ n 600)))
   (playlist begin-clip
             @fade-transition[#:length 200]
 	    main-talk
 	    @fade-transition[#:length 200]
             end-clip)
   (define begin-clip @image["logo.png" #:length 500])
-  (define end-clip @image["logo.png" #:length 500]))]))
-@;
-The @racket[add-bookend] function specifies, with a @racket[#:when] keyword,
-that its input must be a producer of at least 400 frames because it uses two
-200-frame transitions. The result type says that the output adds 600 frames to
-the input. Here the additional frames come from the added beginning and end
-segments, minus the transition frames.
+  (define end-clip @image["logo.png" #:length 500]))]
+
+@vspace{2}
+
+@(noindent)The @racket[add-bookend] function specifies, with a @racket[#:when]
+keyword, that its input must be a producer of at least 400 frames because it
+uses two 200-frame transitions. The result type says that the output adds 600
+frames to the input. Here the additional frames come from the added beginning
+and end segments, minus the transition frames.
 
 Programmer-specified side-conditions may propagate to other functions. The
 @racket[conference-talk] function from @secref{overview} benefits from
 this propagation:
 
+@vspace{2}
+
 @racketblock[
 (define (conference-talk {n} [video  : (Producer n)] [slides : (Producer n)]
                              [audio  : (Producer n)] [offset : Int]
                              -> (Producer (+ n 600)))
-  @code:comment{...}
+  #,elided
   (define p1 (add-slides video slides))
   (define p2 (add-bookend p1))
-  @code:comment{...})]
-@;
-Even though @racket[conference-talk] does not specify an explicit
+  #,elided)]
+
+@vspace{2}
+
+@(noindent)Even though @racket[conference-talk] does not specify a
 side-condition, it inherits the @racket[(>= n 400)] side-condition from
 @racket[add-bookend]. Thus applying @racket[conference-talk] to a video
 that is not provably longer than 400 frames results in a type error:
@@ -174,7 +186,7 @@ into a language implementation.
 
 As previously mentioned, Video programmers already specify explicit video
 lengths in their programs and thus it is easy to lift this information to the
-type-level. For example, @figure-ref{type-rules} shows a few rules
+type level. For example, @figure-ref{type-rules} shows a few rules
 for creating and consuming producers. The @sc{Color-n} rule lifts the
 specified length to the expression's type. In the absence of a length argument,
 as in the @sc{Color} rule, the expression has type @code{Producer}, which is
@@ -206,7 +218,7 @@ e.g., for @code{Producer}s:
 @centered[@inferrule["m >= n"]{(Producer m) <: (Producer n)}]
 
 @(noindent)Since Typed Video aims to prevent not-enough-frame errors, it is
-acceptable to supply a producer that is longer than expected but not shorter.
+acceptable to supply a producer that is longer, but not shorter, than expected.
 
 The @sc{Playlist} rule in @figure-ref{type-rules} shows how producer lengths
 may be combined. Specifically, a @racket[playlist] appends producers together
@@ -239,31 +251,29 @@ example programs, including those for the RacketCon 2016 video proceedings.
 }
 
 The @sc{Lam} and @sc{App} rules in @figure-ref{lam-app-rules} roughly
-illustrate how Typed Video handles constraints. Rather than
-implement multiple type checker passes, Typed Video interleaves constraint
-collection---these may be user-supplied constraints, or constraints required by
-the @code{Producer} subtyping or kinding rules from earlier in the section---and
-type checking, solving the consraints in a more "local" manner.
+illustrate how Typed Video handles constraints. Rather than implement multiple
+passes, Typed Video interleaves constraint collection and type checking,
+solving the constraints in a "local" manner.
 
 Specifically, type checking judgements additionally specify a set of
 constraints φ on the right-hand side, as in @figure-ref{lam-app-rules},
 corresponding to the constraints produced while type checking that
 expression. Constraints in Typed Video are restricted to linear arithmetic
 inequalities.
-The @sc{Lam} rule in @figure-ref{lam-app-rules} specifies that functions, which
-bind a type index variable @code{n}, a procedural variable @code{x}, and must
-satisfy input constraints φ, are assigned a universally quantified type that
-additionally includes constraints φ' collected while type checking the body of
-the function. When applying such a function, the @sc{App} rule first infers a
-concrete number @code{i} at which to instantiate the @code{n} index
-variable. It then uses @code{i} to simplify constraints φ via a
+The @sc{Lam} rule in @figure-ref{lam-app-rules} shows that functions bind a
+type index variable @code{n} and a procedural variable @code{x}, and must
+satisfy input constraints φ. These functions are assigned a universally
+quantified type that additionally includes constraints φ' collected while type
+checking the body of the function. When applying such a function, the @sc{App}
+rule first infers a concrete number @code{i} at which to instantiate the
+@code{n} index variable. It then uses @code{i} to simplify constraints φ via a
 partial-evaluation function @(make-element (make-style "overrightharp"
 '(exact-chars)) @(make-element (make-style "ensuremath"
 '(exact-chars)) (make-element (make-style "mathcal" '(exact-chars)) "E"))).
 Type checking fails if the resulting constraints are not
 satisfiable. Otherwise, the unsolved constraints are propagated. Modularly
-checking constraints at function applications in this manner enables more
-localized error reports.
+checking constraints at function applications in this manner enables the
+reporting of errors on a local basis.
 
 
 @; -----------------------------------------------------------------------------
@@ -298,7 +308,7 @@ turnstile
 @#,line-no[](define-syntax/typecheck (λ {n ...} ([x : τ] ... #:when φ) e) ≫
 @#,line-no[]  [(n ...) ([x ≫ x- : τ] ...) ⊢ e ≫ e- ⇒ τ_out]
 @#,line-no[]  #:with new-φs (get-captured-φs e-)
-@#,line-no[]  ----------------------------------
+@#,line-no[]  ------------------------------------------------------------
 @#,line-no[]  [⊢ (untyped-video:λ (x- ...) e-)
 @#,line-no[]      ⇒ (Π (n ...) #:when (and φ new-φs) (→ τ ... τ_out))])
 @#,line-no[]
@@ -310,21 +320,20 @@ turnstile
 @#,line-no[]   #:fail-unless (not (false? φ*)) "failed side-condition φ at row:col ..."
 @#,line-no[]   #:unless (boolean? φ*) (add-φ φ*)
 @#,line-no[]   [⊢ e_arg ≫ e_arg- ⇐ τ_in] ...
-@#,line-no[]   ------------------------------
+@#,line-no[]   ------------------------------------------------------------
 @#,line-no[]   [⊢ (untyped-video:#%app e_fn- e_arg- ...) ⇒ τ_out])
 ]
 }
 
 We implement our type checker with Turnstile, a Racket DSL introduced by Chang
-et al. for creating Typed DSLs. This DSL-generating-DSL uses a concise,
-bidirectional type-judgement-like syntax. In other words,
-@figure-ref{type-checking-macros}'s @racket[define-syntax/typecheck]
-implementations resemble their specification counterparts in
+et al. for creating typed DSLs. This DSL-generating-DSL uses a concise,
+bidirectional type-judgement-like syntax. In other words, the
+@racket[define-syntax/typecheck] definitions in @figure-ref{type-checking-macros} resemble their specification counterparts in
 @figure-ref{lam-app-rules}. The implementation rules define syntax transformers
 that incorporate type checking as part of syntax elaboration. Interleaving type
 checking and elaboration in this manner not only simplifies implementation of
-the type system, but also enables creating true abstractions on top of the host
-language.
+the type system, but it also enables creating true abstractions on top of the
+host language.
 
 Next we briefly explain each line of the @racket[λ] definition:
 
@@ -342,7 +351,7 @@ Next we briefly explain each line of the @racket[λ] definition:
 
 @(current-line 4)
 
-@with-linelabel{The type-checking transformer's input must match pattern
+@with-linelabel{The transformer's input must match pattern
 @racket[(λ {n ...} ([x : τ] ... #:when φ) e)], which binds pattern variables
 @racket[n] (the type index variables), @racket[x] (the λ parameters), @racket[τ] (the
 type annotations), @racket[φ] (a side-condition), and @racket[e] (the lambda
@@ -356,10 +365,10 @@ requires ellipses when used.}
 
 @with-linelabel{Since type checking is interleaved with syntax elaboration,
 Turnstile type judgements are elaboration judgements as well. Specifically, a
-Turnstile judgement @racket[[ctx ⊢ e ≫ e- ⇒ τ]] is read ``in context
+judgement of the form @racket[[ctx ⊢ e ≫ e- ⇒ τ]] is read ``in context
 @racket[ctx], @racket[e] elaborates to @racket[e-] and has type @racket[τ].''
 
-Thus the lambda body @racket[e] elaborates to to @racket[e-], simultaneously
+Thus the λ transformer elaborates @racket[e] to @racket[e-], simultaneously
 computing its type @racket[τ_out]. This elaboration and type checking occurs in
 the context of the free variables. Instead of propagating a type environment,
 Turnstile reuses Racket's lexical scoping to implement the type
@@ -415,13 +424,13 @@ types @racket[(τ_in ... τ_out)] and side-condition @racket[φ].}
 
 @;item{The side-condition @racket[C] is reduced to a canonical form @racket[φ*].}
 
-@with-linelabel{Partially evaluate the concrete constraints in @racket[φ],
-producing @racket[φ*].}
+@with-linelabel{The transformer partially evaluates the concrete constraints in @racket[φ], producing @racket[φ*].}
 
-@with-linelabel{If @racket[φ*] is @racket[false], stop and report an
-error. Though this paper truncates the error message details, this line
-demonstrates how our DSL creates true abstractions, reporting errors in terms
-of the surface language, e.g., @racket[φ], rather than the host language.}
+@with-linelabel{If @racket[φ*] is @racket[false], elaboration stops and the
+transformer reports an error. Though this paper truncates the error message
+details, this line demonstrates how our DSL creates true abstractions,
+reporting errors in terms of the surface language, e.g., @racket[φ], rather
+than the host language.}
 
 @with-linelabel{If @racket[φ*] is still an expression, propagate it using
 @racket[add-φ].}
@@ -438,10 +447,10 @@ with its computed type.}
 
 @exact{\vspace{0.4cm}}
 
-The rest of the implementation is similar. For example, implementing
-@tt{Π} is straightforward because Turnstile reuses Racket's knowledge
-of a program's binding structure to automatically handle naming. Further,
-the ``as macros'' approach facilitates implementation of rules for both
-terms and types, and thus the implementation of type-level computations also
-resembles the rules in @figure-ref{type-checking-macros}.
+The rest of the implementation of the typing rules is similar. For example,
+implementing @tt{Π} is straightforward because Turnstile reuses Racket's
+knowledge of a program's binding structure to automatically handle
+naming. Further, the ``as macros'' approach facilitates implementation of rules
+for both terms and types, and thus the implementation of type-level
+computations also resembles the rules in @figure-ref{type-checking-macros}.
 
