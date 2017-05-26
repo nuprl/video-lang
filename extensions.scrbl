@@ -6,8 +6,10 @@
          "bib.rkt"
          "utils.rkt"]
 
-@title[#:tag "extensions"]{Teenage Mutant Ninja Turtles -ω}@margin-note*{We
-failed to find the Roman numeral rendering of ω on Google.}
+@title[#:tag "extensions"]{Teenage Mutant Ninja Turtles -ω@m{^*}}
+@nested[#:style "astfootnotes"]{
+ @elem[#:style "footnotetext"]{
+  We failed to find the Roman numeral rendering of ω on Google.}}
 
 @figure["video-gui" @list{Mingling graphical NLVE widgets inside of Video scripts}]{
  @(scale (bitmap "res/video-gui.png") 0.4)}

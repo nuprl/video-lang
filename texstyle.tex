@@ -19,4 +19,11 @@
 %\SetWatermarkText{DRAFT}
 %\SetWatermarkScale{1}
 \overfullrule=10pt
-\renewcommand{\SHyphen}[1]{\mbox{#1}}
+%\renewcommand{\SHyphen}[1]{\mbox{#1}}
+\renewcommand{\Ssection}[2]{\section[]{#2}\let\thesubsection\SOriginalthesubsection}
+
+\newenvironment{astfootnotes}
+  {\par\edef\savedfootnotenumber{\number\value{footnote}}
+   \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+   \setcounter{footnote}{1}}
+  {\par\setcounter{footnote}{\savedfootnotenumber}}
