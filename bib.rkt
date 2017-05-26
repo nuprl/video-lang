@@ -26,6 +26,7 @@
 (set! Transactions "")
 (set! Conference "")
 
+(define comm-acm (string-append "Commun." ACM))
 (define/short lfp "LFP" "LISP and Functional Programming")
 (define/short popl "POPL" (string-append ACM Symposium "Principles of Programming Languages"))
 (define/short oopsla "OOPSLA" (string-append ACM International Conference "Object Oriented Programming Systems, Languages, and Applications"))
@@ -389,7 +390,7 @@
    #:title "Creating Languages in Racket"
    #:author (authors "Matthew Flatt")
    #:date "2012"
-   #:location (journal-location (string-append "Commun." ACM)
+   #:location (journal-location comm-acm
                                 #:volume 55
                                 #:number 1
                                 #:pages '(48 56))))
@@ -482,6 +483,13 @@
    #:is-book? #t
    #:location (book-location #:edition "1st"
                              #:publisher "Addison-Wesley")))
+(define little-languages
+  (make-bib
+   #:title "Little languages"
+   #:author (authors "Jon Bentley")
+   #:date "1986"
+   #:location (journal-location comm-acm #:volume 29 #:number 8
+                                         #:pages '(711 21))))
 
 
 (define mlt-url (url "mltframework.org/"))
