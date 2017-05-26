@@ -14,22 +14,22 @@ Imagine being Spock on the USS Enterprise. The ship's
 
 Clearly, this alternative world encourages developers to build languages
  that are as close as possible to problem domains. In this context,
- ``language'' falls into the same class of concepts as language library or
- module, structure, or functor. Software systems will consist of a deep
- hierarchy of languages. Some of these languages may sit at the surface of
- the system, helping domain experts formulate partial solutions to facets
- of the overall problem---in their own domain languages. Others may sit
- below the surface, in the interior of the hierarchy, because the
- implementation of DSLs also pose domain-specific problems.  Each language
- will narrow the gap between the ordinary constructs of the underlying
- language (folds, maps, monads, algebraic types) and the concepts found in
- a problem domain (videos; type systems; FFI bindings).  The hierarchy
- underneath Racket contains several dozen such languages, each dedicated to
- a special purpose, but all of them sitting within the core language.
+ ``language'' falls into the same class of concepts as library, framework,
+ or module. Software systems will consist of a deep hierarchy of such
+ languages. Some of these languages may sit at the surface of the system,
+ helping domain experts formulate partial solutions to facets of the
+ overall problem. Others may sit below the surface, in the interior of the
+ hierarchy, because the implementation of DSLs also pose domain-specific
+ problems.  Each language will narrow the gap between the ordinary
+ constructs of the underlying language (variables, loops, methods) and the
+ concepts found in a problem domain (videos; syllabi; configurations).  The
+ hierarchy underneath Racket contains several dozen such languages, each
+ dedicated to a special purpose, but all of them sitting within the core
+ language.
 
 Two critical factors enable this brave new world of language-oriented
  programming in the Racket ecosystem. The first one is that developing
- languages---@emph{real} languages---is a process without friction. A
+ languages in Racket---@emph{real languages}---is a process without friction. A
  language developer can edit a language implementation in one Emacs buffer,
  save the file, and immediately run a second Emacs buffer with code written
  in the language of the first one. Furthermore, the Racket syntax
@@ -41,7 +41,8 @@ Two critical factors enable this brave new world of language-oriented
 The second factor is that Racket acts as a common substrate. Eventually
  programs in these ``little'' languages are elaborated into core Racket
  modules.  Developers can link these modules, creating multi-lingual
- systems with a single host language. 
+ systems within a single host language. While this kind of linking is not
+ without problems, the advantages so far outweigh its  disadvantages. 
 
 @figure["language-tower" @list{The tower of languages for Video} 
 @;{#:style center-figure-style}]{
@@ -52,7 +53,7 @@ Racket is the host of this multi-lingual paradise, and Video is a poetic
  promises. @Figure-ref{language-tower} displays an organization diagram
  that summarizes the small language hierarchy underneath Video and its
  dependencies. The Video language itself exists because the domain of video
- editing calls out for a declarative scripting language. In other words,
+ editing calls out for a declarative scripting language. As always,
  Video closes the gap between the domain expert, who wishes to composite
  video clips programmatically, and the scripting language, whose core
  provides nothing but functions and variables and list comprehension and
@@ -66,19 +67,19 @@ Similarly, a linguistic gap shows up for the implementation of Typed Video, an
  type system---as attachments to just those linguistic features for which we
  want types--- as much as possible in the language of type-system designers.
 
-On the left side of the diagram, we see another extension of Video, the
+The left side of the diagram shows yet another extension of Video, the
  Video Docs language, which Video programmers can use to create integrated
  documentation. Like Typed Video, it extends Video and rests on another
  domain-specific language, Scribble, which is a general-purpose mark-up
  language for writing API documentation@cite[scribble-icfp]. While this
  extension is less complicated than the one on the right side, it is
- nevertheless worth mentioning because this domain is often dealt with as
- an after-thought. 
+ worth mentioning because documentation is all often not understood as a
+ domain in its own right. 
 
 The language gap also shows up with the implementation of Video. The
  language's run-time system demands extensive checking of values that flow
- into the C-level primitives. One way to translate the language of the C
- documentation into Racket, is to add explicit checks inside Racket
+ into the C-level primitives. One way to translate the language from the C
+ documentation into Racket is to add explicit checks inside Racket
  function definitions. Instead, we designed and implemented a DSL for
  dealing with just this insertion of checks for this specific library.
 
@@ -94,11 +95,12 @@ Finally, all of these languages make extensive use of yet another DSL,
  instead of just the underlying, raw core language. 
 
 No, Racket by no means solves all problems that come with language-oriented
- programming. But, it sets itself apart from other approaches in the functional
- world, plus it already has numerous successes to show for. We hope that
- functional programmers of all stripes recognize the beauty of
- language-oriented-programming in general and Racket's approach in particular,
- and we invite them to translate them into their world.
+ programming; see the note on linking above.  But, it sets itself apart
+ from other approaches in the functional world, plus it already has
+ numerous successes to show for. We hope that functional programmers of all
+ stripes recognize the beauty of language-oriented-programming in general
+ and Racket's approach in particular, and we invite them to translate
+ the idea into their world.
 
 
 
