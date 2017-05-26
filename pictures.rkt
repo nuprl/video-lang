@@ -116,9 +116,9 @@
 
   (define video     (L  90 30 "Video"))
   (define video-doc (L  90 30 "Video Docs"))
+  (define video-ffi (L  90 30 "Video FFI"))
   (define t-video   (L  90 30 "Typed Video"))
   (define turnstyle (L  90 30 "Turnstile"))
-  (define video-ffi (L  90 30 "Video FFI"))
   (define scribble  (L 120 30 "Scribble"))
   (define syn-parse (L 170 30 "Syntax Parse"))
   (define racket    (L 370 30 "Racket"))
