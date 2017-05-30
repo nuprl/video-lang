@@ -93,6 +93,7 @@ is plain Racket code, and therefore we omit details of the implementation.
 @figure["playlist-sample" @list{Slide reconstruction using magic numbers (left) and a NLVE widget (right)}]{
 @(split-minipage
   #:split-location 0.55
+  #:direction "c"
   @racketmod[video
              (apply playlist
               (for/list ([slide (directory-list slides)]
@@ -103,5 +104,6 @@ is plain Racket code, and therefore we omit details of the implementation.
                      10 50 15 33 250 42 20 65
                      13 9 25 37 25 13 30 39 45))]
   (vc-append
-   (blank 1 10)
-   (hc-append 5 (scale (bitmap "res/playlist-timeline.png") 0.40) (ellipses))))}
+   ;(blank 1 10)
+   (hc-append 5 (scale (bitmap "res/playlist-timeline.png") 0.40) (ellipses))
+   (blank 1 60)))}

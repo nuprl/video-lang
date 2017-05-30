@@ -141,10 +141,13 @@
           code))
 
 (define (split-minipage a b #:split-location [split-location 0.5]
-                        #:direction [direction "c"])
+                        #:direction [direction "c"]
+                        #:indent-offset [indent-amt 0.1])
   (centered
    (list
-    @exact{\vspace{0.5em}\begin{minipage}[@direction]{@(number->string split-location)\textwidth}}
+    @exact{\vspace{0.5em}\begin{minipage}[@direction]{@(number->string indent-amt)\textwidth}%
+ \end{minipage}%
+ \begin{minipage}[@direction]{@(number->string (- split-location indent-amt))\textwidth}}
     a
     @exact{\end{minipage}\begin{minipage}[@direction]{@(number->string (- 1 split-location))\textwidth}}
     b

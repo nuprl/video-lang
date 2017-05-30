@@ -102,6 +102,7 @@ solution.
 @#,line-no[]   (syntax-parse stx
 @#,line-no[]     [(_ rator rand ...)
 @#,line-no[]      #'(#%app (force rator) (lazy rand)  ...)]))])
+ @exact{\vspace{0.1em}}
 }
 
 Now recall that Racket's syntax system supports several interposition
@@ -132,6 +133,8 @@ redirects to @racket[#%lazy-app], which expands into
 @racket[#%app]@superscript{base}, Racket's actual
 application. Here is what the complete process looks like:
 @;
+@split-minipage[
+ #:split-location 0.95
 @nested[#:style 'vertical-inset]{
 @racketblock[
  (f a b c ...) @#,->text{elaborates to} (@#,elem{@racket[#%app]@superscript{lazy}} f a b c ...)
@@ -140,6 +143,7 @@ application. Here is what the complete process looks like:
 
 ]
 }
+ (blank 1 1)]
 @; 
 The curious reader may wish to step through the elaboration via DrRacket's
 syntax debugger@cite[culpepper-scp].
@@ -379,6 +383,8 @@ profile object or @tt{NULL} if there is an error. Rather
 than having to manually check the input and output values,
 the FFI just states input and output types:
 @;
+@split-minipage[
+ #:split-location 0.99
 @nested[#:style 'vertical-inset]{
 @racketblock[
  (define-mlt mlt-profile-init (_fun _string
@@ -386,6 +392,7 @@ the FFI just states input and output types:
                                     -> (null-error v)))
 ]
 }
+ (blank 1 1)]
 @;
 It errors if a bad input or output type passes through this interface.
 
@@ -396,6 +403,8 @@ The @racket[define-constructor] both introduces structures to represent
  an optional super-struct, additional fields, and their default values. 
  For example, the following is the description of a Video-level producer:
 @;
+@split-minipage[
+ #:split-location 0.99
 @nested[#:style 'vertical-inset]{
 @racketblock[
  (define-constructor producer service ([type #f] [source #f] [start -1] [end -1])
@@ -404,6 +413,7 @@ The @racket[define-constructor] both introduces structures to represent
    (register-mlt-close mlt-producer-close producer*))
 ]
 }
+ (blank 1 1)]
 @;
  This definition names the struct @racket[producer], specifies that it
  extends @racket[service], and adds four fields to those it inherits:

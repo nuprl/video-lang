@@ -433,9 +433,10 @@ video
 (multitrack
  composited-talk
  (clip "0000.wav"
- #:filters (list
-            (envelope-filter 50 #:direction 'in)
- 	    (envelope-filter 50 #:direction 'out))))
+  #:filters
+    (list
+     (envelope-filter 50 #:direction 'in)
+     (envelope-filter 50 #:direction 'out))))
 
 (code:comment "where")
 (define composited-talk #,elided)
@@ -498,7 +499,8 @@ video
  (composite-transition 1/4 0 3/4 1)
  talk
  (composite-transition 0 1/4 1/4 3/4)
- (image "logo.png" #:length (get-property talk 'length)))
+ (image "logo.png"
+  #:length (get-property talk 'length)))
 
 (code:comment "where")
 (define talk #,elided)
