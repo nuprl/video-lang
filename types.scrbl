@@ -2,6 +2,7 @@
 
 @title[#:tag "types"]{The Bodyguard}
 @(require (except-in scribble/manual cite)
+          (except-in pict table)
           "utils.rkt"
           scriblib/figure scriblib/footnote
           (except-in scribble/core paragraph)
@@ -39,18 +40,24 @@ because they often manifest themselves at the C level during rendering. For
 example, the following piece of code mistakenly tries to extract 15 frames from
 a producer that is only 10 frames long:
 @;
+@(split-minipage
+  #:split-location 0.99
 @racketblock[
 @code:comment{untyped Video}
 (cut-producer (color "green" #:length 10) #:start 0 #:end 15)
 @code:comment{EXCEPTION: given producer must have length >= end - start = 15}]
+(blank 1 1))
 @;
 The following second example attempts to use producers that are too short for
 the specified transition:
 @;
+@(split-minipage
+  #:split-location 0.99
 @racketblock[
 @code:comment{untyped Video}
 (playlist (blank 10) (fade-transition #:length 15) (color "green" #:length 10))
 @code:comment{EXCEPTION: given producers must have length >= transition length 15}]
+(blank 1 1))
 @;
 While old-fashioned scripting languages rely on dynamic checks to
 catch these bugs, modern scripting languages use a static type system
@@ -70,11 +77,14 @@ already accustomed to specifying explicit length information in their
 programs. For example, the snippets from the preceding section produce static
 type error messages in Typed Video:
 @;
+@(split-minipage
+  #:split-location 0.99
 @racketblock[
 (cut-producer (color "green" #:length 10) #:start 0 #:end 15)
 @code:comment{TYPE ERR: cut-producer: expected (Producer 15), given (Producer 10)}
 (playlist (blank 10) (fade-transition #:length 15) (color "green" #:length 10))
 @code:comment{TYPE ERR: playlist: (fade-transition #:length 15) too long for producer (blank 10)}]
+(blank 1 1))
 @;
 In general, the type system ensures that
 producer values do not flow into positions where their length is less than
@@ -90,9 +100,13 @@ look like:
 
 @vspace{2}
 
+@split-minipage[
+ #:split-location 0.99
 @racketblock[
 (define (add-slides {n} [vid : (Producer n)] [slides : (Producer n)] -> (Producer n))
   (multitrack vid #,elided slides #,elided))]
+ (blank 1 1)
+ ]
 
 @vspace{1}
 
@@ -105,6 +119,8 @@ variables. Here is an @racket[add-bookend] function, which adds an
 opening and ending sequence to a speaker's video:
 
 @;vspace{4}
+@(split-minipage
+  #:split-location 0.99
 @racketblock[
 (code:comment "Add conference logos to the front and end of a video.")
 (define (add-bookend {n} [main-talk : (Producer n)] #:when (>= n 400) -> (Producer (+ n 600)))
@@ -115,6 +131,7 @@ opening and ending sequence to a speaker's video:
             end-clip)
   (define begin-clip @image["logo.png" #:length 500])
   (define end-clip @image["logo.png" #:length 500]))]
+(blank 1 1))
 
 @vspace{2}
 
@@ -130,6 +147,8 @@ this propagation:
 
 @vspace{2}
 
+@(split-minipage
+  #:split-location 0.99
 @racketblock[
 (define (conference-talk {n} [video  : (Producer n)] [slides : (Producer n)]
                              [audio  : (Producer n)] [offset : Int]
@@ -138,6 +157,7 @@ this propagation:
   (define p1 (add-slides video slides))
   (define p2 (add-bookend p1))
   #,elided)]
+(blank 1 1))
 
 @vspace{2}
 
@@ -146,9 +166,12 @@ side-condition, it inherits the @racket[(>= n 400)] side-condition from
 @racket[add-bookend]. Thus applying @racket[conference-talk] to a video
 that is not provably longer than 400 frames results in a type error:
 @;
+@(split-minipage
+  #:split-location 0.99
 @racketblock[
 (conference-talk (blank 200) (blank 200) (blank 200) 0)
 @code:comment{TYPE ERROR: Failed condition (>= n 400), inferred n = 200}]
+(blank 1 1))
 
 @section[#:tag "type-system"]{The Type System}
 

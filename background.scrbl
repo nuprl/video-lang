@@ -22,7 +22,7 @@ clips, and effects playing in sequence. The NLVE @emph{
  renders} these tracks by playing them all simultaneously,
 placing one track on top of the other. Obviously a screen
 displaying the result can play only a single track for
-video;@note{Audio tracks can actually be played together.} by convention this is the last
+video;@note{Audio tracks can actually be played simultaneously.} by convention this is the last
 or top track. Video editors use effects to @emph{composite}
 tracks. That is, effects splice two or more tracks
 together so that they appear on the screen at the same time.
@@ -38,24 +38,24 @@ such as AppleScript@cite[applescript-hopl].
 Some professional tools,
 such as Adobe Premiere@cite[adobe-premiere], even
 include an API to create script-style plug-ins directly.
-
 Extending tools in this fashion has limits. Macros are
 extremely brittle and frequently break, even within a single
 application, because macro languages do not understand the
-underlying tools. Using a tool's official plug-in interface
+underlying tools.
+
+Using a tool's official plug-in interface
 produces reasonably robust scripts but yields plug-ins that
-are tightly coupled with its tool. They can be used only in
-settings where the entire toolchain is present.
+are tightly coupled with its tool. They can be used only when
+the entire toolchain is present.
 Blender@cite[essential-blender], for example, is only
 scriptable with a Blender-specific Python interpreter that
-runs when Blender is launched. This differs from a language
-where programs can run on different language implementations.
+runs when Blender is launched.
 
 @;{ to reducing boilerplate actions }
 
 Alternative approaches use
 general-purpose multimedia frameworks such as
-GStreamer@note[gstreamer-url] or the MLT
+GStreamer@cite[gstreamer-man] or the MLT
 Framework.@note{@mlt-url} These frameworks are APIs for
 C-like languages that provide data types for building and
 rendering videos. Their appeal is the
@@ -65,8 +65,8 @@ using one of these frameworks can write a function to create
 the video for a conference talk.
 
 These frameworks are primarily used in two situations.
-First, they are the back-ends to NLVEs. For example,
-Shotcut@note{@shotcut-url} uses MLT. Second, professionals
+First, they are the back-ends to NLVEs. For example, MLT is the backend for both
+Shotcut@note{@shotcut-url} and Kdenlive.@note{@kdenlive-url} Second, professionals
 use these frameworks to batch-process videos, particularly
 when interactive development is not desired. While the
 frameworks work well for these use cases, they fall short
@@ -94,7 +94,7 @@ tasks: playing videos in sequence with transitions and
 minor visual effects. They also tend to lack any formal
 grammars and use a small script for a parser. Finally, they lack many code
 reuse features. AVISynth, for example, allows programmers to
-create simple functions but lacks control flow constructs
+create simple functions but comes without any control flow constructs
 such as conditional branching.
 
 @(define *line-no 0)

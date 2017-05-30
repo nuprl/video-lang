@@ -28,7 +28,7 @@
    (define line-no (format (if (< *line-no 10) "0~a" "~a") *line-no))
    @exact{\tt @line-no})
 
-The literature survey in the previous section suggests that non-linear
+The literature survey in the preceding section suggests that non-linear
 video editing distinctly separates the description of a
 video clip from the rendering action on it. Specifically, an
 editor (as in the tool) needs a description of what the final video
@@ -46,10 +46,10 @@ abstraction.
 
 The Video language gets to the heart of the domain. Each Video program
 is a complete module that intermingles descriptions of video clips and
-auxiliary definitions. It denotes a Racket module that exports a single item: a playlist
+auxiliary definitions. It denotes a Racket module that exports a playlist
 description of the complete video. One way to use a Video module is to
 create a video with a renderer. A different way is to import it into a second
-Video module and to incorporate it into another video. 
+Video module and to incorporate its export into another video. 
 
 @(set! *line-no 0)
 @figure["video-example" @list{A Video description of a conference talk}]{
@@ -83,7 +83,7 @@ In essence, the script in @figure-ref{video-script} assembles the visual
 part of a simple conference video. What is missing is the audio
 part. Naturally, a Video programmer should abstract over this process, plus
 the audio processing, and create a suitable library.
-@Figure-ref["video-example"] shows what roughly the same script looks
+@Figure-ref["video-example"] shows what the same script roughly looks
 like after a Video programmer has encapsulated an abstraction over the
 script in @figure-ref{video-script} as a utility library. This program uses
 the imported @code{conference-talk} function to combine a recording of the
@@ -95,17 +95,20 @@ imports the library that defines the
 module describes. Finally, the
 remainder is a sequence of definitions that introduce auxiliary constants. 
 
-@Figure-ref{video-functions} shows the essence of the utility library, also
-written as a Video module. Explaining its construction introduces enough of
-Video's primitives and combinators to get a sense of what the rest of
-the language looks like. First we explain Video's primary linguistic
-mechanisms, modules and functions (@secref["overview-functions"]). Then,
-we describe basic producers (@secref["overview-simple"]): images, clips,
-colors and so on. Following up with a discussion of the basics of how to combine these
-producers into playlists and multitracks (sections 4.3, 4.5). To make
-compelling examples, we introduce transitions, filters, and properties
-(sections 4.4, 4.6, 4.7). Finally, we describe the interface for rendering
-programs as traditional video files (@secref["overview-rendering"]).
+@Figure-ref{video-functions} shows the essence of the
+utility library, also written as a Video module. Explaining
+its construction introduces enough of Video's primitives and
+combinators to get a sense of what the rest of the language
+looks like. First we explain Video's primary linguistic
+mechanisms, modules and functions
+(@secref["overview-functions"]). Then, we describe basic
+producers (@secref["overview-simple"]): images, clips,
+colors and so on, following up with a discussion of the
+basics of how to combine these producers into playlists and
+multitracks (sections 4.3, 4.5). To make compelling
+examples, we introduce transitions, filters, and properties
+(sections 4.4, 4.6, 4.7). Finally, we describe the interface
+for displaying videos and rendering Video programs (@secref["overview-rendering"]).
 
 @; -----------------------------------------------------------------------------
 @section[#:tag "overview-functions"]{Essential Video}
@@ -113,13 +116,13 @@ programs as traditional video files (@secref["overview-rendering"]).
 Video modules consist of a series of interleaved
 expressions, definitions, and import/export forms; functions
 have the same shape without the import/export forms. Video
-enforces different scoping rules and assigns slightly
-different meaning to these constructs than Racket. In both
+enforces different scoping rules from, and assigns slightly
+different meaning to these constructs, than Racket. In both
 cases, definitions are valid in the entire scope---that
 is, the entire module or the entire function body. The
-expressions must describe a video playlist. These two forms
-differ in that modules @code{provide} a video, while
-functions return one. Furthermore, Video modules are
+expressions must describe video playlists. Modules and functions 
+differ in that the former @code{provide}s a video, while
+the latter returns one. Furthermore, Video modules are
 first-order entities that can be compiled separately, while
 functions are actually first-class values.
 
@@ -154,9 +157,8 @@ functions are actually first-class values.
 @#,line-no[]                                 (fade-transition #:length 50)
 @#,line-no[]                                 (image "splash.png" #:length 100))))]}
 
-Now, take a second look at the implementation for
-@racket[conference-talk], shown in
-@figure-ref["video-functions"]. Lines 5--7 show the
+Now, take a second look at
+@figure-ref["video-functions"]. @nonbreaking{Lines 5 through 7} show the
 function header. The rest of the code describes the function
 body (lines 7--27). Functions in Video are declarative; in
 particular, line 8 is the producer returned by this
@@ -173,12 +175,13 @@ Video program. A producer evaluates to a data structure that denotes
 some sort of multimedia object: audio clips, video clips, pictures, and so on.
 Combinations of
 producers are themselves producers, and they can be further
-combined into yet more complex producers still.
+combined into yet more complex producers.
 
-The simplest type of producer, @racket[clip], incorporates traditional
-video files. The @racket[clip] producer converts the file into a sequence
-of frames. Developers use @racket[clip] to import recordings, such as
-a conference talk, into their scripts:
+The simplest type of producer, @racket[clip], incorporates
+traditional video files. The @racket[clip] producer converts
+the file into a sequence of frames. Developers use
+@racket[clip] to import recordings from files, such as a
+conference talk, into scripts:
 
 @(split-minipage
   @racketmod[ 
@@ -217,7 +220,7 @@ provides two main ways for combining them:
 playlists play clips in sequence, while multitracks play
 clips in parallel.
 Any producer
-can be put in a @racket[playlist] including another @racket[playlist]. Each
+can be put in a @racket[playlist], including another @racket[playlist]. Each
 clip in the @racket[playlist] plays in succession. Frequently, video
 cameras split recordings into multiple files. With
 @racket[playlist], developers can easily stitch these files together
@@ -249,7 +252,7 @@ included because video recordings
 frequently start before a talk begins and end after the
 talk finishes (see @figure-ref["playlist-cut"]).
 Recall that while @racket[define] is located below the video description,
-its scope includes the expressions. 
+its scope includes the preceding expressions. 
 
 @figure["playlist-cut" "Example of cutting a playlist"]{
 @(split-minipage
@@ -282,13 +285,16 @@ talk
 
 @section{Transitions}
 
-Jumping from one producer in a playlist to another can be rather
-jarring. Scripts can reduce this effect with @emph{transitions}: fading,
-swiping, etc.  These transitions merge the two adjacent clips in a playlist
-and are placed directly inside of (possibly implicit) playlists. Using the
-above example, fade transitions are used to smooth the transition from logo
-to video:
+Jumping from one producer in a playlist to another can be
+rather jarring. Scripts can reduce this effect with @emph{
+ transitions}: fading, swiping, etc. These transitions merge
+the two adjacent clips in a playlist and are placed directly
+inside of (possibly implicit) playlists. Expanding on the
+example from @figure-ref["playlist-cut"], fade transitions
+are used to smooth the transition from logo above to video.
 
+@figure["playlist-cut" "Example with fading transition"
+        #:continue? #t]{
 @(split-minipage
     #:split-location 0.45
 @racketmod[
@@ -315,7 +321,7 @@ talk
              (t# "trans" 31)
              (t# "trans" 10)
              splash
-             (ellipses))))
+             (ellipses))))}
 
 Every transition in a @racket[playlist] actually shortens the length
 of the @racket[playlist], because transitions produce one clip for
@@ -328,13 +334,8 @@ surprises.
 
 @section{Multitracks}
 
-Multitracks play producers in parallel. Like playlists, they employ
-transitions to composite their producers.
-Syntactically, @racket[multitracks] is similar to @racket[playlist]. The
- @racket[multitrack] form consists of a sequence of producers and
- creates a new @racket[multitrack] producer. Again, transitions are
- included within the sequence to combine tracks:
-@;
+@figure["playlist-cut" "Example using multitracks"
+        #:continue? #t]{
 @(nested (split-minipage
   @racketmod[
 video
@@ -355,7 +356,14 @@ video
              (t# "pip" 3)
              (t# "pip" 4)
              (t# "pip" 5)
-             (ellipses)))))
+             (ellipses)))))}
+
+Multitracks play producers in parallel. Like playlists, they employ
+transitions to composite their producers.
+Syntactically, @racket[multitracks] is similar to @racket[playlist]. The
+@racket[multitrack] form consists of a sequence of producers and
+creates a new @racket[multitrack] producer. Again, transitions are
+included within the sequence to combine tracks:
 @;
 This example uses @racket[composite-transition], which
 places one producer on top of the other. The four constants
@@ -365,17 +373,8 @@ Here, the producer following the transition appears in the
 top-left hand of the screen and takes up one quarter of the width
 and height of the screen.
 
-Transitions within a @racket[multitrack] are not associative; instead,
-@racket[multitrack] interprets transitions in left to right order.
-Videos that require a different order can embed a
-@racket[multitrack] inside of another @racket[multitrack], because a @racket[multitrack] is
-itself a producer. Using multiple transitions allow
-producers to appear side by side rather than just on top of
-each other. Modifying the example from
-@secref["impl-trans"] as follows describes a conference video where the
-recording of the presenter goes in the top left while the
-slides go on the right:
-@;
+@figure["playlist-cut" "Example using inlined transitions in a multitracks"
+        #:continue? #t]{
 @(nested (split-minipage
   @racketmod[
 video
@@ -398,7 +397,18 @@ video
              (t# "npip" 3)
              (t# "npip" 4)
              (t# "npip" 5)
-             (ellipses)))))
+             (ellipses)))))}
+
+Transitions within a @racket[multitrack] are not associative; instead,
+@racket[multitrack] interprets transitions in left to right order.
+Videos that require a different order can embed a
+@racket[multitrack] inside of another @racket[multitrack], because a @racket[multitrack] is
+itself a producer. Using multiple transitions allow
+producers to appear side by side rather than just on top of
+each other. Modifying the example from
+@secref["impl-trans"] as follows describes a conference video where the
+recording of the presenter goes in the top left while the
+slides go on the right:
 @;
 This example modifies the previous example by adding a
 second @racket[composite-transition] and placing the
@@ -425,6 +435,8 @@ Here is an example of a filter being attached to an
 audio track that is itself composited with
 the video of the talk above, @racket[composited-talk]:
 
+@figure["playlist-cut" "Example of adding audio tracks"
+        #:continue? #t]{
 @(split-minipage
   #:split-location 0.56
   @racketmod[
@@ -456,7 +468,7 @@ video
     (ellipses)
     (t# "npip" 5)
     (ellipses)
-    (clip-scale (bitmap "res/rcon.png")))))
+    (clip-scale (bitmap "res/rcon.png")))))}
 
 @section{Properties and Dependent Clips}
 
@@ -486,7 +498,9 @@ Explicit properties provide a protocol for
  to come with a watermark that is the same length as the
  caputured conference talk. Here is a script that performs this
  operation:
-@;
+
+@figure["playlist-cut" "Example of adding a watermark"
+        #:continue? #t]{
 @(split-minipage
   #:split-location 0.6
 @racketmod[
@@ -512,7 +526,7 @@ video
  (t# "nlpip" 3)
  (t# "nlpip" 4)
  (t# "nlpip" 5)
- (ellipses)))
+ (ellipses)))}
 
 @; -----------------------------------------------------------------------------
 @section[#:tag "overview-rendering"]{From Programs to Videos}

@@ -6,6 +6,7 @@
          (except-in pict/code code typeset-code)
          (prefix-in pict: pict/code)
          racket/format
+         scriblib/footnote
          "pictures.rkt"
          "utils.rkt"
          "bib.rkt"]
@@ -29,21 +30,21 @@ linguistic reuse@cite[SK-PhD]. Technically, this reuse is enabled via
 Racket's distinctive feature: a modular syntax system@cite[macros-icfp].
 In this system, it is easy to import a linguistic construct as a
 function; indeed the system blurs the distinction between languages and
-libraries@cite[lal-pldi]. While a library module exports functions with a
-related purpose, a language module provides the constructs of a programming
+libraries, e.g. @citet[lal-pldi]. While a library module exports functions with a
+related purpose, a language module exports the constructs of a programming
 language.
 
-In Racket, every module starts with a one-line language specification. For
+In Racket, every module imports its language with a one-line language specification. For
 example, the line @code{#lang racket/base}---pronounced ``hash lang
 racket base''---tells Racket and a future reader that the module is
-written in the @racketmodname[racket/base] language. Roughly speaking, the specified
-language is the first import into the module. From an implementation
+written in the @racketmodname[racket/base] language. That is, the specified
+language is really the first import into the module. From an implementation
 perspective, the language specification points to a file that provides a
 language, approximately speaking, a suite of linguistic features and
 run-time functions. A developer can thus edit a language @tt{L} in one
 buffer of an IDE and an @tt{L} program in a second one. Any change to the
 first is immediately visible in the second one, just by switching
-focus. Hence language development in Racket suffers from no points of
+focus. Language development in Racket suffers from no points of
 friction.
 
 Developing a new language typically starts from a base language close to
@@ -58,14 +59,13 @@ some or all of the following actions:
 
 @item{re-interpreting linguistic constructs.}
 ]
-Here, linguistic constructs are any syntactic extensions
-added to a language, such as list comprehensions or new
-binding forms. For the last one, Racket developers heavily
+Here, linguistic constructs are any functions or syntactic extensions
+added to a language, such as list comprehensions.
+For the last one, Racket developers heavily
 rely on linguistic interposition points, that is, anchors in
 the syntax elaboration process where a program may inject
 additional syntax transformations. Video exploits all of the
-above, plus of course, the ability to supply additional
-run-time primitives, operations with no new syntax.
+above.
 
 Due to the ease of developing and installing languages in
 the Racket ecosystem, language creation has become a
@@ -76,7 +76,9 @@ express themselves in the language of a domain, they do not
 hesitate to develop a matching programming language. After
 all, domain experts have developed this specialized
 terminology (and ontology) so that they can discuss problems
-and solutions efficiently.
+and solutions efficiently.@note{Not every DSL is a week or
+ month-long project. Turnstile@cite[tsam-popl] took almost a
+ year of development time!}
 
 The domain of video editing is a particularly well-suited domain for
 illustrating the above points. While the evolution of the language follows

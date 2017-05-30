@@ -68,5 +68,5 @@ language in Racket takes only a small effort because of Racket's powerful
 language-production language.  Indeed, adding an IDE and a type system is
 also a matter of a few hours of thinking time and coding. In this spirit, the
 pearl points out a key difference between the construction of embedded DSLs in
-conventional@note{i.e. non-parenthesized} functional languages and the one
+conventional functional languages and the one
 true-blue kid on the block, Racket.

@@ -491,9 +491,19 @@
    #:location (journal-location comm-acm #:volume 29 #:number 8
                                          #:pages '(711 21))))
 
+ 
+ 
+(define gstreamer-man
+  (make-bib
+   #:title "GStreamer Application Development Manual"
+   #:author (authors "Wim Taymans"
+                     "Steve Baker"
+                     "Andy Wingo"
+                     "Rondald S. Bultje"
+                     "Kost Stefan")
+   #:date "2013"
+   #:url "https://gstreamer.freedesktop.org/data/doc/gstreamer/head/manual/manual.pdf"))
 
-(define gstreamer-url
-  (url "gstreamer.freedesktop.org/data/doc/gstreamer/head/manual/manual.pdf"))
 (define mlt-url (url "mltframework.org/"))
 (define shotcut-url (url "shotcutapp.com/"))
 (define openshot-url (url "openshot.org/"))
@@ -501,3 +511,4 @@
 (define mlt-xml-url (url "mltframework.org/docs/mltxml/"))
 (define rsound-url (url "docs.racket-lang.org/rsound/index.html"))
 (define racketcon-url (url "con.racket-lang.org/"))
+(define kdenlive-url (url "kdenlive.org/"))

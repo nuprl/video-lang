@@ -88,22 +88,7 @@ assignment. From there, we need to rename @racket[boo:set!]
 to @racket[set!] in the @racket[provide] specification. This renaming
 makes the revised @racket[set!] functionality available to programmers who use the new and
 improved Functions-first variant of Racket. @Figure-ref{racket-boo} displays the complete
-solution. 
-
-@(set! *line-no 0)
-@figure["lazy-racket" @list{An essential element of Lazy Racket}]{
-@(minipage @racketblock[
-@#,line-no[] @#,hash-lang[] racket/base
-@#,line-no[]
-@#,line-no[] (provide (rename-out #%lazy-app #%app)
-@#,line-no[]          (except-out (all-from-out racket/base) #%app))
-@#,line-no[]
-@#,line-no[] (define-syntax (#%lazy-app stx)
-@#,line-no[]   (syntax-parse stx
-@#,line-no[]     [(_ rator rand ...)
-@#,line-no[]      #'(#%app (force rator) (lazy rand)  ...)]))])
- @exact{\vspace{0.1em}}
-}
+solution.
 
 Now recall that Racket's syntax system supports several interposition
 points that facilitate language creation: @racket[#%app] for function
@@ -124,6 +109,21 @@ existing one. @note{Indeed, the Racket family of languages
  which uses exactly this interposition point to convert
  @racketmodname[racket] into an otherwise equivalent language
  with lazy semantics.}
+
+@(set! *line-no 0)
+@figure["lazy-racket" @list{An essential element of Lazy Racket}]{
+@(minipage @racketblock[
+@#,line-no[] @#,hash-lang[] racket/base
+@#,line-no[]
+@#,line-no[] (provide (rename-out #%lazy-app #%app)
+@#,line-no[]          (except-out (all-from-out racket/base) #%app))
+@#,line-no[]
+@#,line-no[] (define-syntax (#%lazy-app stx)
+@#,line-no[]   (syntax-parse stx
+@#,line-no[]     [(_ rator rand ...)
+@#,line-no[]      #'(#%app (force rator) (lazy rand)  ...)]))])
+ @exact{\vspace{0.1em}}
+}
 
 When a programmer uses this new language, the Racket syntax elaborator
 inserts @racket[#%app] into all regular function applications. The
