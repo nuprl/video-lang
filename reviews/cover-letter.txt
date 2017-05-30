@@ -1,7 +1,17 @@
-
 > Please ensure that you are using the correct document style, including author-year citations with correct usage as described in the call for papers. These requirements are necessary for inclusion in PACM PL.
+
+After talking with the PC Chair, we determined that the problem was we had a 'Bibliography' section, rather than a 'References' one. We have changed the section to a 'References' section.
 
 > Either make more clear how Video allows integrated interactive and programmatic workflows, or tone down the claim that it does allow such integrated workflows.
 
+We have revised the interactive claims in the following ways (see Sec. 7):
+
+1. We have added more details on how developers can interact with Video programs with a real-time preview and REPL.
+
+2. We more thoroughly discuss how developers use NLVE widgets.
+
+3. We have toned down the interactive workflow prose by comparing it to the interactive editing in existing NLVE.
+
 > Flesh out the discussion of the type system in section 6 to resolve the mismatch between the typing rules presented in figure 8 and the implementations of typing rules in figure 9. Give more detail about bugs caught by the type system.
 
+<Stephen Please Handle>
