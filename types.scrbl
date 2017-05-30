@@ -429,14 +429,14 @@ types @racket[(τ_in ... τ_out)] and side-condition @racket[φ].}
 @with-linelabel{If @racket[φ*] is @racket[false], elaboration stops and the
 transformer reports an error. Though this paper truncates the error message
 details, this line demonstrates how our DSL creates true abstractions,
-reporting errors in terms of the surface language, e.g., @racket[φ], rather
+reporting errors in terms of the surface language rather
 than the host language.}
 
 @with-linelabel{If @racket[φ*] is still an expression, propagate it using
 @racket[add-φ].}
 
 @with-linelabel{Check that the function arguments have the instantiated
-types. This premise uses the ``check'' left bidirectional arrow. If a
+types. This premise uses the ``check'' left arrow. If a
 programmer does not explicitly implement a left-arrow version of a rule,
 Turnstile uses a standard subsumption rule by default.}
 
