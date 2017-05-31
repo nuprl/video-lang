@@ -34,16 +34,15 @@ papers on fancy type systems
 
 Video programs primarily manipulate two types of data: producers and
 transitions. A typical program slices these values and then combines
-them. Not surprisingly, programmer errors often involve manipulating producers
+them. Not surprisingly, errors often involve manipulating producers
 and transitions of improper lengths. Such errors are particularly dangerous
-because they often manifest themselves at the C level during rendering. For
-example, the following piece of code mistakenly tries to extract 15 frames from
+because they often manifest themselves at the FFI level during rendering. For
+example, the following piece of untyped code mistakenly tries to extract 15 frames from
 a producer that is only 10 frames long:
 @;
 @(split-minipage
   #:split-location 0.99
 @racketblock[
-@code:comment{untyped Video}
 (cut-producer (color "green" #:length 10) #:start 0 #:end 15)
 @code:comment{EXCEPTION: given producer must have length >= end - start = 15}]
 (blank 1 1))
@@ -54,7 +53,6 @@ the specified transition:
 @(split-minipage
   #:split-location 0.99
 @racketblock[
-@code:comment{untyped Video}
 (playlist (blank 10) (fade-transition #:length 15) (color "green" #:length 10))
 @code:comment{EXCEPTION: given producers must have length >= transition length 15}]
 (blank 1 1))
@@ -94,7 +92,7 @@ Typed Video also supports writing functions polymorphic in the lengths of
 videos. Recall the @racket[conference-talk] example from
 @figure-ref{video-functions}. A function @racket[add-slides] that just combines
 the video of a speaker with a video of slides from their presentation might
-look like:
+look like this:
 
 @require{pictures.rkt}
 
@@ -111,7 +109,7 @@ look like:
 @vspace{1}
 
 @(noindent)The function's type binds a universally-quantified type index
-variable @racket[n] that ranges over natural numbers, and uses it to specify
+variable @racket[n] that ranges over natural numbers and uses it to specify
 that the lengths of the input and output producers must match up.
 
 In addition, a programmer may specify side-conditions involving type index
@@ -138,7 +136,7 @@ opening and ending sequence to a speaker's video:
 @(noindent)The @racket[add-bookend] function specifies, with a @racket[#:when]
 keyword, that its input must be a producer of at least 400 frames because it
 uses two 200-frame transitions. The result type says that the output adds 600
-frames to the input. Here the additional frames come from the added beginning
+frames to the input. The additional frames come from the added beginning
 and end segments, minus the transition frames.
 
 Programmer-specified side-conditions may propagate to other functions. The
@@ -208,7 +206,7 @@ into a language implementation.
 @(define (sc str) (elem str #:style (style "textsc" '(exact-chars))))
 
 As previously mentioned, Video programmers already specify explicit video
-lengths in their programs and thus it is easy to lift this information to the
+lengths in their programs, and it thus is easy to lift this information to the
 type level. For example, @figure-ref{type-rules} shows a few rules
 for creating and consuming producers. The @sc{Color-n} rule lifts the
 specified length to the expression's type. In the absence of a length argument,
@@ -284,7 +282,7 @@ corresponding to the constraints produced while type checking that
 expression. Constraints in Typed Video are restricted to linear arithmetic
 inequalities.
 The @sc{Lam} rule in @figure-ref{lam-app-rules} shows that functions bind a
-type index variable @code{n} and a procedural variable @code{x}, and must
+type index variable @code{n} together with a procedural variable @code{x}, and must
 satisfy input constraints φ. These functions are assigned a universally
 quantified type that additionally includes constraints φ' collected while type
 checking the body of the function. When applying such a function, the @sc{App}
@@ -309,7 +307,7 @@ it reuses Racket's syntax system to implement type checking, following
 type-systems-as-macros technique. As a result, Typed Video is an extension to,
 rather than a reimplementation of, the untyped Video language.
 
-@Figure-ref{type-checking-macros} shows the implementation of two rules,
+@Figure-ref{type-checking-macros} shows the implementation of two rules:
 @racket[λ] and function application. The @racket[require] at the top of the
 figure imports and prefixes the identifiers from untyped Video, i.e., the
 syntactic extensions from @secref{implementation}, which are used, unmodified,
@@ -374,8 +372,8 @@ Next we briefly explain each line of the @racket[λ] definition:
 
 @(current-line 4)
 
-@with-linelabel{The transformer's input must match pattern
-@racket[(λ {n ...} ([x : τ] ... #:when φ) e)], which binds pattern variables
+@with-linelabel{The transformer's input must match
+@racket[(λ {n ...} ([x : τ] ... #:when φ) e)], a pattern that binds five  pattern variables:
 @racket[n] (the type index variables), @racket[x] (the λ parameters), @racket[τ] (the
 type annotations), @racket[φ] (a side-condition), and @racket[e] (the lambda
 body).}

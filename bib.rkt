@@ -504,6 +504,16 @@
    #:date "2013"
    #:url "https://gstreamer.freedesktop.org/data/doc/gstreamer/head/manual/manual.pdf"))
 
+(define linking-types
+  (make-bib
+   #:title "Linking Types for Multi-Language Software: Have Your Cake and Eat It Too"
+   #:author (authors "Daniel Patterson"
+                     "Amal Ahmed")
+   #:date "2017"
+   #:location (proceedings-location "Summit on Advances in Programming Languages"
+                                    #:pages '("12-1" "12-15"))))
+
+
 (define mlt-url (url "mltframework.org/"))
 (define shotcut-url (url "shotcutapp.com/"))
 (define openshot-url (url "openshot.org/"))

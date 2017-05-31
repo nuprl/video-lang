@@ -19,6 +19,8 @@
 
 @acmJournal{PACMPL}
 
+@setcopyright{rightsretained}
+
 @abstract{The Racket doctrine tells developers to create
  languages (as libraries) to narrow the gap between the
  terminology of a problem domain and general programming

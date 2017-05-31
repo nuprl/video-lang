@@ -1,7 +1,7 @@
 #lang scribble/acmart
 
 @(require (except-in scribble/manual cite)
-	  scriblib/figure "bib.rkt" "pictures.rkt" scriblib/footnote)
+          scriblib/figure "bib.rkt" "pictures.rkt" scriblib/footnote)
 
 @title[#:tag "conclusion"]{Star Trek Beyond}
 
@@ -73,7 +73,7 @@ The left side of the diagram shows yet another extension of Video, the
  domain-specific language, Scribble, which is a general-purpose mark-up
  language for writing API documentation@cite[scribble-icfp]. While this
  extension is less complicated than the one on the right side, it is
- worth mentioning because documentation is all often not understood as a
+ worth mentioning because documentation is all too often not understood as a
  domain in its own right. 
 
 The language gap also shows up with the implementation of Video. The
@@ -94,13 +94,19 @@ Finally, all of these languages make extensive use of yet another DSL,
  once again allowing developers to use the language they have in mind
  instead of just the underlying, raw core language. 
 
-No, Racket by no means solves all problems that come with language-oriented
- programming; see the note on linking above.  But, it sets itself apart
- from other approaches in the functional world, plus it already has
- numerous successes to show for. We hope that functional programmers of all
- stripes recognize the beauty of language-oriented-programming in general
- and Racket's approach in particular, and we invite them to translate
- the idea into their world.
+No, Racket by no means solves all problems that come with
+language-oriented programming; see the note on linking
+above.@note{@cite-author[linking-types]'s
+ (@cite-year[linking-types]) linking types might help here.}
+But, it sets itself apart from other approaches in the
+functional world, plus it already has numerous successes to
+show for. We hope that functional programmers of all stripes
+recognize the beauty of language-oriented-programming in
+general and Racket's approach in particular, and we invite
+them to translate the idea into their world.
 
+@section[#:style 'unnumbered]{Acknowledgments}
 
-
+We would like to thank Asumu Takikawa for many great
+discussions and feedback on the Video language. This work
+was sponsored by <Grant#>.
