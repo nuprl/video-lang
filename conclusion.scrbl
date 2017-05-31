@@ -107,6 +107,12 @@ them to translate the idea into their world.
 
 @section[#:style 'unnumbered]{Acknowledgments}
 
-We are grateful to Asumu Takikawa for many great discussions and feedback
-on the Video language. This work was generously supported by the US
-National Science Foundation (SHF 1421412, SHF 1518844). 
+We are grateful to Asumu Takikawa, Benjamin Greenman, and
+Benjamin Chung for many great discussions and feedback on
+the Video language. We also thank our reviewers for their
+helpful feedback and useful insights. Finally, thank you to
+the MLT Framework developers for their quick responses to
+our bug reports.
+
+This work was generously supported by the US National
+Science Foundation (SHF 1421412, SHF 1518844).
