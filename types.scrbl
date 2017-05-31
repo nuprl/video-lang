@@ -259,18 +259,6 @@ type defaults to a @code{Producer} of infinite length. Despite these
 restrictions, Typed Video works well in practice and can type check all our
 example programs, including those for the RacketCon 2016 video proceedings.
 
-@figure["lam-app-rules" @list{λ and function application type rules for Typed Video}]{
-@centered[
-@inferrule[#:name "Lam" "$\\Gamma$,n:Int,x:$\\tau\\vdash$ e : $\\tau'$; $\\phi'$"]{$\Gamma\vdash\lambda$n,x:$\tau$,$\phi$.e : $\Pi\{$n$\mid\phi\wedge\phi'\}.\tau\rightarrow\tau'$; true}
-]
-@vspace{10}
-@centered[
-@inferrule[#:name "App" "$\\Gamma\\vdash$ f : $\\Pi\\{$n$\\mid\\phi\\}.\\tau\\rightarrow\\tau';\\phi_1$"
-                        "$\\exists$i.$\\Gamma\\vdash e : \\tau[n/i];\\phi_2$"
-                        "\\overrightharp{$\\mathcal{E}$}$(\\phi[n/i]) = \\phi_3$, $\\phi_3$ satisfiable"]{$\Gamma\vdash$ f e : $\tau'[n/i];\phi_1\wedge\phi_2\wedge\phi_3$}
-]
-}
-
 The @sc{Lam} and @sc{App} rules in @figure-ref{lam-app-rules} roughly
 illustrate how Typed Video handles constraints. Rather than implement multiple
 passes, Typed Video interleaves constraint collection and type checking,
@@ -296,6 +284,17 @@ satisfiable. Otherwise, the unsolved constraints are propagated. Modularly
 checking constraints at function applications in this manner enables the
 reporting of errors on a local basis.
 
+@figure["lam-app-rules" @list{λ and function application type rules for Typed Video}]{
+@centered[
+@inferrule[#:name "Lam" "$\\Gamma$,n:Int,x:$\\tau\\vdash$ e : $\\tau'$; $\\phi'$"]{$\Gamma\vdash\lambda$n,x:$\tau$,$\phi$.e : $\Pi\{$n$\mid\phi\wedge\phi'\}.\tau\rightarrow\tau'$; true}
+]
+@vspace{10}
+@centered[
+@inferrule[#:name "App" "$\\Gamma\\vdash$ f : $\\Pi\\{$n$\\mid\\phi\\}.\\tau\\rightarrow\\tau';\\phi_1$"
+                        "$\\exists$i.$\\Gamma\\vdash e : \\tau[n/i];\\phi_2$"
+                        "\\overrightharp{$\\mathcal{E}$}$(\\phi[n/i]) = \\phi_3$, $\\phi_3$ satisfiable"]{$\Gamma\vdash$ f e : $\tau'[n/i];\phi_1\wedge\phi_2\wedge\phi_3$}
+]
+}
 
 @; -----------------------------------------------------------------------------
 @section[#:tag "type-implementation"]{Type Systems as Macros}
@@ -312,6 +311,39 @@ rather than a reimplementation of, the untyped Video language.
 figure imports and prefixes the identifiers from untyped Video, i.e., the
 syntactic extensions from @secref{implementation}, which are used, unmodified,
 to construct the output of the type-checking pass.
+
+We implement our type checker with Turnstile, a Racket DSL introduced by Chang
+et al. for creating typed DSLs. This DSL-generating-DSL uses a concise,
+bidirectional type-judgement-like syntax. In other words, the
+@racket[define-syntax/typecheck] definitions in @figure-ref{type-checking-macros} resemble their specification counterparts in
+@figure-ref{lam-app-rules}. The implementation rules define syntax transformers
+that incorporate type checking as part of syntax elaboration. Interleaving type
+checking and elaboration in this manner not only simplifies implementation of
+the type system, but it also enables creating true abstractions on top of the
+host language.
+
+Next we briefly explain each line of the @racket[λ] definition:
+
+@(define current-line (make-parameter 1))
+@(define (inc-line) (current-line (add1 (current-line))))
+@(define (linelabel x . rst)
+   (apply para
+          @exact{\vspace{0.2cm}}
+     (noindent)
+     (bold "line ") (bold (number->string x)) ": " rst))
+@(define (with-linelabel . rst)
+   (begin0 (apply linelabel (current-line) rst) (inc-line)))
+
+@; lambda rule explanations ------------------
+
+@(current-line 4)
+
+@with-linelabel{The transformer's input must match
+@racket[(λ {n ...} ([x : τ] ... #:when φ) e)], a pattern that binds five  pattern variables:
+@racket[n] (the type index variables), @racket[x] (the λ parameters), @racket[τ] (the
+type annotations), @racket[φ] (a side-condition), and @racket[e] (the lambda
+body).}
+
 
 @(define *line-no 0)
 @(define (line-no)
@@ -345,38 +377,6 @@ turnstile
 @#,line-no[]   [⊢ (untyped-video:#%app e_fn- e_arg- ...) ⇒ τ_out])
 ]
 }
-
-We implement our type checker with Turnstile, a Racket DSL introduced by Chang
-et al. for creating typed DSLs. This DSL-generating-DSL uses a concise,
-bidirectional type-judgement-like syntax. In other words, the
-@racket[define-syntax/typecheck] definitions in @figure-ref{type-checking-macros} resemble their specification counterparts in
-@figure-ref{lam-app-rules}. The implementation rules define syntax transformers
-that incorporate type checking as part of syntax elaboration. Interleaving type
-checking and elaboration in this manner not only simplifies implementation of
-the type system, but it also enables creating true abstractions on top of the
-host language.
-
-Next we briefly explain each line of the @racket[λ] definition:
-
-@(define current-line (make-parameter 1))
-@(define (inc-line) (current-line (add1 (current-line))))
-@(define (linelabel x . rst)
-   (apply para
-          @exact{\vspace{0.2cm}}
-     (noindent)
-     (bold "line ") (bold (number->string x)) ": " rst))
-@(define (with-linelabel . rst)
-   (begin0 (apply linelabel (current-line) rst) (inc-line)))
-
-@; lambda rule explanations ------------------
-
-@(current-line 4)
-
-@with-linelabel{The transformer's input must match
-@racket[(λ {n ...} ([x : τ] ... #:when φ) e)], a pattern that binds five  pattern variables:
-@racket[n] (the type index variables), @racket[x] (the λ parameters), @racket[τ] (the
-type annotations), @racket[φ] (a side-condition), and @racket[e] (the lambda
-body).}
 
 @; if the readers don't understand this by now, we're lost
 @;{Pattern variables may be used to construct new program

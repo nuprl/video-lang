@@ -564,6 +564,19 @@ video
 The module's first line sets up a splash screen, the second line
 incorporates the external Video module.
 
+@figure["overview-preview" "Previewing Videos"]{
+@(split-minipage
+  #:split-location 0.65
+  #:indent-offset 0.2
+  (nested (values #;larger @racketinput0[(preview
+                                          (external-video "talk.vid"))]))
+  (nested (values #;larger @racketinput0[(preview-video
+                                          "talk.vid")])))
+ @(blank 1 20)
+ 
+@(scale (bitmap "res/talk-preview.png") 0.6)
+  }
+
 A renderer converts Video scripts to traditional videos.
 Having a dedicated rendering pass allows users to set
 various visual properties such as aspect ratio, frame rate,
