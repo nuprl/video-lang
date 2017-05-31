@@ -107,6 +107,6 @@ them to translate the idea into their world.
 
 @section[#:style 'unnumbered]{Acknowledgments}
 
-We would like to thank Asumu Takikawa for many great
-discussions and feedback on the Video language. This work
-was sponsored by <Grant#>.
+We are grateful to Asumu Takikawa for many great discussions and feedback
+on the Video language. This work was generously supported by the US
+National Science Foundation (SHF 1421412, SHF 1518844). 
