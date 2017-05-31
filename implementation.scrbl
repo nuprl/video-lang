@@ -16,7 +16,7 @@ languages quickly and easily. Furthermore, these languages
 compose so that modules written in one language can easily
 interact with modules in another. Best of all, the
 implementation of a language may take advantage of other
-language technology, too. The upshot here is that implementing Video is as
+language technologies, too. The upshot here is that implementing Video is as
 simple as implementing video-specific pieces, while leaving
 the general-purpose bits to Racket.
 
@@ -81,7 +81,7 @@ defining the new features and exporting them.
 Developers do so in the same manner as a programmer who augments the
 functionality of a library via a wrapper module.
 
-In contrast, modifying existing features requires
+In contrast, modifying existing features requires slightly more
 work. Specifically the module must define a syntax
 transformation in terms of the old language
 and rename this transformation on export.
@@ -222,13 +222,13 @@ body.
 (L @line-no[])      (syntax-parse (local-expand #'b1 'module (L elided)) (code:comment "<-- this-syntax")
 (L @line-no[])        [(id*:id rest ...)
 (L @line-no[])         #:when (matches-one-of? #'id* (list #'provide #'define (L elided)))
-(L @line-no[])         #'(begin this-syntax (video-begin vid export body ...))]
+(L @line-no[])         #'(begin this-syntax (video-begin vid export (exprs ...) body ...))]
 (L @line-no[])        [else
 (L @line-no[])         #'(video-begin id export (exprs ... this-syntax) body ...)])]))
 ]
 }
 
-The @racket[video-begin] syntax transformer (lines 11--24) is responsible
+The @racket[video-begin] syntax transformer (lines 11--23) is responsible
 for lifting definitions to the beginning of the module body and
 accumulating expressions into a @racket[playlist]. Its definition
 uses pattern matching again. Lines 13 and 17 specify
@@ -239,8 +239,8 @@ expressions:
 @itemlist[
 
 @item{Once @racket[video-begin] has traversed every piece of syntax (line 13), 
-@racket[exprs] contains all of the original module body's expressions in
-reverse order. The generated output (lines 14--16) defines the
+@racket[exprs] contains all of the original module body's expressions.
+The generated output (lines 14--16) defines the
 given @racket[vid] to stand for the list of expressions
 bundled as a playlist.}
 
@@ -408,10 +408,10 @@ the FFI just states input and output types:
 @;
 It errors if a bad input or output type passes through this interface.
 
-The @racket[define-constructor] both introduces structures to represent
+The @racket[define-constructor] form introduces both structures to represent
  video clips in Video and methods for converting these Video-level objects
  into structures that MLT understands. For its @emph{first} purpose, it
- generalizes Racket's @racket[struct] definitions with
+ generalizes Racket's record-like @racket[struct] definitions with
  an optional super-struct, additional fields, and their default values. 
  For example, the following is the description of a Video-level producer:
 @;

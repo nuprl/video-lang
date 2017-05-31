@@ -107,12 +107,11 @@ them to translate the idea into their world.
 
 @section[#:style 'unnumbered]{Acknowledgments}
 
-We are grateful to Asumu Takikawa, Benjamin Greenman, and
-Benjamin Chung for many great discussions and feedback on
-the Video language. We also thank our reviewers for their
-helpful feedback and useful insights. Finally, thank you to
-the MLT Framework developers for their quick responses to
-our bug reports.
+We thank Asumu Takikawa for inspiring the idea of a Video language, Ben
+Greenman for helping design the type system, and Benjamin Chung for bravely
+undertaking the role of Video user #1. Thank you to our reviewers for their
+detailed and insightful feedback. Finally, thank you to the MLT Framework
+developers for their quick responses to our bug reports.
 
-This work was generously supported by the US National
+This work was supported by the US National
 Science Foundation (SHF 1421412, SHF 1518844).

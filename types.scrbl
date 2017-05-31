@@ -395,9 +395,7 @@ the context of the free variables. Instead of propagating a type environment,
 Turnstile reuses Racket's lexical scoping to implement the type
 environment. This re-use greatly enhances the compositionality of languages and
 reduces effort so that a programmer gets away with specifying only new
-environment bindings. Specifically, the first premise uses two type
-environments, one each for the type index variables and lambda parameters,
-respectively, where the latter may contain references to the former.}
+environment bindings. Specifically, the first premise adds type index variables and lambda parameters to the type environment, where the latter may contain references to the former.}
 
 @with-linelabel{A @racket[#:with] premise binds additional pattern
 variables. Here, elaborating the lambda body @racket[e] may generate additional

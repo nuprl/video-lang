@@ -23,10 +23,10 @@ yet another NLVE widget, etc. See @figure-ref["video-gui"] for a screenshot
 of such nesting.
 
 A reader may wonder why one would want such a ``turtles all
-the way down'' approach to a Video IDE. Consider the case
-where a hardware failure during a talk prevents the capture
-of the speaker's screen. Fortunately, the speaker may have a
-copy of the slide deck as a PDF document. While the captured
+the way down'' approach to a Video IDE. Consider the actual scenario
+when a hardware failure during a talk prevented the capture
+of the speaker's screen. Fortunately, the speaker supplied a
+copy of their slide deck as a PDF document. While the captured
 video can still be recreated by using the slide deck, a
 decision has to be made concerning the duration of each
 slide. If a plain-text Video script were to use this method,
@@ -88,7 +88,7 @@ work.  The entire editor is implemented in less than 800 lines of code. Of
 this, approximately 700 lines are for the graphical editor itself, and 50
 are for the integration with Video. These lines are not counted in the 2,400
 lines for Video's implementation. The code implementing these NLVE widgets
-is plain Racket code, and we therefore omit details of the implementation.therefore
+is plain Racket code, and we therefore omit details of the implementation.
 
 @figure["playlist-sample" @list{Slide reconstruction using magic numbers (left) and a NLVE widget (right)}]{
 @(split-minipage

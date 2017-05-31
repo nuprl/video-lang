@@ -115,9 +115,9 @@ for displaying videos and rendering Video programs (@secref["overview-rendering"
 
 Video modules consist of a series of interleaved
 expressions, definitions, and import/export forms; functions
-have the same shape without the import/export forms. Video
-enforces different scoping rules from, and assigns slightly
-different meaning to these constructs, than Racket. In both
+have the same shape as modules but without the import/export forms. Video
+enforces different scoping rules, and assigns slightly
+different meaning to these constructs, than Racket does. In both
 cases, definitions are valid in the entire scope---that
 is, the entire module or the entire function body. The
 expressions must describe video playlists. Modules and functions 
@@ -362,7 +362,7 @@ video
 
 Multitracks play producers in parallel. Like playlists, they employ
 transitions to composite their producers.
-Syntactically, @racket[multitracks] is similar to @racket[playlist]. The
+Syntactically, @racket[multitrack] is similar to @racket[playlist]. The
 @racket[multitrack] form consists of a sequence of producers and
 creates a new @racket[multitrack] producer. Again, transitions are
 included within the sequence to combine tracks; see @figure-ref["playlist-cut"]c.
@@ -496,7 +496,7 @@ Explicit properties provide a protocol for
  information that is implicitly associated with a producer,
  such as its length. For example, a conference video may have
  to come with a watermark that is the same length as the
- caputured conference talk. A script that performs this
+ captured conference talk. A script that performs this
  operation can be found in @figure-ref["playlist-cut"]f.
 
 @figure["playlist-cutf" "(f). Example of adding a watermark"
@@ -574,7 +574,7 @@ incorporates the external Video module.
                                           "talk.vid")])))
  @(blank 1 20)
  
-@(scale (bitmap "res/talk-preview.png") 0.6)
+@(scale (bitmap "res/talk-preview.png") 0.45)
   }
 
 A renderer converts Video scripts to traditional videos.
@@ -584,23 +584,23 @@ and even output format separately. The simplest renderers,
 dubbed @racket[render] and @racket[preview], are functions
 that consume a producer and display it in a separate window.
 At DrRacket's REPL, developers can apply this function
-directly (left half of @figure-ref["oveflow-preview"]).
+directly (left half of @figure-ref{overview-preview}).
 While @racket[render] just displays the video,
-@racket[preview] adds playback controls. And even gives
-developers the ability to preview an video excerpt. Another
+@racket[preview] adds playback controls, and even gives
+developers the ability to preview a video excerpt. Another
 renderer, called @racket[preview-video] is a function that
 consumes a path to a Video script and plays it in a newly
 opened window (right half of
-@figure-ref["overflow-preview"]). This functionality is
+@figure-ref{overview-preview}). This functionality is
 available outside of the IDE so that non-programmers may
 view the videos, too.
 
 @; -----------------------------------------------------------------------------
 @section[#:tag "effectiveness"]{Effectiveness}
 
-Andersen has
+Leif Andersen, the first author, has
 been involved in the production of a video channel
-for a developer conference. In Andersen's experience, creating Video and compositing
-the videos for one conference took less time than manually editing the
-videos for another, comparable conference (same number of talks, same
+for RacketCon 2016. In Andersen's experience, creating Video and compositing
+the videos for that conference took less time than manually editing the
+videos for the previous year's conference (same number of talks, same
 nature of talks, etc).

@@ -38,9 +38,9 @@ such as AppleScript@cite[applescript-hopl].
 Some professional tools,
 such as Adobe Premiere@cite[adobe-premiere], even
 include an API to create script-style plug-ins directly.
-Extending tools in this fashion has limits. Macros are
+Extending tools in this fashion has limits. These kinds of macros are
 extremely brittle and frequently break, even within a single
-application, because macro languages do not understand the
+application, because these macro languages essentially specify dialog box clicks without understanding the
 underlying tools.
 
 Using a tool's official plug-in interface
@@ -58,21 +58,19 @@ general-purpose multimedia frameworks such as
 GStreamer@cite[gstreamer-man] or the MLT
 Framework.@note{@mlt-url} These frameworks are APIs for
 C-like languages that provide data types for building and
-rendering videos. Their appeal is the
-ability to create abstractions, such as functions, to handle
-otherwise repetitive tasks. For example, a professional
-using one of these frameworks can write a function to create
-the video for a conference talk.
-
+rendering videos.
 These frameworks are primarily used in two situations.
 First, they are the back-ends to NLVEs. For example, MLT is the backend for both
 Shotcut@note{@shotcut-url} and Kdenlive.@note{@kdenlive-url} Second, professionals
 use these frameworks to batch-process videos, particularly
-when interactive development is not desired. While the
-frameworks work well for these use cases, they fall short
+when interactive development is not desired.
+
+The appeal of these frameworks comes from their
+ability to create abstractions, such as functions, to handle
+otherwise repetitive tasks. Using these frameworks quickly becomes cumbersome, however, 
 when there is a need to combine interactive and programmatic work flows,
 as is the case for the creation of conference recordings.
-Studios tend to stick with NLVEs and use these
+Thus, studios tend to stick with NLVEs and use these
 frameworks only sparingly.
 
 Professionals also use domain-specific languages for video
@@ -81,16 +79,15 @@ XML-based DSLs and scripting-based DSLs.
 XML DSLs such as MLT XML and the now-deprecated
 SMIL@cite[smil-tr] offer declarative languages for
 processing videos. These languages generally do not have
-functions or any other type of abstraction. Professionals
+functions or any other type of abstraction, however, and thus professionals
 tend not to deal with these XML languages directly when
 video editing. Rather, NLVEs use these languages as a file
 format to save video projects.
 
-Scripting-based DSLs, such as AVISynth,@note{@avisynth-url}
-are declarative but have their own limitations. Unlike
-XML-based languages, these DSLs support functions and other
-abstractions. However, they support only the simplest of
-tasks: playing videos in sequence with transitions and
+Scripting-based DSLs such as AVISynth@note{@avisynth-url}
+are declarative and support functions and other
+abstractions, but have their own limitations. They typically support only the simplest of
+tasks such as playing videos in sequence with transitions and
 minor visual effects. They also tend to lack any formal
 grammars and use a small script for a parser. Finally, they lack many code
 reuse features. AVISynth, for example, allows programmers to

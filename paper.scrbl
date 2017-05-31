@@ -30,7 +30,7 @@
  conference, for example, video professionals traditionally
  use ``non-linear'' GUI editors to manually edit each talk,
  despite the repetitive nature of the process. As it turns
- out, video editing naturally splits the work into a
+ out, the task of video editing naturally splits into a
  declarative phase and an imperative rendering phase at the
  end. Hence it is natural to create a functional-declarative
  language for the first phase, which reduces a lot of manual

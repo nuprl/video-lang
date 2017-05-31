@@ -32,7 +32,7 @@ messages in terms of the surface language.
 
 Researchers have studied DSLs for a long time and have developed various
 alternative classifications for DSL construction strategies. In the functional
-programming language community, e.g., some @citet[deep-shallow-icfp] distinguish DSLs
+programming language community, @citet[deep-shallow-icfp] distinguish DSLs
 along ``deep'' vs ``shallow'' lines.  Deep embeddings implement a DSL's AST as
 algebraic datatype constructors. As a result, well-typed DSL terms are also
 well-typed host terms. While this makes effective reuse of the host language's

@@ -34,17 +34,15 @@ libraries, e.g. @citet[lal-pldi]. While a library module exports functions with 
 related purpose, a language module exports the constructs of a programming
 language.
 
-In Racket, every module imports its language with a one-line language specification. For
-example, the line @code{#lang racket/base}---pronounced ``hash lang
+In Racket, every module must first import its language definition, via a one-line specification. For
+example, @code{#lang racket/base}---pronounced ``hash lang
 racket base''---tells Racket and a future reader that the module is
-written in the @racketmodname[racket/base] language. That is, the specified
-language is really the first import into the module. From an implementation
-perspective, the language specification points to a file that provides a
-language, approximately speaking, a suite of linguistic features and
+written in the @racketmodname[racket/base] language. This specification
+ points to a file containing the language implementation that, approximately speaking, consists of a suite of linguistic features and
 run-time functions. A developer can thus edit a language @tt{L} in one
 buffer of an IDE and an @tt{L} program in a second one. Any change to the
 first is immediately visible in the second one, just by switching
-focus. Language development in Racket suffers from no points of
+between tabs. Thus, language development in Racket suffers from no points of
 friction.
 
 Developing a new language typically starts from a base language close to
@@ -59,19 +57,18 @@ some or all of the following actions:
 
 @item{re-interpreting linguistic constructs.}
 ]
-Here, linguistic constructs are any functions or syntactic extensions
-added to a language, such as list comprehensions.
-For the last one, Racket developers heavily
+Video exploits all of the
+above. Here, linguistic constructs are any functions or syntactic extensions
+added to a language such as list comprehensions or pattern matching.
+For the re-interpretation of linguistic constructs, Racket developers heavily
 rely on linguistic interposition points, that is, anchors in
 the syntax elaboration process where a program may inject
-additional syntax transformations. Video exploits all of the
-above.
+additional syntax transformations. 
 
 Due to the ease of developing and installing languages in
-the Racket ecosystem, language creation has become a
-critical ``warhead'' in the arsenal of software-engineering
-tools, of comparable status as Haskell's type classes and
-ML's functors. When developers realize that it is best to
+the Racket ecosystem, the language creation ``warhead'' is Racket's distinguishing weapon, akin to Haskell's type classes or
+ML's functors, in its arsenal of software-engineering
+tools. When developers realize that it is best to
 express themselves in the language of a domain, they do not
 hesitate to develop a matching programming language. After
 all, domain experts have developed this specialized
