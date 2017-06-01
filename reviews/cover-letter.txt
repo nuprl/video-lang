@@ -14,4 +14,6 @@ We have revised the interactive claims in the following ways (see Sec. 7):
 
 > Flesh out the discussion of the type system in section 6 to resolve the mismatch between the typing rules presented in figure 8 and the implementations of typing rules in figure 9. Give more detail about bugs caught by the type system.
 
-<Stephen Please Handle>
+Figure 8 is now figure 10. Figure 9 is now figure 12.
+
+We added lambda and application type rules in a new figure, 11, which correspond to the lambda and application implementations in figure 12. These rules and added prose in section 6.3 explain in more detail how our system collects and solves constraints. Finally, we added examples of type errors at the beginning of section 6.2.
