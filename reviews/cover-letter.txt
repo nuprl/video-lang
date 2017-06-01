@@ -1,19 +1,21 @@
-> Please ensure that you are using the correct document style, including author-year citations with correct usage as described in the call for papers. These requirements are necessary for inclusion in PACM PL.
+The reviewers found 3 critical issues with our paper. These are the issues and how we addressed them:
 
-After talking with the PC Chair, we determined that the problem was we had a 'Bibliography' section, rather than a 'References' one. We have changed the section to a 'References' section.
+1. Use the correct document style, including the author-year citation.
 
-> Either make more clear how Video allows integrated interactive and programmatic workflows, or tone down the claim that it does allow such integrated workflows.
+    After talking with the PC Chair, we determined that the problem was we had a 'Bibliography' section, rather than a 'References' one. We have changed the section to a 'References' section.
 
-We have revised the interactive claims in the following ways (see Sec. 7):
+2. Make more clear how Video allows integrated interactive and programmatic workflows or tone down the claim that it does allow such integrated workflows.
 
-1. We have added more details on how developers can interact with Video programs with a real-time preview and REPL.
+    We have revised the interactive claims in the following ways (see Sec. 7):
 
-2. We more thoroughly discuss how developers use NLVE widgets.
+    1. We have added more details on how developers can interact with Video programs with a real-time preview and REPL.
+    2. We more thoroughly discuss how developers use NLVE widgets.
+    3. We have toned down the interactive workflow prose by comparing it to the interactive editing in existing NLVE.
 
-3. We have toned down the interactive workflow prose by comparing it to the interactive editing in existing NLVE.
+3 Flesh out the discussion of the type system in section 6 to resolve the mismatch between the typing rules and the implementation of those rules. Also, give more detail about bugs caught by the type system.
 
-> Flesh out the discussion of the type system in section 6 to resolve the mismatch between the typing rules presented in figure 8 and the implementations of typing rules in figure 9. Give more detail about bugs caught by the type system.
+    Figure 8 is now figure 10. Figure 9 is now figure 12.
 
-Figure 8 is now figure 10. Figure 9 is now figure 12.
+    We added lambda and application type rules in a new figure, 11, which correspond to the lambda and application implementations in figure 12. These rules and added prose in section 6.3 explain in more detail how our system collects and solves constraints. Finally, we added examples of type errors at the beginning of section 6.2.
 
-We added lambda and application type rules in a new figure, 11, which correspond to the lambda and application implementations in figure 12. These rules and added prose in section 6.3 explain in more detail how our system collects and solves constraints. Finally, we added examples of type errors at the beginning of section 6.2.
+The reviewers also found several minor problems with the paper such as typos, formatting errors, and poor phrasing. We have also addressed these issues.
