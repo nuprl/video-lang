@@ -23,7 +23,7 @@ interactive and programmatic workflows. Alternatively, it requested that we
     3. It also compares the workflows of Video plus the DrRacket IDE with
     those of interactive editing processes in existing NLVE. 
 
-3 The reviews requested that we use matching abstract typing rules and
+3. The reviews requested that we use matching abstract typing rules and
 typing rule implementations so that readers could easily understand how
 type system designers can articulate their work within Turnstile. Also, the
 reviews requested details about bugs caught by the type system.
@@ -33,16 +33,15 @@ reviews requested details about bugs caught by the type system.
     Section 6.2 now comes with several examples of type errors in 
     untyped Video and explanations of what Typed Video catches. 
 
-    The second change is expressed via additional figures and prose in
-    section 6.3. 
-
-    Due to the addition of figures, figure 8 from the submission is now
-    figure 10, and figure 9 has become figure 12.
-
-    The new figure 11 displays the abstract typing rules for lambda and
-    application, which correspond to the lambda and application
-    implementations in figure 12. The accompanying prose in section 6.3
-    explains in detail how our system collects and solves constraints. 
+    The remaining changes are expressed via additional figures and prose in 
+    section 6.3:
+    - Due to the addition of figures, figure 8 from the submission is now
+      figure 10, and figure 9 has become figure 12.
+    - The new figure 11 displays the abstract typing rules for lambda and
+      application, which correspond to the lambda and application
+      implementations in figure 12.
+    - The accompanying prose in section 6.3 explains in more detail how our
+      system collects and solves constraints.
 
 The reviewers also found several minor problems with the paper such as
 typos, formatting errors, and poor phrasing. We have also addressed all
