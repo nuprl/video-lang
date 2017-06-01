@@ -1,21 +1,50 @@
-The reviewers found 3 critical issues with our paper. These are the issues and how we addressed them:
+The reviews requested three mandatory changes to our submission. Here is
+how we addressed these requests:  
 
-1. Use the correct document style, including the author-year citation.
+1. The reviews requested that we use the correct document style, including
+the author-year citation. 
 
-    After talking with the PC Chair, we determined that the problem was we had a 'Bibliography' section, rather than a 'References' one. We have changed the section to a 'References' section.
+   Mark Jones confirmed that the problem was the use of 'Bibliography'
+   instead of 'References' for the literature section. We have changed our
+   style file accordingly. 
 
-2. Make more clear how Video allows integrated interactive and programmatic workflows or tone down the claim that it does allow such integrated workflows.
+2. The reviews requested that we clarify how Video accommodates an
+interactive and programmatic workflows. Alternatively, it requested that we
+"tone down the claim that it does allow such integrated workflows."
 
     We have revised the interactive claims in the following ways (see Sec. 7):
 
-    1. We have added more details on how developers can interact with Video programs with a real-time preview and REPL.
-    2. We more thoroughly discuss how developers use NLVE widgets.
-    3. We have toned down the interactive workflow prose by comparing it to the interactive editing in existing NLVE.
+    1. We have added more details on how developers can interact with Video
+    programs using a real-time previewer and the IDE's REPL. 
 
-3 Flesh out the discussion of the type system in section 6 to resolve the mismatch between the typing rules and the implementation of those rules. Also, give more detail about bugs caught by the type system.
+    2. The revised section includes a thorough discussion of how developers
+    use NLVE widgets.  
 
-    Figure 8 is now figure 10. Figure 9 is now figure 12.
+    3. It also compares the workflows of Video plus the DrRacket IDE with
+    those of interactive editing processes in existing NLVE. 
 
-    We added lambda and application type rules in a new figure, 11, which correspond to the lambda and application implementations in figure 12. These rules and added prose in section 6.3 explain in more detail how our system collects and solves constraints. Finally, we added examples of type errors at the beginning of section 6.2.
+3 The reviews requested that we use matching abstract typing rules and
+typing rule implementations so that readers could easily understand how
+type system designers can articulate their work within Turnstile. Also, the
+reviews requested details about bugs caught by the type system.
 
-The reviewers also found several minor problems with the paper such as typos, formatting errors, and poor phrasing. We have also addressed these issues.
+    The changes are all local to section 6. 
+
+    Section 6.2 now comes with several examples of type errors in 
+    untyped Video and explanations of what Typed Video catches. 
+
+    The second change is expressed via additional figures and prose in
+    section 6.3. 
+
+    Due to the addition of figures, figure 8 from the submission is now
+    figure 10, and figure 9 has become figure 12.
+
+    The new figure 11 displays the abstract typing rules for lambda and
+    application, which correspond to the lambda and application
+    implementations in figure 12. The accompanying prose in section 6.3
+    explains in detail how our system collects and solves constraints. 
+
+The reviewers also found several minor problems with the paper such as
+typos, formatting errors, and poor phrasing. We have also addressed all
+these issues locally. We also found additional flaws and addressed those
+locally (e.g., inconsistencies in the bibliography, missing screen shots). 
