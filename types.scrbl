@@ -7,7 +7,7 @@
           scriblib/figure scriblib/footnote
           (except-in scribble/core paragraph)
           racket/list "bib.rkt"
-          (for-label (except-in video #%module-begin)
+          #;(for-label (except-in video #%module-begin)
                      (except-in turnstile #%module-begin mk-~ mk-?)))
 
 What use is a programming language without a dependent type system? Lots of

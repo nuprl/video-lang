@@ -17,9 +17,14 @@
                        #:country "USA")
 	#:email "leif@ccs.neu.edu"]
 
-@acmJournal{PACMPL}
-
 @setcopyright{rightsretained}
+@acmJournal{PACMPL}
+@acmYear{2017}
+@acmVolume{1}
+@acmNumber{1}
+@acmArticle{30}
+@acmMonth{9}
+@acmDOI{10.1145/3110274}
 
 @abstract{The Racket doctrine tells developers to create
  languages (as libraries) to narrow the gap between the

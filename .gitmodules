@@ -1,6 +1,6 @@
 [submodule "racket-video"]
 	path = racket-video
-	url = https://github.com/leifandersen/racket-video
+	url = https://github.com/videolang/video
 [submodule "typed-video"]
 	path = typed-video
-	url = https://github.com/stchang/typed-video.git
+	url = https://github.com/videolang/typed-video.git
