@@ -10,6 +10,7 @@ do
 	printf "compressing %s... " "$pdf"
 	pdf2ps $pdf $pdf.ps
 	ps2pdf $pdf.ps $pdf
+	rm $pdf.ps
 	echo "done"
 done
 
