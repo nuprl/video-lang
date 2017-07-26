@@ -104,14 +104,3 @@ show for. We hope that functional programmers of all stripes
 recognize the beauty of language-oriented-programming in
 general and Racket's approach in particular, and we invite
 them to translate the idea into their world.
-
-@section[#:style 'unnumbered]{Acknowledgments}
-
-We thank Asumu Takikawa for inspiring the idea of a Video language, Ben
-Greenman for helping design the type system, and Benjamin Chung for bravely
-undertaking the role of Video user #1. Thank you to our reviewers for their
-detailed and insightful feedback. Finally, thank you to the MLT Framework
-developers for their quick responses to our bug reports.
-
-This work was supported by the US National
-Science Foundation (SHF 1421412, SHF 1518844).

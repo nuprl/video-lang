@@ -3,8 +3,8 @@
 @require["bib.rkt" (only-in scribble/core element make-style)
          "utils.rkt"]
 
-@title{Super 8 Languages for Making Movies}
-@subtitle{(A Functional Pearl)}
+@title{Super 8 Languages for Making Movies (Functional Pearl)}
+@;@subtitle{(A Functional Pearl)}
 
 @author[@list{Leif Andersen, Stephen Chang, Matthias Felleisen}
         #:affiliation (affiliation
@@ -14,17 +14,19 @@
                         "PLT @ Northeastern University")
                        #:city "Boston"
                        #:state "Mass."
-                       #:country "USA")
+                       #:country "United States of America")
 	#:email "leif@ccs.neu.edu"]
 
 @setcopyright{rightsretained}
-@acmJournal{PACMPL}
+@acmPrice{}
+@acmDOI{10.1145/3110274}
 @acmYear{2017}
+@copyrightyear{2017}
+@acmJournal{PACMPL}
 @acmVolume{1}
-@acmNumber{1}
+@acmNumber{ICFP}
 @acmArticle{30}
 @acmMonth{9}
-@acmDOI{10.1145/3110274}
 
 @abstract{The Racket doctrine tells developers to create
  languages (as libraries) to narrow the gap between the
@@ -82,5 +84,16 @@
 
 @;{Conclusions, not much to say here?}
 @include-section{conclusion.scrbl}
+
+@section[#:style 'unnumbered]{Acknowledgments}
+
+We thank Asumu Takikawa for inspiring the idea of a Video language, Ben
+Greenman for helping design the type system, and Benjamin Chung for bravely
+undertaking the role of Video user #1. Thank you to our reviewers for their
+detailed and insightful feedback. Finally, thank you to the MLT Framework
+developers for their quick responses to our bug reports.
+
+This work was supported by the US National
+Science Foundation (SHF 1421412, SHF 1518844).
 
 @gen-bib[#:sec-title "References"]
