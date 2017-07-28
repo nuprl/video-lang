@@ -1,4 +1,4 @@
-#lang scribble/acmart @acmsmall @; @anonymous @review
+#lang scribble/acmart @acmsmall @screen @; @anonymous @review
 
 @require["bib.rkt" (only-in scribble/core element make-style)
          "utils.rkt"]

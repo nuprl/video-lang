@@ -302,7 +302,7 @@ reporting of errors on a local basis.
 The implementation of Typed Video relies on linguistic reuse to produce a
 full-fledged programming language without starting from scratch. Specifically,
 it reuses Racket's syntax system to implement type checking, following
-@nonbreaking{@cite-author[tsam-popl]'s (@cite-year[tsam-popl])}
+@nonbreaking{@cite-author[tsam-popl]'s [@cite-year[tsam-popl]]}
 type-systems-as-macros technique. As a result, Typed Video is an extension to,
 rather than a reimplementation of, the untyped Video language.
 

@@ -97,7 +97,7 @@ Finally, all of these languages make extensive use of yet another DSL,
 No, Racket by no means solves all problems that come with
 language-oriented programming; see the note on linking
 above.@note{@cite-author[linking-types]'s
- (@cite-year[linking-types]) linking types might help here.}
+ [@cite-year[linking-types]] linking types might help here.}
 But, it sets itself apart from other approaches in the
 functional world, plus it already has numerous successes to
 show for. We hope that functional programmers of all stripes

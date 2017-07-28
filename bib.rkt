@@ -1,13 +1,56 @@
 #lang at-exp racket
 
 (require scriblib/autobib
-         scribble/base)
+         scribble/base
+         scribble/core
+         scribble/html-properties
+         scribble/latex-properties
+         setup/main-collects)
 
 (provide (all-defined-out))
 
+(define autobib-style-extras
+  (let ([abs (lambda (s)
+               (path->main-collects-relative
+                (collection-file-path s "scriblib")))])
+    (list
+     (make-css-addition (abs "autobib.css"))
+     (make-tex-addition (abs "autobib.tex")))))
+
+(define bib-single-style (make-style "AutoBibliography" autobib-style-extras))
+(define bib-columns-style (make-style #f autobib-style-extras))
+
+(define bibentry-style (make-style "Autobibentry" autobib-style-extras))
+(define colbibnumber-style (make-style "Autocolbibnumber" autobib-style-extras))
+(define colbibentry-style (make-style "Autocolbibentry" autobib-style-extras))
+
 (define-cite cite citet gen-bib
   #:cite-author cite-author
-  #:cite-year cite-year)
+  #:cite-year cite-year
+  #:style (new
+           (class object%
+             (define/public (bibliography-table-style) bib-single-style)
+             (define/public (entry-style) bibentry-style)
+             (define/public (disambiguate-date?) #t)
+             (define/public (collapse-for-date?) #t)
+             (define/public (get-cite-open) "[")
+             (define/public (get-cite-close) "]")
+             (define/public (get-group-sep) "; ")
+             (define/public (get-item-sep) ", ")
+             (define/public (render-citation date-cite i)
+               (make-element
+                (make-style "Thyperref" (list (command-extras (list (make-label i)))))
+                (list date-cite)))
+             (define (make-label i)
+               (string-append "autobiblab:" (number->string i)))
+             (define/public (render-author+dates author dates) (list* author " " dates))
+             (define/public (bibliography-line i e)
+               (list (make-paragraph plain
+                                     (make-element "label" #;(make-style "hypertarget"
+                                                               (list (command-extras '("hello"))))
+                                                   (make-label i)))
+                     e))
+             (super-new))))
 
 (define short? #f)
 (define-syntax define/short
